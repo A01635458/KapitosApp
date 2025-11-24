@@ -1,21 +1,12 @@
-//
-//  Encuesta.swift
-//  KapitosApp
-//
-//  Created by Luisa Cardona on 23/11/25.
-//
-
-//
-//  ProducerSurveyView.swift
-//  KapitosApp
-//
-
 import SwiftUI
 
 struct ProducerSurveyView: View {
 
     @EnvironmentObject var theme: AppThemeManager
-    @State private var goToSuccess = false
+    @StateObject private var registrationData = ProducerRegistrationData()
+
+    @State private var showSuccessMessage = false
+    @State private var successText = ""
 
     // --- DATOS PERSONALES ---
     @State private var name = ""
@@ -56,145 +47,161 @@ struct ProducerSurveyView: View {
 
         NavigationStack {
 
-            ZStack {
-                (theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
-                    .ignoresSafeArea()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 26) {
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 26) {
+                    Text("Registro de Productor")
+                        .font(.system(size: 32, weight: .bold))
+                        .padding(.top, 12)
 
-                        Text("Registro de Productor")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-                            .padding(.top, 12)
-
-                        // ----------------------------
-                        // SECCIÓN: datos personales
-                        // ----------------------------
-                        sectionCard("Datos personales", icon: "person.fill") {
-                            formField("Nombre completo", text: $name)
-                            formField("Teléfono", text: $phone)
-                            formField("Correo electrónico", text: $email)
-                        }
-
-                        // ----------------------------
-                        // FINCA
-                        // ----------------------------
-                        sectionCard("Datos de la finca", icon: "leaf.fill") {
-                            formField("Nombre de la marca / finca", text: $brand)
-                            formField("Tamaño de la finca (ha)", text: $farmSize)
-                            formField("Ubicación (opcional)", text: $location)
-                            formField("Altura de cultivo (msnm)", text: $altitude)
-                            formField("Tipo de sombra (nativa, mixta…)", text: $shadeType)
-                        }
-
-                        // ----------------------------
-                        // PRODUCCIÓN
-                        // ----------------------------
-                        sectionCard("Producción", icon: "drop.fill") {
-                            formField("Producción anual (kg)", text: $production)
-                            formField("Variedades cultivadas", text: $varieties)
-                            formField("Procesos (lavado, honey, natural…)", text: $processes)
-                            formField("Tipo de café (pergamino, verde, tostado…)", text: $coffeeType)
-                            formField("Última cosecha (mm/aaaa)", text: $harvestDate)
-                            formField("Rendimiento (kg/ha)", text: $yield)
-                        }
-
-                        // ----------------------------
-                        // COMERCIAL
-                        // ----------------------------
-                        sectionCard("Comercial", icon: "cart.fill") {
-                            formField("Precio promedio por kg (MXN)", text: $price)
-                            formField("¿A quién vendes actualmente?", text: $sellingTo)
-                            formField("Volumen mínimo de venta (kg)", text: $minVolume)
-                            formField("¿Estás abierto a exportar? (sí/no)", text: $exportReady)
-                            formField("¿Vendes en línea? (sí/no + link)", text: $onlineSales)
-                            formField("Necesidades actuales", text: $needs)
-                        }
-
-                        // ----------------------------
-                        // TURISMO
-                        // ----------------------------
-                        sectionCard("Turismo / Visitas", icon: "location.viewfinder") {
-                            formField("Área de degustación (sí/no)", text: $hasTastingArea)
-                            formField("Acceso para turistas (sí/no)", text: $touristAccess)
-                        }
-
-                        // ----------------------------
-                        // CERTIFICACIONES
-                        // ----------------------------
-                        sectionCard("Certificaciones", icon: "checkmark.seal.fill") {
-                            formField("Certificaciones (orgánico, DO, etc.)", text: $certifications)
-                        }
-
-                        // ----------------------------
-                        // BOTÓN
-                        // ----------------------------
-                        Button {
-                            withAnimation {
-                                goToSuccess = true
-                            }
-                        } label: {
-                            Text("Enviar Registro")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
-                                .cornerRadius(16)
-                        }
-                        .padding(.top, 10)
-
-                        Spacer()
+                    // Secciones…
+                    sectionCard("Datos personales", icon: "person.fill") {
+                        formField("Nombre completo", text: $name)
+                        formField("Teléfono", text: $phone)
+                        formField("Correo electrónico", text: $email)
                     }
-                    .padding(.horizontal, 22)
-                    .padding(.bottom, 40)
+
+                    sectionCard("Datos de la finca", icon: "leaf.fill") {
+                        formField("Nombre de la marca / finca", text: $brand)
+                        formField("Tamaño de la finca (ha)", text: $farmSize)
+                        formField("Ubicación (opcional)", text: $location)
+                        formField("Altura de cultivo (msnm)", text: $altitude)
+                        formField("Tipo de sombra", text: $shadeType)
+                    }
+
+                    sectionCard("Producción", icon: "drop.fill") {
+                        formField("Producción anual (kg)", text: $production)
+                        formField("Variedades", text: $varieties)
+                        formField("Procesos", text: $processes)
+                        formField("Tipo de café", text: $coffeeType)
+                        formField("Última cosecha (mm/aaaa)", text: $harvestDate)
+                        formField("Rendimiento (kg/ha)", text: $yield)
+                    }
+
+                    sectionCard("Comercial", icon: "cart.fill") {
+                        formField("Precio por kg (MXN)", text: $price)
+                        formField("¿A quién vendes?", text: $sellingTo)
+                        formField("Volumen mínimo (kg)", text: $minVolume)
+                        formField("¿Exportas? (sí/no)", text: $exportReady)
+                        formField("¿Vendes en línea? (sí/no)", text: $onlineSales)
+                        formField("Necesidades", text: $needs)
+                    }
+
+                    sectionCard("Turismo", icon: "location.viewfinder") {
+                        formField("Área de degustación (sí/no)", text: $hasTastingArea)
+                        formField("Acceso a turistas (sí/no)", text: $touristAccess)
+                    }
+
+                    sectionCard("Certificaciones", icon: "checkmark.seal.fill") {
+                        formField("Certificaciones", text: $certifications)
+                    }
+
+                    submitButton
+                    successBanner
+
+                    Spacer()
                 }
-            }
-            .navigationDestination(isPresented: $goToSuccess) {
-                ProducerSuccessView().environmentObject(theme)
+                .padding(.horizontal, 22)
             }
         }
     }
 
-    // MARK: - COMPONENTES UI
+    // MARK: - SUBMIT BUTTON
+
+    var submitButton: some View {
+        Button {
+            Task {
+                do {
+                    let form = ProducerFormModel(
+                        name: name, phone: phone, email: email,
+                        brand: brand, farmSize: farmSize, location: location,
+                        altitude: altitude, shadeType: shadeType,
+                        production: production, varieties: varieties,
+                        processes: processes, coffeeType: coffeeType,
+                        harvestDate: harvestDate, yield: yield,
+                        price: price, sellingTo: sellingTo,
+                        minVolume: minVolume, exportReady: exportReady,
+                        onlineSales: onlineSales, needs: needs,
+                        hasTastingArea: hasTastingArea, touristAccess: touristAccess,
+                        certifications: certifications
+                    )
+
+                    try await registrationData.submitProducer(form: form)
+
+                    withAnimation {
+                        successText = "Datos enviados ✔️"
+                        showSuccessMessage = true
+                    }
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        withAnimation { showSuccessMessage = false }
+                    }
+
+                } catch {
+                    withAnimation {
+                        successText = "Error al enviar ❌"
+                        showSuccessMessage = true
+                    }
+                }
+            }
+        } label: {
+            Text("Enviar Registro")
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                .cornerRadius(16)
+        }
+        .padding(.vertical, 8)
+    }
+
+    // MARK: - SUCCESS BANNER
+
+    @ViewBuilder var successBanner: some View {
+        if showSuccessMessage {
+            HStack(spacing: 12) {
+                Image(systemName: successText.contains("Error") ? "xmark.circle.fill" : "checkmark.circle.fill")
+                    .foregroundColor(.white)
+                    .font(.title2)
+
+                Text(successText)
+                    .foregroundColor(.white)
+                    .font(.body.bold())
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(successText.contains("Error") ? Color.red : Color.green)
+            .cornerRadius(14)
+            .padding(.top, 4)
+            .transition(.move(edge: .top).combined(with: .opacity))
+        } else {
+            EmptyView()
+        }
+    }
+
+    // MARK: - UI HELPERS
 
     func sectionCard(_ title: String, icon: String, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-
             HStack(spacing: 10) {
                 Image(systemName: icon)
-                    .font(.system(size: 20))
-                    .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight)
-
-                Text(title)
-                    .font(.title3.bold())
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                Text(title).font(.title3.bold())
             }
-
-            VStack(spacing: 14) {
-                content()
-            }
-            .padding(16)
-            .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-            .cornerRadius(16)
-            .shadow(color: theme.isDarkMode ? .black.opacity(0.4) : .black.opacity(0.1),
-                    radius: 8, y: 4)
+            VStack(spacing: 14) { content() }
+                .padding(16)
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(16)
         }
     }
 
     func formField(_ placeholder: String, text: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(placeholder)
-                .font(.footnote)
-                .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.8))
-
+            Text(placeholder).font(.footnote).foregroundColor(.gray)
             TextField(placeholder, text: text)
                 .padding()
-                .background(theme.isDarkMode ? AppColors.backgroundDark.opacity(0.4)
-                                            : AppColors.cardLight.opacity(0.8))
+                .background(Color.gray.opacity(0.15))
                 .cornerRadius(12)
-                .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
         }
     }
 }
@@ -202,3 +209,4 @@ struct ProducerSurveyView: View {
 #Preview {
     ProducerSurveyView().environmentObject(AppThemeManager())
 }
+

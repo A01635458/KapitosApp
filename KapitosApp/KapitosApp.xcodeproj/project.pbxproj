@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A1715E3F2ED4277500FAC5BC /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A1715E3E2ED4277500FAC5BC /* Supabase */; };
+		A1B1BBAD2ED422F100FB58D5 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBAC2ED422F100FB58D5 /* Auth */; };
+		A1B1BBAF2ED422F100FB58D5 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBAE2ED422F100FB58D5 /* Functions */; };
+		A1B1BBB12ED422F100FB58D5 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBB02ED422F100FB58D5 /* PostgREST */; };
+		A1B1BBB32ED422F100FB58D5 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBB22ED422F100FB58D5 /* Realtime */; };
+		A1B1BBB52ED422F100FB58D5 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBB42ED422F100FB58D5 /* Storage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		513B481A2EC8F1B3000AECD6 /* KapitosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KapitosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +32,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B1BBB12ED422F100FB58D5 /* PostgREST in Frameworks */,
+				A1B1BBAF2ED422F100FB58D5 /* Functions in Frameworks */,
+				A1715E3F2ED4277500FAC5BC /* Supabase in Frameworks */,
+				A1B1BBAD2ED422F100FB58D5 /* Auth in Frameworks */,
+				A1B1BBB52ED422F100FB58D5 /* Storage in Frameworks */,
+				A1B1BBB32ED422F100FB58D5 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +48,7 @@
 			isa = PBXGroup;
 			children = (
 				513B481C2EC8F1B3000AECD6 /* KapitosApp */,
+				A1715E3D2ED4276300FAC5BC /* Frameworks */,
 				513B481B2EC8F1B3000AECD6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +59,13 @@
 				513B481A2EC8F1B3000AECD6 /* KapitosApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A1715E3D2ED4276300FAC5BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -65,6 +88,12 @@
 			);
 			name = KapitosApp;
 			packageProductDependencies = (
+				A1B1BBAC2ED422F100FB58D5 /* Auth */,
+				A1B1BBAE2ED422F100FB58D5 /* Functions */,
+				A1B1BBB02ED422F100FB58D5 /* PostgREST */,
+				A1B1BBB22ED422F100FB58D5 /* Realtime */,
+				A1B1BBB42ED422F100FB58D5 /* Storage */,
+				A1715E3E2ED4277500FAC5BC /* Supabase */,
 			);
 			productName = KapitosApp;
 			productReference = 513B481A2EC8F1B3000AECD6 /* KapitosApp.app */;
@@ -94,6 +123,9 @@
 			);
 			mainGroup = 513B48112EC8F1B3000AECD6;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 513B481B2EC8F1B3000AECD6 /* Products */;
 			projectDirPath = "";
@@ -332,6 +364,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A1715E3E2ED4277500FAC5BC /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		A1B1BBAC2ED422F100FB58D5 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		A1B1BBAE2ED422F100FB58D5 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		A1B1BBB02ED422F100FB58D5 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		A1B1BBB22ED422F100FB58D5 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		A1B1BBB42ED422F100FB58D5 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B1BBAB2ED422F100FB58D5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 513B48122EC8F1B3000AECD6 /* Project object */;
 }
