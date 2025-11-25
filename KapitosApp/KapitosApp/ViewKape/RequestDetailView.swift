@@ -1,23 +1,21 @@
 //
 //  RequestDetailView.swift
 //  KapitosApp
-//
 //  Created by Luisa Cardona on 23/11/25.
 //
 
 import SwiftUI
 
 struct RequestDetailView: View {
-
     @EnvironmentObject var theme: AppThemeManager
-    let producerName: String           // <-- IMPORTANTE
+    let producer: Producer
 
     @State private var goToApproval = false
 
     var body: some View {
         VStack(spacing: 20) {
 
-            Text(producerName)
+            Text(producer.displayName)
                 .font(.largeTitle.bold())
                 .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                 .multilineTextAlignment(.center)
@@ -48,13 +46,47 @@ struct RequestDetailView: View {
         }
         .padding()
         .navigationDestination(isPresented: $goToApproval) {
-            ProducerApprovalView(producerName: producerName)
+            ProducerApprovalView(producer: producer)
                 .environmentObject(theme)
         }
     }
 }
 
 #Preview {
-    RequestDetailView(producerName: "Finca San José")
-        .environmentObject(AppThemeManager())
+    RequestDetailView(producer: Producer(
+        id: UUID(),
+        farm_name: "Finca San José",
+        experience_years: nil,
+        phone: nil,
+        photo_url: nil,
+        farm_size_ha: nil,
+        country: nil,
+        state: nil,
+        municipality: nil,
+        shade_type: nil,
+        annual_production_kg: nil,
+        last_harvest_date: nil,
+        yield_per_ha: nil,
+        price_per_kg: nil,
+        current_buyers: nil,
+        min_contract_volume: nil,
+        open_to_export: nil,
+        sells_online: nil,
+        online_store_url: nil,
+        needs: nil,
+        has_tourist_area: nil,
+        tourist_accessible: nil,
+        tourism_details: nil,
+        consent_gps: nil,
+        consent_ai: nil,
+        consent_notifications: nil,
+        varieties: nil,
+        processes: nil,
+        certifications: nil,
+        altitude: nil,
+        coffee_type: nil,
+        status: "pending",
+        created_at: Date()
+    ))
+    .environmentObject(AppThemeManager())
 }

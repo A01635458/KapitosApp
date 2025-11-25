@@ -35,4 +35,5 @@ struct ProducerInsertDTO: Codable {
     let varieties: [String]
     let processes: [String]
     let certifications: [String]
+    let status: String? // 'pending', 'approved', 'rejected'
 }

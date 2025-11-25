@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Producer: Codable {
+struct Producer: Identifiable, Codable {
     let id: UUID
     let farm_name: String?
     let experience_years: Int?
@@ -38,4 +38,20 @@ struct Producer: Codable {
     let varieties: [String]?
     let processes: [String]?
     let certifications: [String]?
+    let altitude: Int?
+    let coffee_type: String?
+    let status: String? // 'pending', 'approved', 'rejected'
+    let created_at: Date?
+    
+    // Computed properties for UI
+    var displayName: String {
+        farm_name ?? "Productor sin nombre"
+    }
+    
+    var location: String {
+        [municipality, state, country]
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
+    }
 }

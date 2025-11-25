@@ -10,6 +10,14 @@ import SwiftUI
 struct DashboardView: View {
 
     @EnvironmentObject var theme: AppThemeManager
+    @StateObject private var approvalService = ProducerApprovalService.shared
+    @StateObject private var adminService = AdminDataService.shared
+    
+    @State private var pendingCount = 0
+    @State private var approvedCount = 0
+    @State private var userCount = 0
+    @State private var producerCount = 0
+    @State private var adminCount = 0
 
     // padding inicial arriba
     private let topSpacing: CGFloat = 60
@@ -31,29 +39,41 @@ struct DashboardView: View {
 
                 // ---- SECTION OF CARDS ----
                 VStack(spacing: 16) {
-                    dashboardCard(
-                        title: "Solicitudes pendientes",
-                        value: "12",
-                        icon: "tray.full.fill"
-                    )
+                    NavigationLink(destination: ProducerListView().environmentObject(theme)) {
+                        dashboardCard(
+                            title: "Solicitudes pendientes",
+                            value: "\(pendingCount)",
+                            icon: "tray.full.fill"
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
 
-                    dashboardCard(
-                        title: "Productores activos",
-                        value: "54",
-                        icon: "leaf.fill"
-                    )
+                    NavigationLink(destination: ProducersListView().environmentObject(theme)) {
+                        dashboardCard(
+                            title: "Productores aprobados",
+                            value: "\(producerCount)",
+                            icon: "leaf.fill"
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
 
-                    dashboardCard(
-                        title: "Clientes registrados",
-                        value: "210",
-                        icon: "person.3.fill"
-                    )
+                    NavigationLink(destination: ClientsListView().environmentObject(theme)) {
+                        dashboardCard(
+                            title: "Clientes registrados",
+                            value: "\(userCount)",
+                            icon: "person.3.fill"
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
 
-                    dashboardCard(
-                        title: "Cuentas creadas hoy",
-                        value: "7",
-                        icon: "key.fill"
-                    )
+                    NavigationLink(destination: AccountGeneratorView().environmentObject(theme)) {
+                        dashboardCard(
+                            title: "Crear cuenta manual",
+                            value: "\(adminCount)",
+                            icon: "person.badge.plus"
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
 
                 // ---- STATS ----
@@ -67,6 +87,21 @@ struct DashboardView: View {
         .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
         .ignoresSafeArea()
         .navigationBarBackButtonHidden(true)
+        .task {
+            await loadDashboardData()
+        }
+    }
+    
+    // MARK: - Data Loading
+    private func loadDashboardData() async {
+        let producerCounts = await approvalService.getProducerCounts()
+        pendingCount = producerCounts.pending
+        approvedCount = producerCounts.approved
+        
+        let userCounts = await adminService.getUserCountsByRole()
+        userCount = userCounts.users
+        producerCount = userCounts.producers
+        adminCount = userCounts.admins
     }
 
     // MARK: - CARD COMPONENT

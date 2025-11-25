@@ -43,7 +43,8 @@ class ProducerRegistrationData: ObservableObject {
                 tourism_details: nil,
                 varieties: splitList(form.varieties),
                 processes: splitList(form.processes),
-                certifications: splitList(form.certifications)
+                certifications: splitList(form.certifications),
+                status: "pending" // Mark as pending for admin approval
             )
 
             // --- INSERT ---
