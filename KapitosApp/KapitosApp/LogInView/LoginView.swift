@@ -6,6 +6,9 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var showRegister = false
     @State private var showProducerSurvey = false
+    @State private var goToApp = false
+
+    @StateObject private var auth = AuthenticationService.shared
 
     @EnvironmentObject var theme: AppThemeManager
 
@@ -48,7 +51,7 @@ struct LoginView: View {
 
                         // BUTTON LOGIN
                         Button {
-                            print("login")
+                            Task { await handleLogin() }
                         } label: {
                             Text("Iniciar Sesión")
                                 .font(.headline)
@@ -59,6 +62,27 @@ struct LoginView: View {
                                 .cornerRadius(14)
                                 .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.6) : .clear,
                                         radius: 10, y: 4)
+                        }
+                        .disabled(email.isEmpty || password.isEmpty || auth.isLoading)
+
+                        if let msg = auth.message {
+                            HStack(spacing: 10) {
+                                Image(systemName: msg.contains("exitoso") ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .foregroundColor(.white)
+                                Text(msg)
+                                    .foregroundColor(.white)
+                                    .font(.footnote.bold())
+                            }
+                            .padding(10)
+                            .frame(maxWidth: .infinity)
+                            .background(msg.contains("exitoso") ? Color.green : Color.red)
+                            .cornerRadius(12)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
+                        }
+
+                        if auth.isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight))
                         }
 
                         // REGISTER
@@ -107,6 +131,9 @@ struct LoginView: View {
             .navigationDestination(isPresented: $showProducerSurvey) {
                 ProducerSurveyView()
             }
+            .navigationDestination(isPresented: $goToApp) {
+                ContentView().environmentObject(theme)
+            }
         }
     }
 
@@ -143,6 +170,17 @@ struct LoginView: View {
                 AppColors.accentDark.opacity(0.3) :
                 Color.black.opacity(0.05),
                 radius: 8, y: 4)
+    }
+}
+
+// MARK: - Login Logic
+extension LoginView {
+    private func handleLogin() async {
+        let success = await auth.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+                                        password: password)
+        if success {
+            withAnimation { goToApp = true }
+        }
     }
 }
 

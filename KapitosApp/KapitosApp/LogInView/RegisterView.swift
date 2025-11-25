@@ -47,6 +47,9 @@ struct RegisterView: View {
 
                         // --------- CONTINUE BUTTON ----------
                         Button {
+                            flowModel.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                            flowModel.email = email.trimmingCharacters(in: .whitespacesAndNewlines)
+                            flowModel.password = password
                             goToPreferences = true
                         } label: {
                             Text("Continuar")
@@ -67,6 +70,8 @@ struct RegisterView: View {
             }
             .navigationDestination(isPresented: $goToPreferences) {
                 RegisterPreferencesView()
+                    .environmentObject(flowModel)
+                    .environmentObject(registrationService)
             }
         }
     }
@@ -139,6 +144,11 @@ struct RegisterView: View {
                 radius: 8, y: 4)
     }
 }
+
+// MARK: - Flow / Service Instances
+private let flowModel = RegistrationFlowModel()
+private let registrationService = UserRegistrationService.shared
+
 
 #Preview {
     RegisterView().environmentObject(AppThemeManager())
