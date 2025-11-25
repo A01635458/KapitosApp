@@ -29,7 +29,7 @@ struct ProducerSuccessView: View {
                     .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                     .multilineTextAlignment(.center)
 
-                Text("Gracias por registrarte como productor.\nNuestro equipo revisará tu información y te llegará correo")
+                Text("Gracias por registrarte como productor.\nNuestro equipo revisará tu información y se comunicará contigo")
                     .font(.headline)
                     .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.8))
                     .multilineTextAlignment(.center)

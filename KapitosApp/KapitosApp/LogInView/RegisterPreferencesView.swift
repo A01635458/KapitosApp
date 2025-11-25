@@ -2,8 +2,6 @@
 //  RegisterPreferencesView.swift
 //  KapitosApp
 //
-//  Created by Luisa Cardona on 23/11/25.
-//
 
 import SwiftUI
 
@@ -15,12 +13,14 @@ struct RegisterPreferencesView: View {
 
     // MULTI SELECT
     @State private var selectedProcesses: Set<String> = []
-    @State private var selectedRoasts: Set<String> = []
     @State private var selectedDrinks: Set<String> = []
-    @State private var selectedTimes: Set<String> = []
-    @State private var selectedAcidity: Set<String> = []
     @State private var selectedNotes: Set<String> = []
-    @State private var selectedWeekly: Set<String> = []
+
+    // SINGLE SELECT
+    @State private var selectedRoast: String? = nil
+    @State private var selectedTime: String? = nil
+    @State private var selectedAcidity: String? = nil
+    @State private var selectedWeekly: String? = nil
 
     // OPTIONS WITH ICONS
     let processes = [
@@ -63,7 +63,7 @@ struct RegisterPreferencesView: View {
         ("Cítrico", "leaf.fill"),
         ("Dulce", "cube.fill"),
         ("Chocolate", "square.fill"),
-        ("Floral", "flower.fill")
+        ("Floral", "leaf.fill")
     ]
 
     let weekly = [
@@ -85,7 +85,7 @@ struct RegisterPreferencesView: View {
                         Spacer()
                         Button {
                             withAnimation(.easeInOut(duration: 0.3)) {
-                                goToSuccess = true   // DIRECTO AL SUCCESS
+                                goToSuccess = true
                             }
                         } label: {
                             skipChip("Saltar todo")
@@ -169,8 +169,7 @@ struct RegisterPreferencesView: View {
             .padding(.horizontal, 14)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(theme.isDarkMode ? AppColors.cardDark.opacity(0.4)
-                          : AppColors.cardLight.opacity(0.7))
+                    .fill(theme.isDarkMode ? AppColors.cardDark.opacity(0.4) : AppColors.cardLight.opacity(0.7))
             )
             .shadow(color: theme.isDarkMode ? .black.opacity(0.2) : .black.opacity(0.08),
                     radius: 4, y: 2)
@@ -178,15 +177,36 @@ struct RegisterPreferencesView: View {
 
     // -------- CARD OPTION --------
     func cardOption(_ text: String, icon: String) -> some View {
-        let selectedSet = selectionBinding
-        let isSelected = selectedSet.wrappedValue.contains(text)
+
+        let isSelected: Bool = {
+            switch index {
+            case 0: return selectedProcesses.contains(text)
+            case 1: return selectedRoast == text
+            case 2: return selectedDrinks.contains(text)
+            case 3: return selectedTime == text
+            case 4: return selectedAcidity == text
+            case 5: return selectedNotes.contains(text)
+            case 6: return selectedWeekly == text
+            default: return false
+            }
+        }()
 
         return Button {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                if isSelected {
-                    selectedSet.wrappedValue.remove(text)
-                } else {
-                    selectedSet.wrappedValue.insert(text)
+                switch index {
+
+                // MULTI SELECT
+                case 0: toggleMulti(text, set: &selectedProcesses)
+                case 2: toggleMulti(text, set: &selectedDrinks)
+                case 5: toggleMulti(text, set: &selectedNotes)
+
+                // SINGLE SELECT
+                case 1: selectedRoast = text
+                case 3: selectedTime = text
+                case 4: selectedAcidity = text
+                case 6: selectedWeekly = text
+
+                default: break
                 }
             }
         } label: {
@@ -206,8 +226,7 @@ struct RegisterPreferencesView: View {
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(isSelected ?
-                          (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
-                          :
+                          (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight) :
                           (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight))
             )
             .shadow(color: isSelected ? AppColors.accentDark.opacity(0.3) : .clear,
@@ -215,35 +234,28 @@ struct RegisterPreferencesView: View {
         }
     }
 
-    // -------- QUESTIONS SETUP --------
+    // MARK: Multi-select toggle
+    func toggleMulti(_ item: String, set: inout Set<String>) {
+        if set.contains(item) { set.remove(item) }
+        else { set.insert(item) }
+    }
+
+    // -------- QUESTIONS CONFIG --------
     var allQuestions: [(String, String, [(String, String)])] {
         [
-            ("¿Qué proceso te gusta?", "drop.fill", processes),
-            ("¿Tu tueste favorito?", "flame.fill", roasts),
-            ("¿Qué bebida tomas más?", "cup.and.saucer.fill", drinks),
-            ("¿A qué hora tomas café?", "clock.fill", times),
-            ("¿Qué acidez prefieres?", "bolt.heart.fill", acidity),
-            ("¿Qué notas prefieres?", "leaf.fill", notes),
-            ("¿Cuánto café consumes por semana?", "chart.bar.fill", weekly)
+            ("¿Qué procesos te gustan?", "drop.fill", processes),      // multi
+            ("Tu tueste favorito", "flame.fill", roasts),                            // single
+            ("¿Qué bebidas tomas?", "cup.and.saucer.fill", drinks),   // multi
+            ("¿A qué hora tomas café?", "clock.fill", times),                        // single
+            ("Acidez preferida", "bolt.heart.fill", acidity),                        // single
+            ("¿Qué notas te gustan?", "leaf.fill", notes),                           // multi
+            ("¿Cuánto café consumes por semana?", "chart.bar.fill", weekly)          // single
         ]
     }
 
     var currentTitle: String { allQuestions[index].0 }
     var currentIcon: String { allQuestions[index].1 }
     var currentOptions: [(String, String)] { allQuestions[index].2 }
-
-    var selectionBinding: Binding<Set<String>> {
-        switch index {
-        case 0: return $selectedProcesses
-        case 1: return $selectedRoasts
-        case 2: return $selectedDrinks
-        case 3: return $selectedTimes
-        case 4: return $selectedAcidity
-        case 5: return $selectedNotes
-        case 6: return $selectedWeekly
-        default: return $selectedProcesses
-        }
-    }
 }
 
 #Preview {

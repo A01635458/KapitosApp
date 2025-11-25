@@ -25,12 +25,12 @@ struct SuccessView: View {
                     .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
                     .shadow(radius: 10)
 
-                Text("¡Bienvenido a Kapitos!")
+                Text("¡Bienvenido!")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                     .multilineTextAlignment(.center)
 
-                Text("Tu perfil está listo. Vamos a comenzar.")
+                Text("Tu perfil está listo.                                     Inicia sesion para comenzar.")
                     .font(.headline)
                     .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.8))
                     .multilineTextAlignment(.center)

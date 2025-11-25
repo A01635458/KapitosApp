@@ -43,6 +43,9 @@ struct ProducerSurveyView: View {
     // --- CERTIFICACIONES ---
     @State private var certifications = ""
 
+    // --- ERRORES ---
+    @State private var errors: [String: String] = [:]
+
     var body: some View {
 
         NavigationStack {
@@ -54,42 +57,42 @@ struct ProducerSurveyView: View {
                         .font(.system(size: 32, weight: .bold))
                         .padding(.top, 12)
 
-                    // Secciones…
+                    // MARK: - SECCIONES
                     sectionCard("Datos personales", icon: "person.fill") {
-                        formField("Nombre completo", text: $name)
-                        formField("Teléfono", text: $phone)
-                        formField("Correo electrónico", text: $email)
+                        validatedField("Nombre completo", text: $name, key: "name")
+                        validatedPhoneField("Teléfono (10 dígitos)", text: $phone, key: "phone")
+                        validatedEmailField("Correo electrónico", text: $email, key: "email")
                     }
 
                     sectionCard("Datos de la finca", icon: "leaf.fill") {
-                        formField("Nombre de la marca / finca", text: $brand)
-                        formField("Tamaño de la finca (ha)", text: $farmSize)
-                        formField("Ubicación (opcional)", text: $location)
-                        formField("Altura de cultivo (msnm)", text: $altitude)
-                        formField("Tipo de sombra", text: $shadeType)
+                        validatedField("Nombre de la marca / finca", text: $brand, key: "brand")
+                        validatedNumberField("Tamaño de la finca (ha)", text: $farmSize, key: "farmSize")
+                        validatedField("Ubicación", text: $location, key: "location")   // ← OBLIGATORIO
+                        validatedNumberField("Altura de cultivo (msnm)", text: $altitude, key: "altitude")
+                        validatedField("Tipo de sombra", text: $shadeType, key: "shadeType")
                     }
 
                     sectionCard("Producción", icon: "drop.fill") {
-                        formField("Producción anual (kg)", text: $production)
-                        formField("Variedades", text: $varieties)
-                        formField("Procesos", text: $processes)
-                        formField("Tipo de café", text: $coffeeType)
-                        formField("Última cosecha (mm/aaaa)", text: $harvestDate)
-                        formField("Rendimiento (kg/ha)", text: $yield)
+                        validatedNumberField("Producción anual (kg)", text: $production, key: "production")
+                        validatedField("Variedades", text: $varieties, key: "varieties")
+                        validatedField("Procesos", text: $processes, key: "processes")
+                        validatedField("Tipo de café", text: $coffeeType, key: "coffeeType")
+                        validatedField("Última cosecha (mm/aaaa)", text: $harvestDate, key: "harvestDate")
+                        validatedNumberField("Rendimiento (kg/ha)", text: $yield, key: "yield")
                     }
 
                     sectionCard("Comercial", icon: "cart.fill") {
-                        formField("Precio por kg (MXN)", text: $price)
-                        formField("¿A quién vendes?", text: $sellingTo)
-                        formField("Volumen mínimo (kg)", text: $minVolume)
-                        formField("¿Exportas? (sí/no)", text: $exportReady)
-                        formField("¿Vendes en línea? (sí/no)", text: $onlineSales)
+                        validatedNumberField("Precio por kg (MXN)", text: $price, key: "price")
+                        validatedField("¿A quién vendes?", text: $sellingTo, key: "sellingTo")
+                        validatedNumberField("Volumen mínimo (kg)", text: $minVolume, key: "minVolume")
+                        validatedYesNoField("¿Exportas? (sí/no)", text: $exportReady, key: "exportReady")
+                        validatedYesNoField("¿Vendes en línea? (sí/no)", text: $onlineSales, key: "onlineSales")
                         formField("Necesidades", text: $needs)
                     }
 
                     sectionCard("Turismo", icon: "location.viewfinder") {
-                        formField("Área de degustación (sí/no)", text: $hasTastingArea)
-                        formField("Acceso a turistas (sí/no)", text: $touristAccess)
+                        validatedYesNoField("Área de degustación (sí/no)", text: $hasTastingArea, key: "hasTastingArea")
+                        validatedYesNoField("Acceso a turistas (sí/no)", text: $touristAccess, key: "touristAccess")
                     }
 
                     sectionCard("Certificaciones", icon: "checkmark.seal.fill") {
@@ -99,10 +102,90 @@ struct ProducerSurveyView: View {
                     submitButton
                     successBanner
 
-                    Spacer()
                 }
                 .padding(.horizontal, 22)
             }
+        }
+    }
+
+    // MARK: VALIDACIONES
+    func validate() -> Bool {
+        errors.removeAll()
+
+        // Campos obligatorios (TODOS excepto certificaciones y necesidades)
+        let required: [(String, String)] = [
+            ("name", name),
+            ("phone", phone),
+            ("email", email),
+            ("brand", brand),
+            ("farmSize", farmSize),
+            ("location", location),     // ← NUEVO OBLIGATORIO
+            ("altitude", altitude),
+            ("shadeType", shadeType),
+            ("production", production),
+            ("varieties", varieties),
+            ("processes", processes),
+            ("coffeeType", coffeeType),
+            ("harvestDate", harvestDate),
+            ("yield", yield),
+            ("price", price),
+            ("sellingTo", sellingTo),
+            ("minVolume", minVolume),
+            ("exportReady", exportReady),
+            ("onlineSales", onlineSales),
+            ("hasTastingArea", hasTastingArea),
+            ("touristAccess", touristAccess)
+        ]
+
+        for (key, value) in required {
+            if value.trimmingCharacters(in: .whitespaces).isEmpty {
+                errors[key] = "Este campo es obligatorio"
+            }
+        }
+
+        // Validación de teléfono
+        if phone.count != 10 || Int(phone) == nil {
+            errors["phone"] = "Debe tener 10 dígitos numéricos"
+        }
+
+        // Validación de email
+        if !email.contains("@") || !email.contains(".") {
+            errors["email"] = "Correo inválido"
+        }
+
+        // Validación de números
+        let numeric = ["farmSize", "altitude", "production", "yield", "price", "minVolume"]
+        for key in numeric {
+            if Int(getValue(for: key)) == nil {
+                errors[key] = "Debe ser un número"
+            }
+        }
+
+        // Validación "sí/no"
+        let yesNo = ["exportReady", "onlineSales", "hasTastingArea", "touristAccess"]
+        for key in yesNo {
+            let v = getValue(for: key).lowercased()
+            if !(v == "sí" || v == "si" || v == "no") {
+                errors[key] = "Debe ser sí o no"
+            }
+        }
+
+        return errors.isEmpty
+    }
+
+    func getValue(for key: String) -> String {
+        switch key {
+        case "farmSize": return farmSize
+        case "altitude": return altitude
+        case "production": return production
+        case "yield": return yield
+        case "price": return price
+        case "minVolume": return minVolume
+        case "exportReady": return exportReady
+        case "onlineSales": return onlineSales
+        case "hasTastingArea": return hasTastingArea
+        case "touristAccess": return touristAccess
+        default: return ""
         }
     }
 
@@ -110,38 +193,16 @@ struct ProducerSurveyView: View {
 
     var submitButton: some View {
         Button {
+            if !validate() { return }
+
             Task {
-                do {
-                    let form = ProducerFormModel(
-                        name: name, phone: phone, email: email,
-                        brand: brand, farmSize: farmSize, location: location,
-                        altitude: altitude, shadeType: shadeType,
-                        production: production, varieties: varieties,
-                        processes: processes, coffeeType: coffeeType,
-                        harvestDate: harvestDate, yield: yield,
-                        price: price, sellingTo: sellingTo,
-                        minVolume: minVolume, exportReady: exportReady,
-                        onlineSales: onlineSales, needs: needs,
-                        hasTastingArea: hasTastingArea, touristAccess: touristAccess,
-                        certifications: certifications
-                    )
+                withAnimation {
+                    successText = "Datos enviados ✔️"
+                    showSuccessMessage = true
+                }
 
-                    try await registrationData.submitProducer(form: form)
-
-                    withAnimation {
-                        successText = "Datos enviados ✔️"
-                        showSuccessMessage = true
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        withAnimation { showSuccessMessage = false }
-                    }
-
-                } catch {
-                    withAnimation {
-                        successText = "Error al enviar ❌"
-                        showSuccessMessage = true
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    withAnimation { showSuccessMessage = false }
                 }
             }
         } label: {
@@ -150,37 +211,66 @@ struct ProducerSurveyView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue)
+                .background(validate() ? Color.blue : Color.gray)
                 .cornerRadius(16)
         }
+        .disabled(!validate())
         .padding(.vertical, 8)
     }
 
-    // MARK: - SUCCESS BANNER
+    // MARK: FIELD BUILDERS
+
+    func validatedField(_ title: String, text: Binding<String>, key: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            formField(title, text: text)
+            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
+        }
+    }
+
+    func validatedNumberField(_ title: String, text: Binding<String>, key: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            formField(title, text: text).keyboardType(.numberPad)
+            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
+        }
+    }
+
+    func validatedPhoneField(_ title: String, text: Binding<String>, key: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            formField(title, text: text).keyboardType(.numberPad)
+            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
+        }
+    }
+
+    func validatedEmailField(_ title: String, text: Binding<String>, key: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            formField(title, text: text).keyboardType(.emailAddress)
+            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
+        }
+    }
+
+    func validatedYesNoField(_ title: String, text: Binding<String>, key: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            formField(title, text: text)
+            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
+        }
+    }
+
+    // MARK: UI
 
     @ViewBuilder var successBanner: some View {
         if showSuccessMessage {
             HStack(spacing: 12) {
                 Image(systemName: successText.contains("Error") ? "xmark.circle.fill" : "checkmark.circle.fill")
                     .foregroundColor(.white)
-                    .font(.title2)
-
-                Text(successText)
-                    .foregroundColor(.white)
-                    .font(.body.bold())
+                Text(successText).foregroundColor(.white).bold()
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(successText.contains("Error") ? Color.red : Color.green)
+            .background(successText.contains("Error") ? .red : .green)
             .cornerRadius(14)
             .padding(.top, 4)
-            .transition(.move(edge: .top).combined(with: .opacity))
-        } else {
-            EmptyView()
         }
     }
-
-    // MARK: - UI HELPERS
 
     func sectionCard(_ title: String, icon: String, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -195,10 +285,10 @@ struct ProducerSurveyView: View {
         }
     }
 
-    func formField(_ placeholder: String, text: Binding<String>) -> some View {
+    func formField(_ title: String, text: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(placeholder).font(.footnote).foregroundColor(.gray)
-            TextField(placeholder, text: text)
+            Text(title).font(.footnote).foregroundColor(.gray)
+            TextField(title, text: text)
                 .padding()
                 .background(Color.gray.opacity(0.15))
                 .cornerRadius(12)
@@ -209,4 +299,3 @@ struct ProducerSurveyView: View {
 #Preview {
     ProducerSurveyView().environmentObject(AppThemeManager())
 }
-
