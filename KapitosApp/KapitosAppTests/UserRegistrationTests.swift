@@ -72,7 +72,15 @@ struct UserRegistrationTests {
             "spaces @email.com"
           ])
     func testInvalidEmailFormats(email: String) async {
-        let isValid = email.contains("@") && email.contains(".") && !email.contains(" ")
+        // More robust email validation
+        let hasAt = email.contains("@")
+        let hasDot = email.contains(".")
+        let hasSpace = email.contains(" ")
+        let parts = email.split(separator: "@")
+        let hasLocalPart = parts.first?.isEmpty == false
+        let hasDomainPart = parts.count == 2 && parts.last?.contains(".") == true
+        
+        let isValid = hasAt && hasDot && !hasSpace && hasLocalPart && hasDomainPart
         #expect(!isValid)
     }
     

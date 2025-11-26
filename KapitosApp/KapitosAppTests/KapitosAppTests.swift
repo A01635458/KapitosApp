@@ -5,14 +5,12 @@
 //  Created by Leobardo Navarro Márquez on 26/11/25.
 //
 
-import Testing
-import Foundation
+import XCTest
 @testable import KapitosApp
 
-@Suite("Example Tests")
-struct ExampleTests {
-    @Test("Basic test")
-    func exampleTest() async {
-        #expect(1 + 1 == 2)
+final class ExampleTests: XCTestCase {
+    func testBasicExample() {
+        XCTAssertEqual(1 + 1, 2)
     }
 }
+

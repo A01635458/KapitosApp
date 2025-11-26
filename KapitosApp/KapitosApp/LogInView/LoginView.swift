@@ -7,6 +7,7 @@ struct LoginView: View {
     @State private var showRegister = false
     @State private var showProducerSurvey = false
     @State private var goToApp = false
+    @State private var goToAdmin = false
 
     @StateObject private var auth = AuthenticationService.shared
 
@@ -134,6 +135,9 @@ struct LoginView: View {
             .navigationDestination(isPresented: $goToApp) {
                 ContentView().environmentObject(theme)
             }
+            .navigationDestination(isPresented: $goToAdmin) {
+                KapeContentView().environmentObject(theme)
+            }
         }
     }
 
@@ -179,7 +183,12 @@ extension LoginView {
         let success = await auth.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines),
                                         password: password)
         if success {
-            withAnimation { goToApp = true }
+            // Redirigir según el rol del usuario
+            if auth.userRole == "admin" {
+                withAnimation { goToAdmin = true }
+            } else {
+                withAnimation { goToApp = true }
+            }
         }
     }
 }

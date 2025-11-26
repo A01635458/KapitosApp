@@ -23,7 +23,7 @@ struct KapeContentView: View {
                     case .dashboard:
                         DashboardView().environmentObject(theme)
                     case .requests:
-                        RequestsListView().environmentObject(theme)
+                        ProducerListView().environmentObject(theme)
                     case .producers:
                         ProducersListView().environmentObject(theme)
                     case .clients:

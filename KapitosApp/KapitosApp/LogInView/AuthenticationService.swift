@@ -14,6 +14,7 @@ final class AuthenticationService: ObservableObject {
     @Published var isLoading = false
     @Published var message: String? = nil
     @Published var currentUserId: UUID? = nil
+    @Published var userRole: String? = nil
 
     enum AuthError: LocalizedError {
         case missingUser
@@ -38,6 +39,19 @@ final class AuthenticationService: ObservableObject {
             // En versión actual user no es opcional
             let user = response.user
             currentUserId = user.id
+            
+            // Obtener el rol del usuario desde la tabla profiles
+            let profileResponse: [UserProfile] = try await client
+                .from("profiles")
+                .select()
+                .eq("id", value: user.id.uuidString)
+                .execute()
+                .value
+            
+            if let profile = profileResponse.first {
+                userRole = profile.role
+            }
+            
             message = "Inicio de sesión exitoso ✔️"
             return true
         } catch {
