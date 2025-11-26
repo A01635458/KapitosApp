@@ -17,7 +17,7 @@ struct UserRegistrationTests {
     func testFlowModelInitialization() async {
         let flowModel = RegistrationFlowModel()
         
-        #expect(flowModel.fullName.isEmpty)
+        #expect(flowModel.name.isEmpty)
         #expect(flowModel.email.isEmpty)
         #expect(flowModel.password.isEmpty)
         #expect(flowModel.preferences.processes.isEmpty)
@@ -41,11 +41,11 @@ struct UserRegistrationTests {
     func testCredentialStorage() async {
         let flowModel = RegistrationFlowModel()
         
-        flowModel.fullName = "Test User"
+        flowModel.name = "Test User"
         flowModel.email = "test@example.com"
         flowModel.password = "SecurePass123"
         
-        #expect(flowModel.fullName == "Test User")
+        #expect(flowModel.name == "Test User")
         #expect(flowModel.email == "test@example.com")
         #expect(flowModel.password == "SecurePass123")
     }
@@ -114,7 +114,7 @@ struct UserRegistrationTests {
     
     @Test("Preferences structure initialization")
     func testPreferencesStructure() async {
-        var prefs = RegistrationFlowModel.UserPreferences()
+        var prefs = RegistrationFlowModel.PreferencesData()
         
         #expect(prefs.processes.isEmpty)
         #expect(prefs.roasts.isEmpty)
@@ -129,7 +129,7 @@ struct UserRegistrationTests {
     
     @Test("Preferences can store multiple selections")
     func testMultiplePreferences() async {
-        var prefs = RegistrationFlowModel.UserPreferences()
+        var prefs = RegistrationFlowModel.PreferencesData()
         
         prefs.processes = ["Lavado", "Natural", "Honey"]
         prefs.drinks = ["Espresso", "Latte", "Americano"]
@@ -175,7 +175,7 @@ struct UserRegistrationTests {
     
     @Test("Preferences conversion to arrays")
     func testPreferencesArrayConversion() async {
-        let prefs = RegistrationFlowModel.UserPreferences(
+        let prefs = RegistrationFlowModel.PreferencesData(
             processes: ["Lavado", "Natural"],
             roasts: ["Medio"],
             drinks: ["Espresso", "Latte"],
@@ -185,14 +185,14 @@ struct UserRegistrationTests {
             weekly: ["4-7 tazas"]
         )
         
-        #expect(Array(prefs.processes) == ["Lavado", "Natural"])
+        #expect(Array(prefs.processes).sorted() == ["Lavado", "Natural"].sorted())
         #expect(Array(prefs.roasts) == ["Medio"])
-        #expect(Array(prefs.drinks) == ["Espresso", "Latte"])
+        #expect(Array(prefs.drinks).sorted() == ["Espresso", "Latte"].sorted())
     }
     
     @Test("Empty preferences are handled correctly")
     func testEmptyPreferences() async {
-        let prefs = RegistrationFlowModel.UserPreferences()
+        let prefs = RegistrationFlowModel.PreferencesData()
         
         let allEmpty = prefs.processes.isEmpty &&
                        prefs.roasts.isEmpty &&

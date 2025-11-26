@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A1715E3F2ED4277500FAC5BC /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A1715E3E2ED4277500FAC5BC /* Supabase */; };
-		A17161222ED757B200FAC5BC /* KapitosAppTests.xctest in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = A17161192ED7576200FAC5BC /* KapitosAppTests.xctest */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A1B1BBAD2ED422F100FB58D5 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBAC2ED422F100FB58D5 /* Auth */; };
 		A1B1BBAF2ED422F100FB58D5 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBAE2ED422F100FB58D5 /* Functions */; };
 		A1B1BBB12ED422F100FB58D5 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBB02ED422F100FB58D5 /* PostgREST */; };
@@ -25,20 +24,6 @@
 			remoteInfo = KapitosApp;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		A17161252ED757B200FAC5BC /* Embed PlugIns */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				A17161222ED757B200FAC5BC /* KapitosAppTests.xctest in Embed PlugIns */,
-			);
-			name = "Embed PlugIns";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		513B481A2EC8F1B3000AECD6 /* KapitosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KapitosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,7 +103,6 @@
 				513B48162EC8F1B3000AECD6 /* Sources */,
 				513B48172EC8F1B3000AECD6 /* Frameworks */,
 				513B48182EC8F1B3000AECD6 /* Resources */,
-				A17161252ED757B200FAC5BC /* Embed PlugIns */,
 			);
 			buildRules = (
 			);
