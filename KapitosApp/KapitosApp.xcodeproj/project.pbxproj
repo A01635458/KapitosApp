@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A1715E3F2ED4277500FAC5BC /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A1715E3E2ED4277500FAC5BC /* Supabase */; };
+		A17161222ED757B200FAC5BC /* KapitosAppTests.xctest in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = A17161192ED7576200FAC5BC /* KapitosAppTests.xctest */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A1B1BBAD2ED422F100FB58D5 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBAC2ED422F100FB58D5 /* Auth */; };
 		A1B1BBAF2ED422F100FB58D5 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBAE2ED422F100FB58D5 /* Functions */; };
 		A1B1BBB12ED422F100FB58D5 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBB02ED422F100FB58D5 /* PostgREST */; };
@@ -15,14 +16,44 @@
 		A1B1BBB52ED422F100FB58D5 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = A1B1BBB42ED422F100FB58D5 /* Storage */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A171611D2ED7576200FAC5BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 513B48122EC8F1B3000AECD6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 513B48192EC8F1B3000AECD6;
+			remoteInfo = KapitosApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A17161252ED757B200FAC5BC /* Embed PlugIns */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A17161222ED757B200FAC5BC /* KapitosAppTests.xctest in Embed PlugIns */,
+			);
+			name = "Embed PlugIns";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		513B481A2EC8F1B3000AECD6 /* KapitosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KapitosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A17161192ED7576200FAC5BC /* KapitosAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KapitosAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		513B481C2EC8F1B3000AECD6 /* KapitosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = KapitosApp;
+			sourceTree = "<group>";
+		};
+		A171611A2ED7576200FAC5BC /* KapitosAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = KapitosAppTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -41,6 +72,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A17161162ED7576200FAC5BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -48,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				513B481C2EC8F1B3000AECD6 /* KapitosApp */,
+				A171611A2ED7576200FAC5BC /* KapitosAppTests */,
 				A1715E3D2ED4276300FAC5BC /* Frameworks */,
 				513B481B2EC8F1B3000AECD6 /* Products */,
 			);
@@ -57,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				513B481A2EC8F1B3000AECD6 /* KapitosApp.app */,
+				A17161192ED7576200FAC5BC /* KapitosAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,6 +118,7 @@
 				513B48162EC8F1B3000AECD6 /* Sources */,
 				513B48172EC8F1B3000AECD6 /* Frameworks */,
 				513B48182EC8F1B3000AECD6 /* Resources */,
+				A17161252ED757B200FAC5BC /* Embed PlugIns */,
 			);
 			buildRules = (
 			);
@@ -99,6 +140,29 @@
 			productReference = 513B481A2EC8F1B3000AECD6 /* KapitosApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A17161182ED7576200FAC5BC /* KapitosAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A171611F2ED7576200FAC5BC /* Build configuration list for PBXNativeTarget "KapitosAppTests" */;
+			buildPhases = (
+				A17161152ED7576200FAC5BC /* Sources */,
+				A17161162ED7576200FAC5BC /* Frameworks */,
+				A17161172ED7576200FAC5BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A171611E2ED7576200FAC5BC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A171611A2ED7576200FAC5BC /* KapitosAppTests */,
+			);
+			name = KapitosAppTests;
+			packageProductDependencies = (
+			);
+			productName = KapitosAppTests;
+			productReference = A17161192ED7576200FAC5BC /* KapitosAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -111,6 +175,10 @@
 				TargetAttributes = {
 					513B48192EC8F1B3000AECD6 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					A17161182ED7576200FAC5BC = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 513B48192EC8F1B3000AECD6;
 					};
 				};
 			};
@@ -132,12 +200,20 @@
 			projectRoot = "";
 			targets = (
 				513B48192EC8F1B3000AECD6 /* KapitosApp */,
+				A17161182ED7576200FAC5BC /* KapitosAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		513B48182EC8F1B3000AECD6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A17161172ED7576200FAC5BC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -154,7 +230,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A17161152ED7576200FAC5BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A171611E2ED7576200FAC5BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 513B48192EC8F1B3000AECD6 /* KapitosApp */;
+			targetProxy = A171611D2ED7576200FAC5BC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		513B48232EC8F1BD000AECD6 /* Debug */ = {
@@ -192,6 +283,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JLJHA5D6V7;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -256,6 +348,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = JLJHA5D6V7;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -342,6 +435,48 @@
 			};
 			name = Release;
 		};
+		A17161202ED7576200FAC5BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CWBAF94KUZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leobardo.KapitosAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KapitosApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KapitosApp";
+			};
+			name = Debug;
+		};
+		A17161212ED7576200FAC5BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CWBAF94KUZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.leobardo.KapitosAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KapitosApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KapitosApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -359,6 +494,15 @@
 			buildConfigurations = (
 				513B48262EC8F1BD000AECD6 /* Debug */,
 				513B48272EC8F1BD000AECD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A171611F2ED7576200FAC5BC /* Build configuration list for PBXNativeTarget "KapitosAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A17161202ED7576200FAC5BC /* Debug */,
+				A17161212ED7576200FAC5BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
