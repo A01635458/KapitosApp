@@ -1,5 +1,12 @@
 import SwiftUI
 
+//admin@kapitos.com
+//Teamleche123@
+
+
+//productor1@kapitos.com
+//Productor123!
+
 struct LoginView: View {
 
     @State private var email: String = ""
@@ -8,6 +15,7 @@ struct LoginView: View {
     @State private var showProducerSurvey = false
     @State private var goToApp = false
     @State private var goToAdmin = false
+    @State private var goToProducer = false    // <-- NUEVO
 
     @StateObject private var auth = AuthenticationService.shared
 
@@ -32,7 +40,7 @@ struct LoginView: View {
                         .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.5) : .clear,
                                 radius: 8)
 
-                    // CARD CONTAINER
+                    // CARD
                     VStack(spacing: 20) {
 
                         // EMAIL FIELD
@@ -50,7 +58,7 @@ struct LoginView: View {
                             isSecure: true
                         )
 
-                        // BUTTON LOGIN
+                        // LOGIN BUTTON
                         Button {
                             Task { await handleLogin() }
                         } label: {
@@ -83,7 +91,11 @@ struct LoginView: View {
 
                         if auth.isLoading {
                             ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight))
+                                .progressViewStyle(
+                                    CircularProgressViewStyle(
+                                        tint: theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight
+                                    )
+                                )
                         }
 
                         // REGISTER
@@ -138,6 +150,10 @@ struct LoginView: View {
             .navigationDestination(isPresented: $goToAdmin) {
                 KapeContentView().environmentObject(theme)
             }
+            .navigationDestination(isPresented: $goToProducer) {
+                ProducerContentView()        // <-- AQUI TE LLEVA
+                    .environmentObject(theme)
+            }
         }
     }
 
@@ -162,7 +178,6 @@ struct LoginView: View {
                     .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                     .autocapitalization(.none)
             }
-
         }
         .padding()
         .background(
@@ -170,9 +185,7 @@ struct LoginView: View {
                 .opacity(theme.isDarkMode ? 0.5 : 1)
         )
         .cornerRadius(14)
-        .shadow(color: theme.isDarkMode ?
-                AppColors.accentDark.opacity(0.3) :
-                Color.black.opacity(0.05),
+        .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.3) : Color.black.opacity(0.05),
                 radius: 8, y: 4)
     }
 }
@@ -180,10 +193,24 @@ struct LoginView: View {
 // MARK: - Login Logic
 extension LoginView {
     private func handleLogin() async {
-        let success = await auth.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines),
-                                        password: password)
+
+        // --------- HARD CODEADO PARA PRODUCTOR -----------
+        if email.lowercased() == "productor1@kapitos.com"
+            && password == "Productor123!" {
+
+            withAnimation {
+                goToProducer = true
+            }
+            return
+        }
+
+        // --------- LOGIN NORMAL ----------
+        let success = await auth.signIn(
+            email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+            password: password
+        )
+
         if success {
-            // Redirigir según el rol del usuario
             if auth.userRole == "admin" {
                 withAnimation { goToAdmin = true }
             } else {

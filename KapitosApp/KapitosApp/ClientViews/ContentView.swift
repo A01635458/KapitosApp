@@ -1,6 +1,14 @@
+//
+//  ContentView.swift
+//  KapitosApp
+//
+//
+//  ContentView.swift
+//  KapitosApp
+//
+
 import SwiftUI
 
-// Enum para controlar la pantalla actual
 enum AppScreen {
     case home
     case map
@@ -16,26 +24,43 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                // --- CURRENT SCREEN ---
+
+                // ===== BACKGROUND GENERAL =====
+                (theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+                    .ignoresSafeArea()
+
                 Group {
                     switch currentScreen {
+
                     case .home:
-                        HomeView()
-                            .environmentObject(theme)
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 24) {
+
+                                Text("Home")
+                                    .font(.system(size: 34, weight: .bold))
+                                    .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
+                                    .padding(.horizontal, 20)
+
+                                MapPreviewCard(currentScreen: $currentScreen)
+                                    .environmentObject(theme)
+
+                                HomeView()
+                                    .environmentObject(theme)
+                            }
+                        }
+
                     case .map:
-                        MapView()
-                            .environmentObject(theme)
+                        MapView().environmentObject(theme)
+
                     case .profile:
-                        ProfileView()
-                            .environmentObject(theme)
+                        ProfileView().environmentObject(theme)
                     }
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                                showMenu.toggle() // Abre o cierra el menú
+                                showMenu.toggle()
                             }
                         } label: {
                             Image(systemName: "line.horizontal.3")
@@ -45,26 +70,19 @@ struct ContentView: View {
                     }
                 }
 
-                //cerrar picando afuera
                 if showMenu {
                     Color.black.opacity(0.35)
                         .ignoresSafeArea()
                         .onTapGesture {
-                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                                showMenu = false // Cierra el menú si tocas afuera
-                            }
+                            withAnimation(.spring()) { showMenu = false }
                         }
                 }
 
-                //side menbu
                 if showMenu {
-                    SideMenu(
-                        currentScreen: $currentScreen,
-                        showMenu: $showMenu
-                    )
-                    .environmentObject(theme)
-                    .offset(x: showMenu ? -70 : -260)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: showMenu)
+                    SideMenu(currentScreen: $currentScreen, showMenu: $showMenu)
+                        .environmentObject(theme)
+                        .offset(x: showMenu ? -70 : -260)
+                        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: showMenu)
                 }
             }
         }
@@ -72,6 +90,4 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+#Preview { ContentView() }

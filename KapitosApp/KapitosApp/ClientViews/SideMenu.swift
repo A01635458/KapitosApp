@@ -12,6 +12,8 @@ struct SideMenu: View {
     @Binding var showMenu: Bool
     @EnvironmentObject var theme: AppThemeManager
 
+    @State private var goToLogin = false   // navegación a LoginView
+
     var body: some View {
         VStack(alignment: .leading, spacing: 25) {
 
@@ -23,6 +25,25 @@ struct SideMenu: View {
                 .toggleStyle(SwitchToggleStyle(tint: AppColors.accentLight))
 
             Spacer()
+
+            // ----------- CERRAR SESIÓN -----------
+            Button {
+                withAnimation(.smooth) {
+                    goToLogin = true
+                    showMenu = false
+                }
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .font(.headline)
+
+                    Text("Cerrar sesión")
+                        .font(.headline)
+                }
+                .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
+                .padding(.vertical, 8)
+            }
+            .padding(.bottom, 24)
         }
         .padding(.top, 70)
         .padding(.horizontal, 20)
@@ -30,6 +51,12 @@ struct SideMenu: View {
         .frame(maxHeight: .infinity)
         .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
         .shadow(color: .black.opacity(0.3), radius: 12, x: 5, y: 0)
+        .overlay(
+            NavigationLink(destination: LoginView(), isActive: $goToLogin) {
+                EmptyView()
+            }
+            .hidden()
+        )
     }
 
     // BUTTON REUSABLE
@@ -37,13 +64,11 @@ struct SideMenu: View {
         Button {
             withAnimation(.smooth) {
 
-                // SI YA ESTAS EN ESA SCREEN → SOLO CIERRA EL MENU
                 if currentScreen == screen {
                     showMenu = false
                     return
                 }
 
-                // SI ES OTRA SCREEN → actualiza + cierra
                 currentScreen = screen
                 showMenu = false
             }
