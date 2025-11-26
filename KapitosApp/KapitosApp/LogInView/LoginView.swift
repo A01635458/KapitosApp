@@ -3,7 +3,6 @@ import SwiftUI
 //admin@kapitos.com
 //Teamleche123@
 
-
 //productor1@kapitos.com
 //Productor123!
 
@@ -11,11 +10,13 @@ struct LoginView: View {
 
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var showPassword = false
+
     @State private var showRegister = false
     @State private var showProducerSurvey = false
     @State private var goToApp = false
     @State private var goToAdmin = false
-    @State private var goToProducer = false    // <-- NUEVO
+    @State private var goToProducer = false
 
     @StateObject private var auth = AuthenticationService.shared
 
@@ -25,7 +26,6 @@ struct LoginView: View {
         NavigationStack {
             ZStack {
 
-                // BACKGROUND
                 (theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
                     .ignoresSafeArea()
 
@@ -33,32 +33,23 @@ struct LoginView: View {
 
                     Spacer()
 
-                    // LOGO / TITLE
                     Text("La Ruta del Cafe")
                         .font(.system(size: 38, weight: .bold))
                         .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight)
                         .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.5) : .clear,
                                 radius: 8)
 
-                    // CARD
                     VStack(spacing: 20) {
 
-                        // EMAIL FIELD
                         inputField(
                             icon: "envelope.fill",
                             placeholder: "Correo electrónico",
                             text: $email
                         )
 
-                        // PASSWORD FIELD
-                        inputField(
-                            icon: "lock.fill",
-                            placeholder: "Contraseña",
-                            text: $password,
-                            isSecure: true
-                        )
+                        // PASSWORD FIELD CON OJITO
+                        passwordField()
 
-                        // LOGIN BUTTON
                         Button {
                             Task { await handleLogin() }
                         } label: {
@@ -98,7 +89,6 @@ struct LoginView: View {
                                 )
                         }
 
-                        // REGISTER
                         Button {
                             showRegister = true
                         } label: {
@@ -121,7 +111,6 @@ struct LoginView: View {
 
                     Spacer()
 
-                    // PRODUCER SECTION
                     VStack(spacing: 6) {
                         Text("¿Eres productor?")
                             .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight)
@@ -135,6 +124,7 @@ struct LoginView: View {
                         }
                     }
                     .padding(.bottom, 30)
+
                 }
                 .padding(.horizontal, 24)
             }
@@ -151,13 +141,13 @@ struct LoginView: View {
                 KapeContentView().environmentObject(theme)
             }
             .navigationDestination(isPresented: $goToProducer) {
-                ProducerContentView()        // <-- AQUI TE LLEVA
+                ProducerContentView()
                     .environmentObject(theme)
             }
         }
     }
 
-    // MARK: - Custom Input Field
+    // MARK: - CUSTOM FIELDS
     @ViewBuilder
     func inputField(icon: String,
                     placeholder: String,
@@ -188,23 +178,57 @@ struct LoginView: View {
         .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.3) : Color.black.opacity(0.05),
                 radius: 8, y: 4)
     }
+
+    // MARK: - PASSWORD FIELD COMPLETO CON OJITO
+    @ViewBuilder
+    func passwordField() -> some View {
+        HStack(spacing: 14) {
+
+            Image(systemName: "lock.fill")
+                .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight.opacity(0.6))
+                .font(.system(size: 18))
+
+            if showPassword {
+                TextField("Contraseña", text: $password)
+                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                    .autocapitalization(.none)
+            } else {
+                SecureField("Contraseña", text: $password)
+                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+            }
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    showPassword.toggle()
+                }
+            } label: {
+                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                    .font(.system(size: 18))
+                    .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
+            }
+        }
+        .padding()
+        .background(
+            (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                .opacity(theme.isDarkMode ? 0.5 : 1)
+        )
+        .cornerRadius(14)
+        .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.3) : Color.black.opacity(0.05),
+                radius: 8, y: 4)
+    }
 }
 
-// MARK: - Login Logic
+// MARK: - LOGIN LOGIC
 extension LoginView {
     private func handleLogin() async {
 
-        // --------- HARD CODEADO PARA PRODUCTOR -----------
         if email.lowercased() == "productor1@kapitos.com"
             && password == "Productor123!" {
 
-            withAnimation {
-                goToProducer = true
-            }
+            withAnimation { goToProducer = true }
             return
         }
 
-        // --------- LOGIN NORMAL ----------
         let success = await auth.signIn(
             email: email.trimmingCharacters(in: .whitespacesAndNewlines),
             password: password
