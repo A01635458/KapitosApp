@@ -30,12 +30,15 @@ struct UnifiedTextFieldStyle: ViewModifier {
             HStack(spacing: 12) {
 
                 // ---- Ícono ----
-                Image(systemName: icon)
-                    .foregroundColor(
-                        theme.isDarkMode
-                        ? AppColors.accentDark.opacity(0.9)
-                        : AppColors.textLight.opacity(0.8)
-                    )
+                if !icon.isEmpty {
+                    Image(systemName: icon)
+                        .foregroundColor(
+                            theme.isDarkMode
+                            ? AppColors.accentDark
+                            : AppColors.textLight.opacity(0.6)
+                        )
+                        .font(.system(size: 18))
+                }
 
                 // ---- Placeholder visible cuando value está vacío ----
                 if value.isEmpty {
@@ -76,6 +79,8 @@ extension View {
                 value: value,
                 isSecure: isSecure
             )
+            
         )
     }
+    
 }

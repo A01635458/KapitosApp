@@ -5,6 +5,7 @@
 //  Created by Luisa Cardona on 23/11/25.
 //
 
+
 import SwiftUI
 
 struct RegisterView: View {
@@ -33,19 +34,52 @@ struct RegisterView: View {
                             .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight)
                             .padding(.top, 20)
 
-                        // --------- NAME ----------
-                        inputField("person.fill", "Nombre completo", text: $name)
+                        // -------- NOMBRE --------
+                        Color.clear
+                            .unifiedTextField(
+                                icon: "person.fill",        // ← SE MANTIENE
+                                text: "Nombre completo",
+                                value: $name
+                            )
+                            .environmentObject(theme)
 
-                        // --------- EMAIL ----------
-                        inputField("envelope.fill", "Correo electrónico", text: $email)
+                        // -------- EMAIL --------
+                        Color.clear
+                            .unifiedTextField(
+                                icon: "envelope.fill",      // ← SE MANTIENE
+                                text: "Correo electrónico",
+                                value: $email
+                            )
+                            .environmentObject(theme)
 
-                        // --------- PASSWORD ----------
-                        passwordField
+                        // -------- PASSWORDS --------
+                        VStack(spacing: 16) {
 
-                        // --------- PASSWORD CHECKLIST ----------
+                            // CONTRASEÑA
+                            Color.clear
+                                .unifiedTextField(
+                                    icon: "lock.fill",       // ← SE MANTIENE
+                                    text: "Contraseña",
+                                    value: $password,
+                                    isSecure: true
+                                )
+                                .environmentObject(theme)
+
+                            // REPETIR CONTRASEÑA
+                            Color.clear
+                                .unifiedTextField(
+                                    icon: "lock.fill",       // ← SE MANTIENE
+                                    text: "Repetir contraseña",
+                                    value: $confirmPassword,
+                                    isSecure: true
+                                )
+                                .environmentObject(theme)
+                        }
+
+                        // -------- CHECKLIST --------
                         checklistView
 
-                        // --------- CONTINUE BUTTON ----------
+                        // -------- CONTINUAR --------
                         Button {
                             flowModel.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
                             flowModel.email = email.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -87,14 +121,6 @@ struct RegisterView: View {
         ruleLength && ruleUpper && ruleNumber && ruleSymbol && ruleMatch && !name.isEmpty && !email.isEmpty
     }
 
-    // MARK: PASSWORD FIELD
-    var passwordField: some View {
-        VStack(spacing: 16) {
-            inputField("lock.fill", "Contraseña", text: $password, secure: true)
-            inputField("lock.fill", "Repetir contraseña", text: $confirmPassword, secure: true)
-        }
-    }
-
     // MARK: CHECKLIST
     var checklistView: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -113,42 +139,17 @@ struct RegisterView: View {
                 .foregroundColor(ok ? .green : .red)
                 .font(.system(size: 16))
             Text(text)
-                .foregroundColor(theme.isDarkMode ? .white.opacity(0.8) : AppColors.textLight.opacity(0.9))
+                .foregroundColor(
+                    theme.isDarkMode ? .white.opacity(0.8) : AppColors.textLight.opacity(0.9)
+                )
                 .font(.footnote)
         }
-    }
-
-    // MARK: INPUT FIELD
-    @ViewBuilder
-    func inputField(_ icon: String, _ placeholder: String,
-                    text: Binding<String>, secure: Bool = false) -> some View {
-
-        HStack(spacing: 14) {
-
-            Image(systemName: icon)
-                .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight.opacity(0.6))
-
-            if secure {
-                SecureField(placeholder, text: text)
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-            } else {
-                TextField(placeholder, text: text)
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-                    .autocapitalization(.none)
-            }
-        }
-        .padding()
-        .background((theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight).opacity(0.9))
-        .cornerRadius(14)
-        .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.25) : .black.opacity(0.07),
-                radius: 8, y: 4)
     }
 }
 
 // MARK: - Flow / Service Instances
 private let flowModel = RegistrationFlowModel()
 private let registrationService = UserRegistrationService.shared
-
 
 #Preview {
     RegisterView().environmentObject(AppThemeManager())

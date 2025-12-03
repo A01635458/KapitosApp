@@ -180,7 +180,7 @@ struct ProducerSurveyView: View {
             if !validate() { return }
 
             withAnimation {
-                successText = "Datos enviados ✔️"
+                successText = "Datos enviados correctamente"
                 showSuccessMessage = true
             }
 
@@ -236,6 +236,10 @@ struct ProducerSurveyView: View {
         }
     }
 
+    // ============================================================
+    // MARK: ——— INPUT FIELDS (sin iconos)
+    // ============================================================
+
     func formField(_ title: String, text: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 6) {
 
@@ -243,15 +247,13 @@ struct ProducerSurveyView: View {
                 .font(.footnote)
                 .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
 
-            TextField(title, text: text)
-                .padding()
-                .background(
-                    theme.isDarkMode
-                    ? AppColors.cardDark.opacity(0.8)
-                    : AppColors.cardLight
+            Color.clear
+                .unifiedTextField(
+                    icon: "",        // 🔥 SIN ICONO
+                    text: title,
+                    value: text
                 )
-                .cornerRadius(12)
-                .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                .environmentObject(theme)
         }
     }
 
@@ -263,14 +265,11 @@ struct ProducerSurveyView: View {
     }
 
     func validatedNumberField(_ title: String, text: Binding<String>, key: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            formField(title, text: text).keyboardType(.numberPad)
-            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
-        }
+        validatedField(title, text: text, key: key)
     }
 
     func validatedPhoneField(_ title: String, text: Binding<String>, key: String) -> some View {
-        validatedNumberField(title, text: text, key: key)
+        validatedField(title, text: text, key: key)
     }
 
     func validatedEmailField(_ title: String, text: Binding<String>, key: String) -> some View {
@@ -285,5 +284,3 @@ struct ProducerSurveyView: View {
 #Preview {
     ProducerSurveyView().environmentObject(AppThemeManager())
 }
-
-

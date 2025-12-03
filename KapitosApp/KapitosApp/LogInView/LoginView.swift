@@ -2,7 +2,7 @@ import SwiftUI
 
 //admin@kapitos.com
 //Teamleche123@
-
+//
 //productor1@kapitos.com
 //Productor123!
 
@@ -41,15 +41,48 @@ struct LoginView: View {
 
                     VStack(spacing: 20) {
 
-                        inputField(
-                            icon: "envelope.fill",
-                            placeholder: "Correo electrónico",
-                            text: $email
-                        )
+                        // -----------------------------
+                        //  EMAIL FIELD (UNIFIED STYLE)
+                        // -----------------------------
+                        Color.clear
+                            .unifiedTextField(
+                                icon: "envelope.fill",
+                                text: "Correo electrónico",
+                                value: $email,
+                                isSecure: false
+                            )
+                            .environmentObject(theme)
 
-                        // PASSWORD FIELD CON OJITO
-                        passwordField()
+                        // -----------------------------
+                        // PASSWORD FIELD (UNIFIED STYLE + OJO)
+                        // -----------------------------
+                        ZStack(alignment: .trailing) {
 
+                            Color.clear
+                                .unifiedTextField(
+                                    icon: "lock.fill",
+                                    text: "Contraseña",
+                                    value: $password,
+                                    isSecure: !showPassword
+                                )
+                                .environmentObject(theme)
+
+                            Button {
+                                withAnimation(.easeInOut(duration: 0.15)) {
+                                    showPassword.toggle()
+                                }
+                            } label: {
+                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                    .foregroundColor(
+                                        theme.isDarkMode ?
+                                        .white.opacity(0.7) :
+                                        AppColors.textLight.opacity(0.7)
+                                    )
+                                    .padding(.trailing, 20)
+                            }
+                        }
+
+                        // -----------------------------
                         Button {
                             Task { await handleLogin() }
                         } label: {
@@ -145,76 +178,6 @@ struct LoginView: View {
                     .environmentObject(theme)
             }
         }
-    }
-
-    // MARK: - CUSTOM FIELDS
-    @ViewBuilder
-    func inputField(icon: String,
-                    placeholder: String,
-                    text: Binding<String>,
-                    isSecure: Bool = false) -> some View {
-
-        HStack(spacing: 14) {
-
-            Image(systemName: icon)
-                .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight.opacity(0.6))
-                .font(.system(size: 18))
-
-            if isSecure {
-                SecureField(placeholder, text: text)
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-            } else {
-                TextField(placeholder, text: text)
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-                    .autocapitalization(.none)
-            }
-        }
-        .padding()
-        .background(
-            (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                .opacity(theme.isDarkMode ? 0.5 : 1)
-        )
-        .cornerRadius(14)
-        .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.3) : Color.black.opacity(0.05),
-                radius: 8, y: 4)
-    }
-
-    // MARK: - PASSWORD FIELD COMPLETO CON OJITO
-    @ViewBuilder
-    func passwordField() -> some View {
-        HStack(spacing: 14) {
-
-            Image(systemName: "lock.fill")
-                .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight.opacity(0.6))
-                .font(.system(size: 18))
-
-            if showPassword {
-                TextField("Contraseña", text: $password)
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-                    .autocapitalization(.none)
-            } else {
-                SecureField("Contraseña", text: $password)
-                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-            }
-
-            Button {
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    showPassword.toggle()
-                }
-            } label: {
-                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                    .font(.system(size: 18))
-                    .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
-            }
-        }
-        .padding()
-        .background(
-            (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                .opacity(theme.isDarkMode ? 0.5 : 1)
-        )
-        .cornerRadius(14)
-        .shadow(color: theme.isDarkMode ? AppColors.accentDark.opacity(0.3) : Color.black.opacity(0.05),
-                radius: 8, y: 4)
     }
 }
 
