@@ -55,9 +55,10 @@ struct ProducerSurveyView: View {
 
                     Text("Registro de Productor")
                         .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                         .padding(.top, 12)
 
-                    // MARK: - SECCIONES
+                    // MARK: SECCIONES
                     sectionCard("Datos personales", icon: "person.fill") {
                         validatedField("Nombre completo", text: $name, key: "name")
                         validatedPhoneField("Teléfono (10 dígitos)", text: $phone, key: "phone")
@@ -67,7 +68,7 @@ struct ProducerSurveyView: View {
                     sectionCard("Datos de la finca", icon: "leaf.fill") {
                         validatedField("Nombre de la marca / finca", text: $brand, key: "brand")
                         validatedNumberField("Tamaño de la finca (ha)", text: $farmSize, key: "farmSize")
-                        validatedField("Ubicación", text: $location, key: "location")   // ← OBLIGATORIO
+                        validatedField("Ubicación", text: $location, key: "location")
                         validatedNumberField("Altura de cultivo (msnm)", text: $altitude, key: "altitude")
                         validatedField("Tipo de sombra", text: $shadeType, key: "shadeType")
                     }
@@ -105,6 +106,8 @@ struct ProducerSurveyView: View {
                 }
                 .padding(.horizontal, 22)
             }
+            .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+            .scrollContentBackground(.hidden)
         }
     }
 
@@ -112,29 +115,14 @@ struct ProducerSurveyView: View {
     func validate() -> Bool {
         errors.removeAll()
 
-        // Campos obligatorios (TODOS excepto certificaciones y necesidades)
         let required: [(String, String)] = [
-            ("name", name),
-            ("phone", phone),
-            ("email", email),
-            ("brand", brand),
-            ("farmSize", farmSize),
-            ("location", location),     // ← NUEVO OBLIGATORIO
-            ("altitude", altitude),
-            ("shadeType", shadeType),
-            ("production", production),
-            ("varieties", varieties),
-            ("processes", processes),
-            ("coffeeType", coffeeType),
-            ("harvestDate", harvestDate),
-            ("yield", yield),
-            ("price", price),
-            ("sellingTo", sellingTo),
-            ("minVolume", minVolume),
-            ("exportReady", exportReady),
-            ("onlineSales", onlineSales),
-            ("hasTastingArea", hasTastingArea),
-            ("touristAccess", touristAccess)
+            ("name", name), ("phone", phone), ("email", email),
+            ("brand", brand), ("farmSize", farmSize), ("location", location),
+            ("altitude", altitude), ("shadeType", shadeType), ("production", production),
+            ("varieties", varieties), ("processes", processes), ("coffeeType", coffeeType),
+            ("harvestDate", harvestDate), ("yield", yield), ("price", price),
+            ("sellingTo", sellingTo), ("minVolume", minVolume), ("exportReady", exportReady),
+            ("onlineSales", onlineSales), ("hasTastingArea", hasTastingArea), ("touristAccess", touristAccess)
         ]
 
         for (key, value) in required {
@@ -143,17 +131,14 @@ struct ProducerSurveyView: View {
             }
         }
 
-        // Validación de teléfono
         if phone.count != 10 || Int(phone) == nil {
             errors["phone"] = "Debe tener 10 dígitos numéricos"
         }
 
-        // Validación de email
         if !email.contains("@") || !email.contains(".") {
             errors["email"] = "Correo inválido"
         }
 
-        // Validación de números
         let numeric = ["farmSize", "altitude", "production", "yield", "price", "minVolume"]
         for key in numeric {
             if Int(getValue(for: key)) == nil {
@@ -161,7 +146,6 @@ struct ProducerSurveyView: View {
             }
         }
 
-        // Validación "sí/no"
         let yesNo = ["exportReady", "onlineSales", "hasTastingArea", "touristAccess"]
         for key in yesNo {
             let v = getValue(for: key).lowercased()
@@ -189,36 +173,87 @@ struct ProducerSurveyView: View {
         }
     }
 
-    // MARK: - SUBMIT BUTTON
+    // MARK: SUBMIT BUTTON
 
     var submitButton: some View {
         Button {
             if !validate() { return }
 
-            Task {
-                withAnimation {
-                    successText = "Datos enviados ✔️"
-                    showSuccessMessage = true
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    withAnimation { showSuccessMessage = false }
-                }
+            withAnimation {
+                successText = "Datos enviados ✔️"
+                showSuccessMessage = true
             }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation { showSuccessMessage = false }
+            }
+
         } label: {
             Text("Enviar Registro")
                 .font(.headline)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(validate() ? Color.blue : Color.gray)
+                .background(validate() ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight) : Color.gray)
                 .cornerRadius(16)
         }
         .disabled(!validate())
         .padding(.vertical, 8)
     }
 
-    // MARK: FIELD BUILDERS
+    // MARK: UI BUILDERS
+
+    @ViewBuilder var successBanner: some View {
+        if showSuccessMessage {
+            HStack(spacing: 12) {
+                Image(systemName: "checkmark.circle.fill").foregroundColor(.white)
+                Text(successText).foregroundColor(.white).bold()
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(.green)
+            .cornerRadius(14)
+        }
+    }
+
+    func sectionCard(_ title: String, icon: String, @ViewBuilder content: () -> some View) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight)
+                Text(title)
+                    .font(.title3.bold())
+                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+            }
+
+            VStack(spacing: 14) { content() }
+                .padding(16)
+                .background(
+                    theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight
+                )
+                .cornerRadius(16)
+        }
+    }
+
+    func formField(_ title: String, text: Binding<String>) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+
+            Text(title)
+                .font(.footnote)
+                .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
+
+            TextField(title, text: text)
+                .padding()
+                .background(
+                    theme.isDarkMode
+                    ? AppColors.cardDark.opacity(0.8)
+                    : AppColors.cardLight
+                )
+                .cornerRadius(12)
+                .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+        }
+    }
 
     func validatedField(_ title: String, text: Binding<String>, key: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -235,67 +270,20 @@ struct ProducerSurveyView: View {
     }
 
     func validatedPhoneField(_ title: String, text: Binding<String>, key: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            formField(title, text: text).keyboardType(.numberPad)
-            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
-        }
+        validatedNumberField(title, text: text, key: key)
     }
 
     func validatedEmailField(_ title: String, text: Binding<String>, key: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            formField(title, text: text).keyboardType(.emailAddress)
-            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
-        }
+        validatedField(title, text: text, key: key)
     }
 
     func validatedYesNoField(_ title: String, text: Binding<String>, key: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            formField(title, text: text)
-            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
-        }
-    }
-
-    // MARK: UI
-
-    @ViewBuilder var successBanner: some View {
-        if showSuccessMessage {
-            HStack(spacing: 12) {
-                Image(systemName: successText.contains("Error") ? "xmark.circle.fill" : "checkmark.circle.fill")
-                    .foregroundColor(.white)
-                Text(successText).foregroundColor(.white).bold()
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(successText.contains("Error") ? .red : .green)
-            .cornerRadius(14)
-            .padding(.top, 4)
-        }
-    }
-
-    func sectionCard(_ title: String, icon: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 10) {
-                Image(systemName: icon)
-                Text(title).font(.title3.bold())
-            }
-            VStack(spacing: 14) { content() }
-                .padding(16)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(16)
-        }
-    }
-
-    func formField(_ title: String, text: Binding<String>) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.footnote).foregroundColor(.gray)
-            TextField(title, text: text)
-                .padding()
-                .background(Color.gray.opacity(0.15))
-                .cornerRadius(12)
-        }
+        validatedField(title, text: text, key: key)
     }
 }
 
 #Preview {
     ProducerSurveyView().environmentObject(AppThemeManager())
 }
+
+
