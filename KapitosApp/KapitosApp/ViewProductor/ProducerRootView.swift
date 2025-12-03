@@ -12,6 +12,7 @@ enum ProducerScreen {
     case shop
     case profile
     case customerPreview
+    case mensajesProductor
 }
 
 struct ProducerRootView: View {
@@ -32,23 +33,34 @@ struct ProducerRootView: View {
 
                     case .dashboard:
                         ProducerDashboardView()
+                            .environmentObject(theme)
                             .environmentObject(store)
 
                     case .business:
                         ProducerBusinessView()
+                            .environmentObject(theme)
                             .environmentObject(store)
 
                     case .shop:
                         ProducerShopView()
+                            .environmentObject(theme)
                             .environmentObject(store)
 
                     case .profile:
                         ProducerProfileView()
+                            .environmentObject(theme)
                             .environmentObject(store)
 
                     case .customerPreview:
                         ProducerCustomerPreviewView()
+                            .environmentObject(theme)
                             .environmentObject(store)
+                        
+                    case .mensajesProductor:
+                        ProducerChatListView()
+                            .environmentObject(theme)
+                            .environmentObject(store)
+                        
                     }
                 }
                 .environmentObject(theme)

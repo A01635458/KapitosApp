@@ -1,9 +1,106 @@
+////
+////  ProducerContentView.swift
+////  KapitosApp
+////
+////  Created by Luisa Cardona on 25/11/25.
+////
 //
-//  ProducerContentView.swift
-//  KapitosApp
+//import SwiftUI
 //
-//  Created by Luisa Cardona on 25/11/25.
+//struct ProducerContentView: View {
 //
+//    @State private var showMenu = false
+//    @State private var currentPage: ProducerScreen = .dashboard
+//
+//    @StateObject var theme = AppThemeManager()
+//    @StateObject var store = ProducerStore()
+//
+//    var body: some View {
+//        NavigationStack {
+//            ZStack {
+//
+//                // ---------- BACKGROUND DINÁMICO ----------
+//                (theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+//                    .ignoresSafeArea()
+//
+//                // ---------- CURRENT PAGE ----------
+//                Group {
+//                    switch currentPage {
+//                    case .dashboard:
+//                        ProducerDashboardView()
+//                            .environmentObject(theme)
+//                            .environmentObject(store)
+//
+//                    case .business:
+//                        ProducerBusinessView()
+//                            .environmentObject(theme)
+//                            .environmentObject(store)
+//
+//                    case .shop:
+//                        ProducerShopView()
+//                            .environmentObject(theme)
+//                            .environmentObject(store)
+//
+//                    case .profile:
+//                        ProducerProfileView()
+//                            .environmentObject(theme)
+//                            .environmentObject(store)
+//
+//                    case .customerPreview:
+//                        ProducerCustomerPreviewView()
+//                            .environmentObject(theme)
+//                            .environmentObject(store)
+//                    }
+//                }
+//                .toolbar {
+//                    ToolbarItem(placement: .topBarLeading) {
+//                        Button {
+//                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+//                                showMenu.toggle()
+//                            }
+//                        } label: {
+//                            Image(systemName: "line.horizontal.3")
+//                                .font(.system(size: 22, weight: .bold))
+//                                .foregroundColor(
+//                                    theme.isDarkMode ? AppColors.textDark : AppColors.textLight
+//                                )
+//                        }
+//                    }
+//                }
+//
+//                // ---------- TAP OUTSIDE TO CLOSE ----------
+//                if showMenu {
+//                    Color.black.opacity(0.35)
+//                        .ignoresSafeArea()
+//                        .onTapGesture {
+//                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+//                                showMenu = false
+//                            }
+//                        }
+//                }
+//
+//                // ---------- SIDE MENU ----------
+//                if showMenu {
+//                    ProducerSideMenu(
+//                        current: $currentPage,
+//                        showMenu: $showMenu
+//                    )
+//                    .environmentObject(theme)
+//                    .environmentObject(store)
+//                    .offset(x: showMenu ? -70 : -260)
+//                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: showMenu)
+//                }
+//            }
+//        }
+//        .environmentObject(theme)
+//        .environmentObject(store)
+//    }
+//}
+//
+//#Preview {
+//    ProducerContentView()
+//}
+
 
 import SwiftUI
 
@@ -19,13 +116,12 @@ struct ProducerContentView: View {
         NavigationStack {
             ZStack {
 
-                // ---------- BACKGROUND DINÁMICO ----------
                 (theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
                     .ignoresSafeArea()
 
-                // ---------- CURRENT PAGE ----------
                 Group {
                     switch currentPage {
+
                     case .dashboard:
                         ProducerDashboardView()
                             .environmentObject(theme)
@@ -41,13 +137,19 @@ struct ProducerContentView: View {
                             .environmentObject(theme)
                             .environmentObject(store)
 
+                    case .customerPreview:
+                        ProducerCustomerPreviewView()
+                            .environmentObject(theme)
+                            .environmentObject(store)
+
                     case .profile:
                         ProducerProfileView()
                             .environmentObject(theme)
                             .environmentObject(store)
 
-                    case .customerPreview:
-                        ProducerCustomerPreviewView()
+                    // ---------- NUEVO: MENSAJES PRODUCTOR ----------
+                    case .mensajesProductor:
+                        ProducerChatListView()
                             .environmentObject(theme)
                             .environmentObject(store)
                     }
@@ -68,7 +170,6 @@ struct ProducerContentView: View {
                     }
                 }
 
-                // ---------- TAP OUTSIDE TO CLOSE ----------
                 if showMenu {
                     Color.black.opacity(0.35)
                         .ignoresSafeArea()
@@ -79,7 +180,6 @@ struct ProducerContentView: View {
                         }
                 }
 
-                // ---------- SIDE MENU ----------
                 if showMenu {
                     ProducerSideMenu(
                         current: $currentPage,
