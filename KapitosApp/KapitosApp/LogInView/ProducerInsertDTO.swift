@@ -18,6 +18,8 @@ struct ProducerInsertDTO: Codable {
     let country: String?
     let state: String?
     let municipality: String?
+    let latitude: Double?
+    let longitude: Double?
     let shade_type: String?
     let annual_production_kg: Int?
     let last_harvest_date: String? // formatted "YYYY-MM-DD" for Postgres date

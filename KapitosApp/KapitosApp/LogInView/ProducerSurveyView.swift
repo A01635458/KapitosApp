@@ -1,4 +1,5 @@
 import SwiftUI
+import MapKit
 
 struct ProducerSurveyView: View {
 
@@ -17,6 +18,10 @@ struct ProducerSurveyView: View {
     @State private var brand = ""
     @State private var farmSize = ""
     @State private var location = ""
+    @State private var latitude: Double? = nil
+    @State private var longitude: Double? = nil
+    @State private var locationAddress: String? = nil
+    @State private var showLocationPicker = false
     @State private var altitude = ""
     @State private var shadeType = ""
 
@@ -68,7 +73,7 @@ struct ProducerSurveyView: View {
                     sectionCard("Datos de la finca", icon: "leaf.fill") {
                         validatedField("Nombre de la marca / finca", text: $brand, key: "brand")
                         validatedNumberField("Tamaño de la finca (ha)", text: $farmSize, key: "farmSize")
-                        validatedField("Ubicación", text: $location, key: "location")
+                        locationPickerField
                         validatedNumberField("Altura de cultivo (msnm)", text: $altitude, key: "altitude")
                         validatedField("Tipo de sombra", text: $shadeType, key: "shadeType")
                     }
@@ -109,6 +114,15 @@ struct ProducerSurveyView: View {
             .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
             .scrollContentBackground(.hidden)
         }
+        .sheet(isPresented: $showLocationPicker) {
+            MapLocationPickerView { locationData in
+                latitude = locationData.coordinate.latitude
+                longitude = locationData.coordinate.longitude
+                locationAddress = locationData.address
+                location = locationData.address
+            }
+            .environmentObject(theme)
+        }
     }
 
     // MARK: VALIDACIONES
@@ -129,6 +143,11 @@ struct ProducerSurveyView: View {
             if value.trimmingCharacters(in: .whitespaces).isEmpty {
                 errors[key] = "Este campo es obligatorio"
             }
+        }
+        
+        // Validate location coordinates
+        if latitude == nil || longitude == nil {
+            errors["location"] = "Debe seleccionar ubicación en el mapa"
         }
 
         if phone.count != 10 || Int(phone) == nil {
@@ -179,25 +198,65 @@ struct ProducerSurveyView: View {
         Button {
             if !validate() { return }
 
-            withAnimation {
-                successText = "Datos enviados correctamente"
-                showSuccessMessage = true
-            }
+            Task {
+                let form = ProducerFormModel(
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    brand: brand,
+                    farmSize: farmSize,
+                    location: location,
+                    latitude: latitude,
+                    longitude: longitude,
+                    locationAddress: locationAddress,
+                    altitude: altitude,
+                    shadeType: shadeType,
+                    production: production,
+                    varieties: varieties,
+                    processes: processes,
+                    coffeeType: coffeeType,
+                    harvestDate: harvestDate,
+                    yield: yield,
+                    price: price,
+                    sellingTo: sellingTo,
+                    minVolume: minVolume,
+                    exportReady: exportReady,
+                    onlineSales: onlineSales,
+                    needs: needs,
+                    hasTastingArea: hasTastingArea,
+                    touristAccess: touristAccess,
+                    certifications: certifications
+                )
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                withAnimation { showSuccessMessage = false }
+                await registrationData.submitProducer(form: form)
+
+                if let msg = registrationData.submitMessage {
+                    withAnimation {
+                        successText = msg
+                        showSuccessMessage = true
+                    }
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        withAnimation { showSuccessMessage = false }
+                    }
+                }
             }
 
         } label: {
-            Text("Enviar Registro")
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(validate() ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight) : Color.gray)
-                .cornerRadius(16)
+            if registrationData.isLoading {
+                ProgressView()
+                    .tint(.white)
+            } else {
+                Text("Enviar Registro")
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
         }
-        .disabled(!validate())
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(validate() ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight) : Color.gray)
+        .cornerRadius(16)
+        .disabled(!validate() || registrationData.isLoading)
         .padding(.vertical, 8)
     }
 
@@ -278,6 +337,60 @@ struct ProducerSurveyView: View {
 
     func validatedYesNoField(_ title: String, text: Binding<String>, key: String) -> some View {
         validatedField(title, text: text, key: key)
+    }
+    
+    // MARK: - Location Picker Field
+    
+    var locationPickerField: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Ubicación de la finca")
+                .font(.footnote)
+                .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
+            
+            Button(action: {
+                showLocationPicker = true
+            }) {
+                HStack {
+                    Image(systemName: "map.fill")
+                        .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                    
+                    if location.isEmpty {
+                        Text("Seleccionar en el mapa")
+                            .foregroundColor(.gray)
+                    } else {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(location)
+                                .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                                .lineLimit(2)
+                            
+                            if let lat = latitude, let lon = longitude {
+                                Text("Lat: \(String(format: "%.6f", lat)), Lon: \(String(format: "%.6f", lon))")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
+                }
+                .padding(14)
+                .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.cardLight)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(errors["location"] != nil ? Color.red : Color.clear, lineWidth: 1)
+                )
+            }
+            
+            if let err = errors["location"] {
+                Text(err)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
+        }
     }
 }
 

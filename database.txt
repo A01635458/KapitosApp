@@ -1,0 +1,207 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.ai_inspections (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  image_id bigint,
+  bean_type text,
+  defects jsonb,
+  quality_score numeric,
+  ai_explanation text,
+  created_at timestamp without time zone DEFAULT now(),
+  bean_variety text,
+  roast_level text CHECK (roast_level = ANY (ARRAY['light'::text, 'medium'::text, 'dark'::text, 'unroasted'::text])),
+  uniformity_score numeric CHECK (uniformity_score >= 0::numeric AND uniformity_score <= 100::numeric),
+  color_analysis jsonb,
+  defect_count integer DEFAULT 0,
+  confidence_score numeric CHECK (confidence_score >= 0::numeric AND confidence_score <= 100::numeric),
+  is_verified boolean DEFAULT false,
+  verification_notes text,
+  CONSTRAINT ai_inspections_pkey PRIMARY KEY (id),
+  CONSTRAINT ai_inspections_image_id_fkey FOREIGN KEY (image_id) REFERENCES public.coffee_images(id)
+);
+CREATE TABLE public.coffee_images (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  lot_id bigint,
+  image_url text NOT NULL,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT coffee_images_pkey PRIMARY KEY (id),
+  CONSTRAINT coffee_images_lot_id_fkey FOREIGN KEY (lot_id) REFERENCES public.coffee_lots(id)
+);
+CREATE TABLE public.coffee_lots (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  producer_id uuid,
+  lot_name text NOT NULL,
+  harvest_date date,
+  variety text,
+  altitude integer,
+  notes text,
+  created_at timestamp without time zone DEFAULT now(),
+  quality_verified boolean DEFAULT false,
+  quality_grade text,
+  quality_score numeric,
+  last_verification_date timestamp without time zone,
+  CONSTRAINT coffee_lots_pkey PRIMARY KEY (id),
+  CONSTRAINT coffee_lots_producer_id_fkey FOREIGN KEY (producer_id) REFERENCES public.producers(id)
+);
+CREATE TABLE public.conversations (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  client_id uuid NOT NULL,
+  producer_id uuid NOT NULL,
+  created_at timestamp without time zone DEFAULT now(),
+  updated_at timestamp without time zone DEFAULT now(),
+  last_message_at timestamp without time zone,
+  is_active boolean DEFAULT true,
+  CONSTRAINT conversations_pkey PRIMARY KEY (id),
+  CONSTRAINT conversations_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.profiles(id),
+  CONSTRAINT conversations_producer_id_fkey FOREIGN KEY (producer_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.defect_types (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  name text NOT NULL,
+  severity text CHECK (severity = ANY (ARRAY['minor'::text, 'major'::text, 'critical'::text])),
+  description text,
+  impact_on_quality numeric CHECK (impact_on_quality >= 0::numeric AND impact_on_quality <= 10::numeric),
+  CONSTRAINT defect_types_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.learning_modules (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  title text NOT NULL,
+  description text,
+  created_by uuid,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT learning_modules_pkey PRIMARY KEY (id),
+  CONSTRAINT learning_modules_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.lessons (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  module_id bigint,
+  title text NOT NULL,
+  content text,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT lessons_pkey PRIMARY KEY (id),
+  CONSTRAINT lessons_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.learning_modules(id)
+);
+CREATE TABLE public.lot_verifications (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  lot_id bigint NOT NULL,
+  verification_date timestamp without time zone DEFAULT now(),
+  overall_grade text CHECK (overall_grade = ANY (ARRAY['A'::text, 'B'::text, 'C'::text, 'D'::text])),
+  total_score numeric CHECK (total_score >= 0::numeric AND total_score <= 100::numeric),
+  images_count integer DEFAULT 1,
+  average_quality numeric,
+  is_approved boolean DEFAULT false,
+  approved_by uuid,
+  approval_date timestamp without time zone,
+  notes text,
+  CONSTRAINT lot_verifications_pkey PRIMARY KEY (id),
+  CONSTRAINT lot_verifications_lot_id_fkey FOREIGN KEY (lot_id) REFERENCES public.coffee_lots(id),
+  CONSTRAINT lot_verifications_approved_by_fkey FOREIGN KEY (approved_by) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.messages (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  conversation_id uuid NOT NULL,
+  sender_id uuid NOT NULL,
+  content text NOT NULL,
+  created_at timestamp without time zone DEFAULT now(),
+  updated_at timestamp without time zone DEFAULT now(),
+  is_read boolean DEFAULT false,
+  read_at timestamp without time zone,
+  is_deleted boolean DEFAULT false,
+  deleted_at timestamp without time zone,
+  message_type text DEFAULT 'text'::text CHECK (message_type = ANY (ARRAY['text'::text, 'image'::text, 'system'::text])),
+  image_url text,
+  metadata jsonb,
+  CONSTRAINT messages_pkey PRIMARY KEY (id),
+  CONSTRAINT messages_sender_id_fkey FOREIGN KEY (sender_id) REFERENCES public.profiles(id),
+  CONSTRAINT messages_conversation_id_fkey FOREIGN KEY (conversation_id) REFERENCES public.conversations(id)
+);
+CREATE TABLE public.producers (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  farm_name text,
+  experience_years integer,
+  created_at timestamp without time zone DEFAULT now(),
+  phone text,
+  photo_url text,
+  farm_size_ha numeric CHECK (farm_size_ha IS NULL OR farm_size_ha >= 0::numeric),
+  country text,
+  state text,
+  municipality text,
+  shade_type text,
+  annual_production_kg integer,
+  last_harvest_date date,
+  yield_per_ha numeric,
+  price_per_kg numeric CHECK (price_per_kg IS NULL OR price_per_kg >= 0::numeric),
+  current_buyers text,
+  min_contract_volume integer,
+  open_to_export boolean DEFAULT false,
+  sells_online boolean DEFAULT false,
+  online_store_url text,
+  needs text,
+  has_tourist_area boolean DEFAULT false,
+  tourist_accessible boolean DEFAULT false,
+  tourism_details text,
+  consent_gps boolean DEFAULT false,
+  consent_ai boolean DEFAULT false,
+  consent_notifications boolean DEFAULT false,
+  varieties ARRAY,
+  processes ARRAY,
+  certifications ARRAY,
+  altitude integer,
+  coffee_type text,
+  status text DEFAULT 'pending'::text CHECK (status = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text])),
+  latitude numeric CHECK (latitude IS NULL OR latitude >= '-90'::integer::numeric AND latitude <= 90::numeric),
+  longitude numeric CHECK (longitude IS NULL OR longitude >= '-180'::integer::numeric AND longitude <= 180::numeric),
+  CONSTRAINT producers_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.profiles (
+  id uuid NOT NULL,
+  full_name text NOT NULL,
+  email text NOT NULL UNIQUE,
+  role text DEFAULT 'user'::text CHECK (role = ANY (ARRAY['user'::text, 'producer'::text, 'admin'::text])),
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT profiles_pkey PRIMARY KEY (id),
+  CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.quizzes (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  lesson_id bigint,
+  question text NOT NULL,
+  answer text NOT NULL,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT quizzes_pkey PRIMARY KEY (id),
+  CONSTRAINT quizzes_lesson_id_fkey FOREIGN KEY (lesson_id) REFERENCES public.lessons(id)
+);
+CREATE TABLE public.unread_messages_count (
+  user_id uuid NOT NULL,
+  conversation_id uuid NOT NULL,
+  unread_count integer DEFAULT 0,
+  last_updated timestamp without time zone DEFAULT now(),
+  CONSTRAINT unread_messages_count_pkey PRIMARY KEY (user_id, conversation_id),
+  CONSTRAINT unread_messages_count_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id),
+  CONSTRAINT unread_messages_count_conversation_id_fkey FOREIGN KEY (conversation_id) REFERENCES public.conversations(id)
+);
+CREATE TABLE public.user_preferences (
+  user_id uuid NOT NULL,
+  processes ARRAY,
+  roasts ARRAY,
+  drinks ARRAY,
+  times ARRAY,
+  acidity ARRAY,
+  flavor_notes ARRAY,
+  weekly_consumption text,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT user_preferences_pkey PRIMARY KEY (user_id),
+  CONSTRAINT user_preferences_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.user_progress (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  user_id uuid,
+  lesson_id bigint,
+  completed boolean DEFAULT false,
+  score integer,
+  completed_at timestamp without time zone,
+  CONSTRAINT user_progress_pkey PRIMARY KEY (id),
+  CONSTRAINT user_progress_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id),
+  CONSTRAINT user_progress_lesson_id_fkey FOREIGN KEY (lesson_id) REFERENCES public.lessons(id)
+);

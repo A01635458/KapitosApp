@@ -53,7 +53,8 @@ struct MapView: View {
                     }
                 }
             }
-            .mapStyle(.standard)
+            .mapStyle(.standard(elevation: .realistic))
+            .preferredColorScheme(theme.isDarkMode ? .dark : .light)
             .ignoresSafeArea()
 
             VStack {

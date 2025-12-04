@@ -7,6 +7,9 @@ struct ProducerFormModel: Codable {
     let brand: String
     let farmSize: String
     let location: String
+    let latitude: Double?
+    let longitude: Double?
+    let locationAddress: String?
     let altitude: String
     let shadeType: String
     let production: String
