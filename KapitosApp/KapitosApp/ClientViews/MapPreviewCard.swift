@@ -5,6 +5,7 @@
 
 import SwiftUI
 import MapKit
+import Combine 
 
 struct MapPreviewCard: View {
     

@@ -99,6 +99,7 @@
 //
 
 import SwiftUI
+import Combine 
 
 struct SideMenu: View {
     @Binding var currentScreen: AppScreen
