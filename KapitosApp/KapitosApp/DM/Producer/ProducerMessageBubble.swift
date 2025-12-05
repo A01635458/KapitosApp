@@ -14,9 +14,9 @@ struct ProducerMessageBubble: View {
 
     var body: some View {
         HStack {
-            if !message.isMe { Spacer() }
+            if message.isMe { Spacer() }
 
-            VStack(alignment: message.isMe ? .leading : .trailing, spacing: 4) {
+            VStack(alignment: message.isMe ? .trailing : .leading, spacing: 4) {
                 Text(message.text)
                     .padding(12)
                     .foregroundColor(
@@ -32,7 +32,7 @@ struct ProducerMessageBubble: View {
                                     : (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
                             )
                     )
-                    .frame(maxWidth: UIScreen.main.bounds.width * 0.68, alignment: message.isMe ? .leading : .trailing)
+                    .frame(maxWidth: UIScreen.main.bounds.width * 0.68, alignment: message.isMe ? .trailing : .leading)
                 
                 Text(formatTime(message.timestamp))
                     .font(.caption2)
@@ -40,7 +40,7 @@ struct ProducerMessageBubble: View {
                     .padding(.horizontal, 4)
             }
 
-            if message.isMe { Spacer() }
+            if !message.isMe { Spacer() }
         }
         .padding(.horizontal)
     }

@@ -168,7 +168,12 @@ struct LoginView: View {
                 ProducerSurveyView()
             }
             .navigationDestination(isPresented: $goToApp) {
-                ContentView().environmentObject(theme)
+                if let userId = auth.currentUserId {
+                    ContentView(currentUserId: userId)
+                        .environmentObject(theme)
+                } else {
+                    Text("Error: No se pudo obtener el ID del usuario")
+                }
             }
             .navigationDestination(isPresented: $goToAdmin) {
                 KapeContentView().environmentObject(theme)

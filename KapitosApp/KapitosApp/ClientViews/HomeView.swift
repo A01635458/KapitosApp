@@ -91,6 +91,7 @@ import Combine
 struct HomeView: View {
 
     @EnvironmentObject var theme: AppThemeManager
+    let currentUserId: UUID
     
     struct CoffeeType: Identifiable {
         let id = UUID()
@@ -113,7 +114,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 20) {
 
             // --- PREVIEW DE CHATS ---
-            ChatPreviewCard()
+            ChatPreviewCard(currentUserId: currentUserId)
                 .environmentObject(theme)
                 .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
 
@@ -169,5 +170,8 @@ struct HomeView: View {
     }
 }
 
-#Preview { HomeView().environmentObject(AppThemeManager()) }
+#Preview { 
+    HomeView(currentUserId: UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!)
+        .environmentObject(AppThemeManager()) 
+}
 

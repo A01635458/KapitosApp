@@ -19,11 +19,6 @@ struct Conversation: Identifiable, Codable {
     var updated_at: Date
     var last_message_at: Date?
     var is_active: Bool
-    
-    // Computed properties for display
-    var otherUserProfile: Profile?
-    var lastMessage: MessageData?
-    var unreadCount: Int = 0
 }
 
 struct MessageData: Identifiable, Codable {
@@ -75,12 +70,10 @@ class MessagingService: ObservableObject {
     init(currentUserId: UUID) {
         self.currentUserId = currentUserId
         
-        guard let url = URL(string: "https://vhjxtygfviesnyepsujw.supabase.co"),
-              let key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoanh0eWdmdmllc255ZXBzdWp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE4ODI5MTksImV4cCI6MjA0NzQ1ODkxOX0.sb_publishable_JawMYouxwX8apRA2F2s_5w_xy1LbFDb".data(using: .utf8) else {
-            fatalError("Invalid Supabase configuration")
-        }
-        
-        self.supabase = SupabaseClient(supabaseURL: url, supabaseKey: String(data: key, encoding: .utf8)!)
+        self.supabase = SupabaseClient(
+            supabaseURL: URL(string: "https://vhjxtygfviesnyepsujw.supabase.co")!,
+            supabaseKey: "sb_publishable_JawMYouxwX8apRA2F2s_5w_xy1LbFDb"
+        )
     }
     
     // MARK: - Fetch Conversations
@@ -136,16 +129,18 @@ class MessagingService: ObservableObject {
                 let lastMessage = lastMessageResponse?.first
                 
                 // Fetch unread count
-                let unreadResponse: [[String: Int]]? = try? await supabase
+                let unreadMessages: [MessageData]? = try? await supabase
                     .from("messages")
-                    .select("count")
+                    .select()
                     .eq("conversation_id", value: conversation.id.uuidString)
                     .eq("is_read", value: false)
                     .neq("sender_id", value: currentUserId.uuidString)
                     .execute()
                     .value
                 
-                let unreadCount = unreadResponse?.first?["count"] ?? 0
+                let unreadCount = unreadMessages?.count ?? 0
+                
+                print("📬 Conversation with \(profile.full_name): \(unreadCount) unread messages")
                 
                 conversationsWithDetails.append(ConversationWithDetails(
                     id: conversation.id,
@@ -199,6 +194,11 @@ class MessagingService: ObservableObject {
     func sendMessage(conversationId: UUID, content: String, messageType: String = "text", imageUrl: String? = nil) async {
         guard !content.isEmpty || imageUrl != nil else { return }
         
+        print("📤 Attempting to send message...")
+        print("   Conversation ID: \(conversationId.uuidString)")
+        print("   Sender ID: \(currentUserId.uuidString)")
+        print("   Content: \(content)")
+        
         do {
             struct NewMessage: Encodable {
                 let conversation_id: String
@@ -220,12 +220,15 @@ class MessagingService: ObservableObject {
                 is_deleted: false
             )
             
-            let response: MessageData = try await supabase
+            print("🔄 Inserting message into database...")
+            
+            // Insert without expecting a full response
+            try await supabase
                 .from("messages")
                 .insert(newMessage)
-                .single()
                 .execute()
-                .value
+            
+            print("✅ Message inserted successfully!")
             
             // Update conversation's last_message_at
             struct ConversationUpdate: Encodable {
@@ -241,10 +244,15 @@ class MessagingService: ObservableObject {
                 .eq("id", value: conversationId.uuidString)
                 .execute()
             
-            // Add message to local array
-            messages.append(response)
+            print("✅ Conversation updated!")
+            
+            // Refresh messages to get the new one
+            await fetchMessages(conversationId: conversationId)
+            
+            print("✅ Messages refreshed. Total messages: \(messages.count)")
             
         } catch {
+            print("❌ Error sending message: \(error)")
             errorMessage = "Error al enviar mensaje: \(error.localizedDescription)"
         }
     }

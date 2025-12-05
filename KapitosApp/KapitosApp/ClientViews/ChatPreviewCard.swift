@@ -14,12 +14,11 @@ struct ChatPreviewCard: View {
     @EnvironmentObject var theme: AppThemeManager
     @StateObject private var messagingService: MessagingService
     
-    // TODO: Replace with actual authenticated user ID
-    private let currentUserId = UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!
+    let currentUserId: UUID
     
-    init() {
-        let uuid = UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!
-        _messagingService = StateObject(wrappedValue: MessagingService(currentUserId: uuid))
+    init(currentUserId: UUID) {
+        self.currentUserId = currentUserId
+        _messagingService = StateObject(wrappedValue: MessagingService(currentUserId: currentUserId))
     }
     
     var body: some View {

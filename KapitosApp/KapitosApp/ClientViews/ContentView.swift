@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var showMenu = false
     @State private var currentScreen: AppScreen = .home
     @StateObject var theme = AppThemeManager()
+    let currentUserId: UUID
 
     var body: some View {
         NavigationStack {
@@ -38,7 +39,7 @@ struct ContentView: View {
                                 MapPreviewCard(currentScreen: $currentScreen)
                                     .environmentObject(theme)
 
-                                HomeView()
+                                HomeView(currentUserId: currentUserId)
                                     .environmentObject(theme)
                             }
                         }
@@ -51,8 +52,7 @@ struct ContentView: View {
 
                     // ----------- NUEVO: CHAT CLIENTE -----------
                     case .mensajesCliente:
-                        // TODO: Replace with actual authenticated user ID
-                        ClientChatListView(currentUserId: UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!)
+                        ClientChatListView(currentUserId: currentUserId)
                             .environmentObject(theme)
                     }
                 }
@@ -90,4 +90,6 @@ struct ContentView: View {
     }
 }
 
-#Preview { ContentView() }
+#Preview { 
+    ContentView(currentUserId: UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!)
+}
