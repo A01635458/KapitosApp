@@ -95,12 +95,12 @@ class ProducerRegistrationData: ObservableObject {
             
             // Upload to Supabase Storage
             let uploadedFile = try await supabase.storage
-                .from("producer-images")
+                .from("producer-profiles")
                 .upload(path: filePath, file: imageData, options: .init(contentType: "image/jpeg"))
             
             // Get public URL
             let publicURL = try supabase.storage
-                .from("producer-images")
+                .from("producer-profiles")
                 .getPublicURL(path: filePath)
             
             print("✅ Image uploaded successfully: \(publicURL)")

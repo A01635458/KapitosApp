@@ -11,8 +11,13 @@ import MapKit
 struct ProducerDetailSheetView: View {
     
     let producer: ProducerMapData
+    let currentUserId: UUID
     @EnvironmentObject var theme: AppThemeManager
     @Environment(\.dismiss) private var dismiss
+    
+    @State private var isCreatingConversation = false
+    @State private var showChatView = false
+    @State private var conversationId: UUID?
     
     var body: some View {
         NavigationStack {
@@ -61,6 +66,18 @@ struct ProducerDetailSheetView: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.gray)
+                    }
+                }
+            }
+            .sheet(isPresented: $showChatView) {
+                if let conversationId = conversationId {
+                    NavigationStack {
+                        ClientChatDetailView(
+                            conversationId: conversationId,
+                            currentUserId: currentUserId,
+                            otherUserName: producer.displayName
+                        )
+                        .environmentObject(theme)
                     }
                 }
             }
@@ -117,6 +134,29 @@ struct ProducerDetailSheetView: View {
                     .font(.body)
                     .foregroundColor(.gray)
             }
+            
+            // Message Button
+            Button(action: {
+                Task {
+                    await createConversationAndOpenChat()
+                }
+            }) {
+                HStack {
+                    if isCreatingConversation {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: "message.fill")
+                        Text("Enviar mensaje")
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                .foregroundColor(.white)
+                .cornerRadius(12)
+            }
+            .disabled(isCreatingConversation)
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -243,6 +283,21 @@ struct ProducerDetailSheetView: View {
         .cornerRadius(16)
         .disabled(true)
     }
+    
+    // MARK: - Helper Functions
+    
+    private func createConversationAndOpenChat() async {
+        isCreatingConversation = true
+        
+        let messagingService = MessagingService(currentUserId: currentUserId)
+        
+        if let newConversationId = await messagingService.getOrCreateConversation(withUserId: producer.id) {
+            conversationId = newConversationId
+            showChatView = true
+        }
+        
+        isCreatingConversation = false
+    }
 }
 
 // MARK: - Flow Layout Helper
@@ -301,20 +356,23 @@ struct FlowLayout: Layout {
 // MARK: - Preview
 
 #Preview {
-    ProducerDetailSheetView(producer: ProducerMapData(
-        id: UUID(),
-        farm_name: "Finca El Triunfo",
-        latitude: 15.1150,
-        longitude: -92.0868,
-        municipality: "Ángel Albino Corzo",
-        state: "Chiapas",
-        photo_url: nil,
-        varieties: ["Typica", "Bourbon", "Caturra"],
-        processes: ["Lavado", "Natural"],
-        certifications: ["Comercio Justo", "Orgánico"],
-        has_tourist_area: true,
-        tourist_accessible: true,
-        status: "approved"
-    ))
+    ProducerDetailSheetView(
+        producer: ProducerMapData(
+            id: UUID(),
+            farm_name: "Finca El Triunfo",
+            latitude: 15.1150,
+            longitude: -92.0868,
+            municipality: "Ángel Albino Corzo",
+            state: "Chiapas",
+            photo_url: nil,
+            varieties: ["Typica", "Bourbon", "Caturra"],
+            processes: ["Lavado", "Natural"],
+            certifications: ["Comercio Justo", "Orgánico"],
+            has_tourist_area: true,
+            tourist_accessible: true,
+            status: "approved"
+        ),
+        currentUserId: UUID()
+    )
     .environmentObject(AppThemeManager())
 }

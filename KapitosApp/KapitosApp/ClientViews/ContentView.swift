@@ -45,7 +45,7 @@ struct ContentView: View {
                         }
 
                     case .map:
-                        MapView().environmentObject(theme)
+                        MapView(currentUserId: currentUserId).environmentObject(theme)
 
                     case .profile:
                         ProfileView(currentUserId: currentUserId).environmentObject(theme)

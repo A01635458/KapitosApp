@@ -90,6 +90,13 @@ class ProducerStore: ObservableObject {
                 }
                 description = descParts.isEmpty ? "Productor de café" : descParts.joined(separator: " ")
                 
+                // Load profile image from URL if available
+                if let photoUrl = producer.photo_url, !photoUrl.isEmpty {
+                    Task {
+                        await loadImageFromURL(photoUrl)
+                    }
+                }
+                
                 print("📋 Producer data loaded successfully")
             } else {
                 print("⚠️ No producer found for this user")
@@ -102,6 +109,22 @@ class ProducerStore: ObservableObject {
             print("❌ Error loading producer data: \(error)")
             errorMessage = "Error al cargar datos: \(error.localizedDescription)"
             isLoading = false
+        }
+    }
+    
+    /// Carga una imagen desde una URL
+    private func loadImageFromURL(_ urlString: String) async {
+        guard let url = URL(string: urlString) else { return }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let image = UIImage(data: data) {
+                await MainActor.run {
+                    self.profileImage = image
+                }
+            }
+        } catch {
+            print("❌ Error loading image from URL: \(error)")
         }
     }
     

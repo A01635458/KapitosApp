@@ -11,6 +11,7 @@ import MapKit
 struct MapView: View {
 
     @EnvironmentObject var theme: AppThemeManager
+    let currentUserId: UUID
     @StateObject private var mapService = ProducerMapService()
     @State private var selectedProducer: ProducerMapData?
     @State private var showStore = false
@@ -123,7 +124,7 @@ struct MapView: View {
         }
         .sheet(isPresented: $showStore) {
             if let producer = selectedProducer {
-                ProducerDetailSheetView(producer: producer)
+                ProducerDetailSheetView(producer: producer, currentUserId: currentUserId)
                     .environmentObject(theme)
             }
         }

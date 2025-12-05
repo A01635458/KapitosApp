@@ -17,20 +17,39 @@ struct KapitosAppApp: App {
     var body: some Scene {
         WindowGroup {
             if auth.isAuthenticated {
-                // Usuario autenticado - mostrar la vista correspondiente según su rol
-                if auth.userRole == "admin" {
-                    KapeContentView()
-                        .environmentObject(theme)
-                } else if auth.userRole == "producer" {
-                    if let userId = auth.currentUserId {
-                        ProducerContentView(currentUserId: userId)
+                // Esperar a que el rol esté cargado antes de mostrar la vista
+                if let role = auth.userRole {
+                    // Usuario autenticado con rol conocido
+                    if role == "admin" {
+                        KapeContentView()
                             .environmentObject(theme)
+                    } else if role == "producer" {
+                        if let userId = auth.currentUserId {
+                            ProducerContentView(currentUserId: userId)
+                                .environmentObject(theme)
+                        }
+                    } else {
+                        // Cliente o rol por defecto
+                        if let userId = auth.currentUserId {
+                            ContentView(currentUserId: userId)
+                                .environmentObject(theme)
+                        }
                     }
                 } else {
-                    // Cliente o rol por defecto
-                    if let userId = auth.currentUserId {
-                        ContentView(currentUserId: userId)
-                            .environmentObject(theme)
+                    // Autenticado pero rol aún no cargado - mostrar loading
+                    ZStack {
+                        Color(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+                            .ignoresSafeArea()
+                        
+                        VStack(spacing: 20) {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight))
+                                .scaleEffect(1.5)
+                            
+                            Text("Cargando...")
+                                .font(.headline)
+                                .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                        }
                     }
                 }
             } else {
