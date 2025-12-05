@@ -14,7 +14,6 @@ struct MapView: View {
     let currentUserId: UUID
     @StateObject private var mapService = ProducerMapService()
     @State private var selectedProducer: ProducerMapData?
-    @State private var showStore = false
     @State private var searchText = ""
     @State private var filteredProducers: [ProducerMapData] = []
     @State private var showSuggestions = false
@@ -45,10 +44,10 @@ struct MapView: View {
                 ForEach(displayedProducers) { producer in
                     if let coordinate = producer.coordinate {
                         Annotation(producer.displayName, coordinate: coordinate) {
-                            Button {
+                            Button(action: {
                                 selectedProducer = producer
-                                showStore = true
-                            } label: {
+                            }) {
+
                                 VStack(spacing: 4) {
                                     // Profile image or placeholder
                                     if let photoUrl = producer.photo_url, !photoUrl.isEmpty {
@@ -120,11 +119,9 @@ struct MapView: View {
                 }
             }
         }
-        .sheet(isPresented: $showStore) {
-            if let producer = selectedProducer {
-                ProducerDetailSheetView(producer: producer, currentUserId: currentUserId)
-                    .environmentObject(theme)
-            }
+        .sheet(item: $selectedProducer) { producer in
+            ProducerDetailSheetView(producer: producer, currentUserId: currentUserId)
+                .environmentObject(theme)
         }
         .task {
             await mapService.fetchProducers()
@@ -316,7 +313,6 @@ struct MapView: View {
             // Optionally show details after a delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 selectedProducer = producer
-                showStore = true
             }
         }
     }
