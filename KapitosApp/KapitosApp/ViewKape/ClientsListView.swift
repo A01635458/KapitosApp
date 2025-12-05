@@ -13,8 +13,12 @@ struct ClientsListView: View {
     var body: some View {
         VStack {
             if adminService.isLoading && adminService.allUsers.isEmpty {
-                ProgressView("Cargando usuarios...")
-                    .padding()
+                VStack {
+                    ProgressView("Cargando usuarios...")
+                        .padding()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)  
+                .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
             } else if adminService.allUsers.isEmpty {
                 emptyState
             } else {
@@ -89,5 +93,8 @@ struct ClientsListView: View {
                 .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
     }
+
 }

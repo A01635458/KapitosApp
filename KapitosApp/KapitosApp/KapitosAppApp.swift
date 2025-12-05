@@ -5,6 +5,7 @@
 //  Created by Luisa Cardona on 15/11/25.
 //
 
+
 import SwiftUI
 
 @main
@@ -15,6 +16,7 @@ struct KapitosAppApp: App {
         WindowGroup {
             LoginView()
                 .environmentObject(theme)
+                .navigationBarBackButtonHidden(true)
         }
     }
 }

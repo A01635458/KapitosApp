@@ -16,6 +16,10 @@ struct ProducerApprovalView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    
+    @State private var showPassword = false
+    @State private var showConfirmPassword = false
+    
     @State private var showSuccessMessage = false
     @State private var showErrorMessage = false
     @State private var isProcessing = false
@@ -42,15 +46,55 @@ struct ProducerApprovalView: View {
                         .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
                         .cornerRadius(10)
                     
-                    SecureField("Contraseña", text: $password)
-                        .padding()
-                        .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                        .cornerRadius(10)
+                    // ⭐ CONTRASEÑA CON OJITO
+                    ZStack(alignment: .trailing) {
+                        if showPassword {
+                            TextField("Contraseña", text: $password)
+                                .padding()
+                                .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                                .cornerRadius(10)
+                        } else {
+                            SecureField("Contraseña", text: $password)
+                                .padding()
+                                .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                showPassword.toggle()
+                            }
+                        } label: {
+                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                                .padding(.trailing, 12)
+                        }
+                    }
                     
-                    SecureField("Confirmar contraseña", text: $confirmPassword)
-                        .padding()
-                        .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                        .cornerRadius(10)
+                    // ⭐ CONFIRMAR CONTRASEÑA CON OJITO
+                    ZStack(alignment: .trailing) {
+                        if showConfirmPassword {
+                            TextField("Confirmar contraseña", text: $confirmPassword)
+                                .padding()
+                                .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                                .cornerRadius(10)
+                        } else {
+                            SecureField("Confirmar contraseña", text: $confirmPassword)
+                                .padding()
+                                .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                showConfirmPassword.toggle()
+                            }
+                        } label: {
+                            Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                                .foregroundColor(.gray)
+                                .padding(.trailing, 12)
+                        }
+                    }
                     
                     if !password.isEmpty && password != confirmPassword {
                         Text("Las contraseñas no coinciden")
@@ -205,9 +249,9 @@ struct ProducerApprovalView: View {
     
     // MARK: - Validation
     private var isFormValid: Bool {
-        !email.isEmpty 
-        && email.contains("@") 
-        && password.count >= 6 
+        !email.isEmpty
+        && email.contains("@")
+        && password.count >= 6
         && password == confirmPassword
     }
     
@@ -227,7 +271,7 @@ struct ProducerApprovalView: View {
         
         if success {
             showSuccessMessage = true
-            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
             dismiss()
         } else {
             showErrorMessage = true
@@ -290,4 +334,3 @@ struct ProducerApprovalView: View {
         .environmentObject(AppThemeManager())
     }
 }
-

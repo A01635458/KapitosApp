@@ -13,9 +13,14 @@ struct ProducerListView: View {
     var body: some View {
         VStack(spacing: 0) {
             if approvalService.isLoading && approvalService.pendingProducers.isEmpty {
-                ProgressView("Cargando solicitudes...")
-                    .padding()
-            } else if approvalService.pendingProducers.isEmpty {
+                VStack {
+                    ProgressView("Cargando solicitudes...")
+                        .padding()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+            }
+            else if approvalService.pendingProducers.isEmpty {
                 emptyState
             } else {
                 ScrollView {
@@ -127,7 +132,10 @@ struct ProducerListView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)   
+        .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
     }
+
 }
 
 #Preview {
