@@ -122,8 +122,6 @@ struct ProducerSurveyView: View {
                     }
 
                     submitButton
-                    successBanner
-
                 }
                 .padding(.horizontal, 22)
             }
@@ -246,7 +244,7 @@ struct ProducerSurveyView: View {
                 await registrationData.submitProducer(form: form)
 
                 if registrationData.submitMessage != nil {
-                    goToSuccess = true   // ⭐ REDIRECCIÓN
+                    goToSuccess = true   // ⭐ REDIRECCIÓN FINAL
                 }
             }
 
@@ -268,20 +266,7 @@ struct ProducerSurveyView: View {
         .padding(.vertical, 8)
     }
 
-    // MARK: UI BUILDERS
-
-    @ViewBuilder var successBanner: some View {
-        if showSuccessMessage {
-            HStack(spacing: 12) {
-                Image(systemName: "checkmark.circle.fill").foregroundColor(.white)
-                Text(successText).foregroundColor(.white).bold()
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(.green)
-            .cornerRadius(14)
-        }
-    }
+    // MARK: UI BUILDERS (SE MANTIENE IGUAL)
 
     func sectionCard(_ title: String, icon: String, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -303,10 +288,6 @@ struct ProducerSurveyView: View {
         }
     }
 
-    // ============================================================
-    // MARK: ——— INPUT FIELDS (sin iconos)
-    // ============================================================
-
     func formField(_ title: String, text: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 6) {
 
@@ -316,7 +297,7 @@ struct ProducerSurveyView: View {
 
             Color.clear
                 .unifiedTextField(
-                    icon: "",        // 🔥 SIN ICONO
+                    icon: "",
                     text: title,
                     value: text
                 )
@@ -327,7 +308,11 @@ struct ProducerSurveyView: View {
     func validatedField(_ title: String, text: Binding<String>, key: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             formField(title, text: text)
-            if let err = errors[key] { Text(err).foregroundColor(.red).font(.caption) }
+            if let err = errors[key] {
+                Text(err)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
         }
     }
 
@@ -346,8 +331,6 @@ struct ProducerSurveyView: View {
     func validatedYesNoField(_ title: String, text: Binding<String>, key: String) -> some View {
         validatedField(title, text: text, key: key)
     }
-
-    // MARK: - Location Picker Field
 
     var locationPickerField: some View {
         VStack(alignment: .leading, spacing: 6) {
