@@ -12,6 +12,10 @@
 	<string>Queremos enviarte notificaciones cuando estés cerca de productores de café que coincidan con tus preferencias, incluso cuando la app esté cerrada.</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Te enviaremos notificaciones inteligentes sobre nuevos productores compatibles, cosechas próximas y tours de cafetales cercanos basadas en tus preferencias.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Necesitamos acceso a la cámara para que puedas tomar fotos de tus productos de café. El AI analizará automáticamente la imagen para generar toda la información del producto.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Necesitamos acceso a tu galería de fotos para que puedas elegir imágenes de tus productos de café y analizarlas con inteligencia artificial.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

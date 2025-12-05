@@ -21,7 +21,7 @@ struct KapitosAppApp: App {
                 if auth.userRole == "admin" {
                     KapeContentView()
                         .environmentObject(theme)
-                } else if auth.userRole == "productor" {
+                } else if auth.userRole == "producer" {
                     if let userId = auth.currentUserId {
                         ProducerContentView(currentUserId: userId)
                             .environmentObject(theme)
