@@ -13,7 +13,6 @@ struct ProducerShopView: View {
     @EnvironmentObject var theme: AppThemeManager
     @State private var showAddOptions = false
     @State private var selectedProduct: ProducerProduct?
-    @State private var showEditSheet = false
 
     var body: some View {
 
@@ -92,7 +91,6 @@ struct ProducerShopView: View {
                                 product: product,
                                 onTap: {
                                     selectedProduct = product
-                                    showEditSheet = true
                                 },
                                 onDelete: {
                                     Task {
@@ -114,12 +112,10 @@ struct ProducerShopView: View {
                 .presentationDetents([.height(320)])
                 .environmentObject(store)
         }
-        .sheet(isPresented: $showEditSheet) {
-            if let product = selectedProduct {
-                EditProductView(product: product)
-                    .environmentObject(store)
-                    .environmentObject(theme)
-            }
+        .sheet(item: $selectedProduct) { product in
+            EditProductView(product: product)
+                .environmentObject(store)
+                .environmentObject(theme)
         }
     }
 }

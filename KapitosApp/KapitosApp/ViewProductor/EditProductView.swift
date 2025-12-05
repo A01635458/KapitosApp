@@ -229,7 +229,7 @@ struct EditProductView: View {
                                 await saveChanges()
                             }
                         } label: {
-                            HStack {
+                            HStack(spacing: 12) {
                                 if isSaving {
                                     ProgressView()
                                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -240,12 +240,13 @@ struct EditProductView: View {
                             }
                             .font(.headline)
                             .foregroundColor(.white)
-                            .padding()
+                            .padding(.vertical, 16)
                             .frame(maxWidth: .infinity)
-                            .background(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
-                            .cornerRadius(16)
-                            .shadow(color: (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight).opacity(0.3),
-                                   radius: 8, y: 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                            )
+                            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 3)
                         }
                         .disabled(editedName.isEmpty || editedPrice.isEmpty || isSaving)
                         .padding(.top, 10)
@@ -253,7 +254,7 @@ struct EditProductView: View {
                 }
                 .padding(22)
             }
-            .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+            .background(AppColors.backgroundLight)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

@@ -21,9 +21,11 @@ struct ProducerDashboardView: View {
 
                 Text("Dashboard")
                     .font(.largeTitle.bold())
+                    .foregroundColor(AppColors.textLight)
 
                 Text("Hola, \(store.businessName)")
                     .font(.title3)
+                    .foregroundColor(AppColors.textLight)
 
                 dashboardCard(title: "Productos publicados", value: "\(store.products.count)")
                 dashboardCard(title: "Clientes esta semana", value: "12")
@@ -32,20 +34,24 @@ struct ProducerDashboardView: View {
                 Spacer()
                     .frame(height: 80)
             }
-            .padding(.horizontal, 22)
+            .padding(22)
         }
+        .background(AppColors.backgroundLight)
     }
 
     func dashboardCard(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.headline)
+                .foregroundColor(AppColors.textLight)
             Text(value)
                 .font(.title.bold())
+                .foregroundColor(AppColors.textLight)
         }
         .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color.gray.opacity(0.15))
-        .cornerRadius(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(AppColors.cardLight)
+        .cornerRadius(18)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 3)
     }
 }

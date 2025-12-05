@@ -88,6 +88,7 @@ struct ProducerBusinessView: View {
             }
             .padding(22)
         }
+        .background(AppColors.backgroundLight)
         .photosPicker(isPresented: $showBannerPicker, selection: .constant(nil), matching: .images, preferredItemEncoding: .automatic)
         .onChange(of: showBannerPicker) { _ in
             // NOTE: handling inside .onChange for PhotosPicker below

@@ -181,16 +181,20 @@ struct AddProductManualView: View {
                         Text("Guardar")
                             .font(.headline)
                             .foregroundColor(.white)
-                            .padding()
+                            .padding(.vertical, 16)
                             .frame(maxWidth: .infinity)
-                            .background(AppColors.accentLight)
-                            .cornerRadius(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(AppColors.accentLight)
+                            )
+                            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 3)
                     }
                     .padding(.top, 20)
 
                 }
                 .padding(22)
             }
+            .background(AppColors.backgroundLight)
             .navigationTitle("Agregar Manualmente")
         }
     }
