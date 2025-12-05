@@ -81,7 +81,11 @@ struct ProducerChatDetailView: View {
                 }
                 .task {
                     await messagingService.fetchMessages(conversationId: conversationId)
+                    messagingService.startPollingMessages(conversationId: conversationId)
                     scrollToBottom(proxy)
+                }
+                .onDisappear {
+                    messagingService.stopPollingMessages()
                 }
             }
 

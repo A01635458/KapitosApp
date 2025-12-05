@@ -67,6 +67,8 @@ class MessagingService: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
+    private var messagePollingTask: Task<Void, Never>?
+    
     init(currentUserId: UUID) {
         self.currentUserId = currentUserId
         
@@ -74,6 +76,10 @@ class MessagingService: ObservableObject {
             supabaseURL: URL(string: "https://vhjxtygfviesnyepsujw.supabase.co")!,
             supabaseKey: "sb_publishable_JawMYouxwX8apRA2F2s_5w_xy1LbFDb"
         )
+    }
+    
+    deinit {
+        messagePollingTask?.cancel()
     }
     
     // MARK: - Fetch Conversations
@@ -359,10 +365,47 @@ class MessagingService: ObservableObject {
         }
     }
     
-    // MARK: - Real-time Subscription
+    // MARK: - Real-time Subscription & Polling
     
-    func subscribeToMessages(conversationId: UUID) {
-        // TODO: Implement Supabase real-time subscription
-        // This would listen for new messages in the conversation
+    func startPollingMessages(conversationId: UUID, interval: TimeInterval = 3.0) {
+        stopPollingMessages()
+        
+        messagePollingTask = Task { [weak self] in
+            while !Task.isCancelled {
+                guard let self = self else { return }
+                
+                // Fetch messages silently (without showing loading)
+                await self.fetchMessagesQuietly(conversationId: conversationId)
+                
+                try? await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
+            }
+        }
+    }
+    
+    func stopPollingMessages() {
+        messagePollingTask?.cancel()
+        messagePollingTask = nil
+    }
+    
+    private func fetchMessagesQuietly(conversationId: UUID) async {
+        do {
+            let response: [MessageData] = try await supabase
+                .from("messages")
+                .select()
+                .eq("conversation_id", value: conversationId.uuidString)
+                .eq("is_deleted", value: false)
+                .order("created_at", ascending: true)
+                .execute()
+                .value
+            
+            // Only update if there are new messages
+            if response.count > self.messages.count {
+                self.messages = response
+                await markMessagesAsRead(conversationId: conversationId)
+            }
+        } catch {
+            // Silently fail for background polling
+            print("⚠️ Background polling error: \(error)")
+        }
     }
 }
