@@ -1,10 +1,12 @@
 import Foundation
 import Combine
+import UIKit
 
 final class RegistrationFlowModel: ObservableObject {
     @Published var name: String = ""
     @Published var email: String = ""
     @Published var password: String = ""
+    @Published var profileImage: UIImage? = nil
 
     struct PreferencesData {
         var processes: Set<String> = []

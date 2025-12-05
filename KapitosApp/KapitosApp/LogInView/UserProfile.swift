@@ -12,6 +12,7 @@ struct UserProfile: Identifiable, Codable {
     let email: String
     let role: String // 'user', 'producer', 'admin'
     let created_at: String?
+    let photo_url: String?
     
     var displayRole: String {
         switch role {

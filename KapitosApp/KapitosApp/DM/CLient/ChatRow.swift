@@ -15,18 +15,37 @@ struct ChatRow: View {
     let lastMessage: String
     let time: String
     let unreadCount: Int
-    let avatar: String
+    let avatarUrl: String?
+    
+    @State private var avatarImage: UIImage?
 
     var body: some View {
         HStack(spacing: 14) {
 
             // ------- FOTO -------
-            Image(avatar)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 52, height: 52)
-                .clipShape(Circle())
-                .shadow(radius: 3)
+            ZStack {
+                Circle()
+                    .fill(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                    .frame(width: 52, height: 52)
+                
+                if let image = avatarImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 52, height: 52)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(.gray)
+                }
+            }
+            .shadow(radius: 3)
+            .task {
+                if let urlString = avatarUrl, !urlString.isEmpty {
+                    await loadAvatar(from: urlString)
+                }
+            }
 
             VStack(alignment: .leading, spacing: 4) {
 
@@ -64,5 +83,20 @@ struct ChatRow: View {
             }
         }
         .padding(.vertical, 10)
+    }
+    
+    private func loadAvatar(from urlString: String) async {
+        guard let url = URL(string: urlString) else { return }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let image = UIImage(data: data) {
+                await MainActor.run {
+                    self.avatarImage = image
+                }
+            }
+        } catch {
+            print("❌ Error loading avatar: \(error)")
+        }
     }
 }

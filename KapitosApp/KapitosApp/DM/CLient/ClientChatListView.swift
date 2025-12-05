@@ -45,7 +45,8 @@ struct ClientChatListView: View {
                                     ClientChatDetailView(
                                         conversationId: conversationDetail.conversation.id,
                                         currentUserId: messagingService.currentUserId,
-                                        otherUserName: conversationDetail.otherUser.full_name
+                                        otherUserName: conversationDetail.otherUser.full_name,
+                                        otherUserPhotoUrl: conversationDetail.otherUser.photo_url
                                     )
                                     .environmentObject(theme)
                                 } label: {
@@ -54,7 +55,7 @@ struct ClientChatListView: View {
                                         lastMessage: conversationDetail.lastMessage?.content ?? "Sin mensajes",
                                         time: formatTime(conversationDetail.lastMessage?.created_at),
                                         unreadCount: conversationDetail.unreadCount,
-                                        avatar: "profile_sample"
+                                        avatarUrl: conversationDetail.otherUser.photo_url
                                     )
                                     .environmentObject(theme)
                                     .padding(.horizontal)

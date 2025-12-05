@@ -16,13 +16,16 @@ struct ProducerChatDetailView: View {
     
     let conversationId: UUID
     let otherUserName: String
+    let otherUserPhotoUrl: String?
 
     @State private var input = ""
     @State private var scrollID = UUID()
+    @State private var otherUserAvatar: UIImage?
     
-    init(conversationId: UUID, currentUserId: UUID, otherUserName: String) {
+    init(conversationId: UUID, currentUserId: UUID, otherUserName: String, otherUserPhotoUrl: String? = nil) {
         self.conversationId = conversationId
         self.otherUserName = otherUserName
+        self.otherUserPhotoUrl = otherUserPhotoUrl
         _messagingService = StateObject(wrappedValue: MessagingService(currentUserId: currentUserId))
     }
     
@@ -100,12 +103,29 @@ extension ProducerChatDetailView {
     var headerView: some View {
         HStack(spacing: 12) {
 
-            Image("profile_sample")  // cambia cuando tengas avatar real
-                .resizable()
-                .scaledToFill()
-                .frame(width: 42, height: 42)
-                .clipShape(Circle())
-                .shadow(radius: 3)
+            ZStack {
+                Circle()
+                    .fill(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                    .frame(width: 42, height: 42)
+                
+                if let image = otherUserAvatar {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 42, height: 42)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(.gray)
+                }
+            }
+            .shadow(radius: 3)
+            .task {
+                if let urlString = otherUserPhotoUrl, !urlString.isEmpty {
+                    await loadAvatar(from: urlString)
+                }
+            }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(otherUserName)
@@ -120,6 +140,21 @@ extension ProducerChatDetailView {
             Spacer()
         }
         .padding()
+    }
+    
+    private func loadAvatar(from urlString: String) async {
+        guard let url = URL(string: urlString) else { return }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let image = UIImage(data: data) {
+                await MainActor.run {
+                    self.otherUserAvatar = image
+                }
+            }
+        } catch {
+            print("❌ Error loading avatar: \(error)")
+        }
     }
 }
 

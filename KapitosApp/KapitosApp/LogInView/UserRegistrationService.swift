@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import Supabase
+import PhotosUI
 
 final class UserRegistrationService: ObservableObject {
 
@@ -41,21 +42,51 @@ final class UserRegistrationService: ObservableObject {
     @Published var submitMessage: String? = nil
 
     // Realiza signUp y retorna el UUID del usuario
-    struct ProfileInsert: Encodable { let id: UUID; let full_name: String; let email: String }
+    struct ProfileInsert: Encodable { let id: UUID; let full_name: String; let email: String; let photo_url: String? }
 
     @discardableResult
-    func signUpUser(name: String, email: String, password: String) async throws -> UUID {
+    func signUpUser(name: String, email: String, password: String, profileImage: UIImage?) async throws -> UUID {
         do {
             let response = try await client.auth.signUp(email: email, password: password)
-            // user es no opcional en la versión actual del SDK
             let id = response.user.id
+            
+            // Upload profile image if provided
+            var photoUrl: String? = nil
+            if let image = profileImage {
+                photoUrl = try await uploadProfileImage(image, userId: id)
+            }
+            
             // Insert perfil explícito
-            let profile = ProfileInsert(id: id, full_name: name, email: email)
+            let profile = ProfileInsert(id: id, full_name: name, email: email, photo_url: photoUrl)
             try await client.from("profiles").insert(profile).execute()
             return id
         } catch {
             throw RegistrationError.signUpFailed(error.localizedDescription)
         }
+    }
+    
+    /// Sube la foto de perfil del usuario a Supabase Storage
+    private func uploadProfileImage(_ image: UIImage, userId: UUID) async throws -> String {
+        guard let imageData = image.jpegData(compressionQuality: 0.7) else {
+            throw RegistrationError.signUpFailed("No se pudo convertir la imagen")
+        }
+        
+        let fileName = "\(userId.uuidString)/profile.jpg"
+        let bucket = "user_photo"
+        
+        try await client.storage
+            .from(bucket)
+            .upload(
+                path: fileName,
+                file: imageData,
+                options: .init(contentType: "image/jpeg")
+            )
+        
+        let publicURL = try client.storage
+            .from(bucket)
+            .getPublicURL(path: fileName)
+        
+        return publicURL.absoluteString
     }
 
     // Inserta preferencias (arrays) para el usuario recién creado
@@ -77,11 +108,11 @@ final class UserRegistrationService: ObservableObject {
         }
     }
 
-    // Flujo completo: signUp + preferencias (si hay)
+    // Flujo completo: signUp + foto + preferencias (si hay)
     func completeRegistration(flow: RegistrationFlowModel) async {
         await MainActor.run { isSubmitting = true; submitMessage = nil }
         do {
-            let userId = try await signUpUser(name: flow.name, email: flow.email, password: flow.password)
+            let userId = try await signUpUser(name: flow.name, email: flow.email, password: flow.password, profileImage: flow.profileImage)
             if flow.hasAnyPreferenceSelections {
                 try await insertPreferences(userId: userId, preferences: flow.preferences)
             }

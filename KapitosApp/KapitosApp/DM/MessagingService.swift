@@ -47,6 +47,7 @@ struct Profile: Codable {
     let full_name: String
     let email: String
     let role: String
+    let photo_url: String?
 }
 
 struct ConversationWithDetails: Identifiable {

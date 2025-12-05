@@ -16,6 +16,8 @@ struct RegisterView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    @State private var selectedImage: UIImage? = nil
+    @State private var showImageSourceSelector = false
 
     @State private var goToPreferences = false
 
@@ -33,6 +35,52 @@ struct RegisterView: View {
                             .font(.system(size: 32, weight: .bold))
                             .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.textLight)
                             .padding(.top, 20)
+
+                        // -------- FOTO DE PERFIL --------
+                        VStack(spacing: 12) {
+                            Text("Foto de perfil (opcional)")
+                                .font(.footnote)
+                                .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Button {
+                                showImageSourceSelector = true
+                            } label: {
+                                if let image = selectedImage {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(Circle())
+                                        .overlay(
+                                            Circle()
+                                                .stroke(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight, lineWidth: 3)
+                                        )
+                                } else {
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "person.crop.circle.badge.plus")
+                                            .font(.system(size: 50))
+                                            .foregroundColor(.gray)
+                                        
+                                        Text("Agregar foto")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                    }
+                                    .frame(width: 100, height: 100)
+                                    .background(
+                                        Circle()
+                                            .fill(theme.isDarkMode ? AppColors.cardDark : Color.gray.opacity(0.1))
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.gray.opacity(0.5), lineWidth: 2)
+                                                    .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                                            )
+                                    )
+                                }
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .frame(maxWidth: .infinity)
+                        }
 
                         // -------- NOMBRE --------
                         Color.clear
@@ -85,6 +133,7 @@ struct RegisterView: View {
                             flowModel.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
                             flowModel.email = email.trimmingCharacters(in: .whitespacesAndNewlines)
                             flowModel.password = password
+                            flowModel.profileImage = selectedImage
                             goToPreferences = true
                         } label: {
                             Text("Continuar")
@@ -108,6 +157,9 @@ struct RegisterView: View {
                     .environmentObject(flowModel)
                     .environmentObject(registrationService)
             }
+        }
+        .background {
+            ImageSourceSelector(image: $selectedImage, showActionSheet: $showImageSourceSelector)
         }
     }
 
