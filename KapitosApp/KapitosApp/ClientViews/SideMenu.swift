@@ -106,8 +106,6 @@ struct SideMenu: View {
     @Binding var showMenu: Bool
     @EnvironmentObject var theme: AppThemeManager
 
-    @State private var goToLogin = false   // navegación a LoginView
-
     var body: some View {
         VStack(alignment: .leading, spacing: 25) {
 
@@ -126,7 +124,7 @@ struct SideMenu: View {
             // ----------- CERRAR SESIÓN -----------
             Button {
                 withAnimation(.smooth) {
-                    goToLogin = true
+                    AuthenticationService.shared.signOut()
                     showMenu = false
                 }
             } label: {
@@ -148,12 +146,6 @@ struct SideMenu: View {
         .frame(maxHeight: .infinity)
         .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
         .shadow(color: .black.opacity(0.3), radius: 12, x: 5, y: 0)
-        .overlay(
-            NavigationLink(destination: LoginView(), isActive: $goToLogin) {
-                EmptyView()
-            }
-            .hidden()
-        )
     }
 
     // BUTTON REUSABLE

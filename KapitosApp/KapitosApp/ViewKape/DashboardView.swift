@@ -69,15 +69,12 @@ struct DashboardView: View {
                     NavigationLink(destination: AccountGeneratorView().environmentObject(theme)) {
                         dashboardCard(
                             title: "Crear cuenta manual",
-                            value: "\(adminCount)",
+                            value: "",
                             icon: "person.badge.plus"
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-
-                // ---- STATS ----
-                dashboardStatsCard
 
                 Spacer()
             }
@@ -126,28 +123,6 @@ struct DashboardView: View {
         }
         .padding()
         .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
-    }
-
-    // MARK: - STATS BLOCK
-    var dashboardStatsCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Actividad de hoy")
-                .font(.headline)
-                .foregroundColor(theme.isDarkMode ? .white.opacity(0.9) : AppColors.textLight.opacity(0.9))
-
-            RoundedRectangle(cornerRadius: 12)
-                .fill(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                .frame(height: 140)
-                .overlay(
-                    Text("Gráfica aquí")
-                        .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.6))
-                )
-
-        }
-        .padding()
-        .background(theme.isDarkMode ? AppColors.cardDark.opacity(0.5) : AppColors.cardLight.opacity(0.8))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
     }

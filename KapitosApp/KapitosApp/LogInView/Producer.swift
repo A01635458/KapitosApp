@@ -18,6 +18,8 @@ struct Producer: Identifiable, Codable {
     let country: String?
     let state: String?
     let municipality: String?
+    let latitude: Double?
+    let longitude: Double?
     let shade_coverage_percent: Int?
     let annual_production_kg: Int?
     let last_harvest_date: String?

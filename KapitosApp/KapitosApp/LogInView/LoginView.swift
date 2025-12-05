@@ -14,9 +14,6 @@ struct LoginView: View {
 
     @State private var showRegister = false
     @State private var showProducerSurvey = false
-    @State private var goToApp = false
-    @State private var goToAdmin = false
-    @State private var goToProducer = false
 
     @StateObject private var auth = AuthenticationService.shared
 
@@ -49,7 +46,8 @@ struct LoginView: View {
                                 icon: "envelope.fill",
                                 text: "Correo electrónico",
                                 value: $email,
-                                isSecure: false
+                                isSecure: false,
+                                isEmail: true
                             )
                             .environmentObject(theme)
 
@@ -167,25 +165,6 @@ struct LoginView: View {
             .navigationDestination(isPresented: $showProducerSurvey) {
                 ProducerSurveyView()
             }
-            .navigationDestination(isPresented: $goToApp) {
-                if let userId = auth.currentUserId {
-                    ContentView(currentUserId: userId)
-                        .environmentObject(theme)
-                } else {
-                    Text("Error: No se pudo obtener el ID del usuario")
-                }
-            }
-            .navigationDestination(isPresented: $goToAdmin) {
-                KapeContentView().environmentObject(theme)
-            }
-            .navigationDestination(isPresented: $goToProducer) {
-                if let userId = auth.currentUserId {
-                    ProducerContentView(currentUserId: userId)
-                        .environmentObject(theme)
-                } else {
-                    Text("Error: No se pudo obtener el ID del usuario")
-                }
-            }
         }
     }
 }
@@ -200,19 +179,8 @@ extension LoginView {
 
         if success {
             print("🎯 Login successful. User role: \(auth.userRole ?? "nil")")
-            
-            // Route based on user role from database
-            switch auth.userRole {
-            case "admin":
-                print("➡️ Routing to Admin view")
-                withAnimation { goToAdmin = true }
-            case "producer":
-                print("➡️ Routing to Producer view")
-                withAnimation { goToProducer = true }
-            default:
-                print("➡️ Routing to Client view (role: \(auth.userRole ?? "nil"))")
-                withAnimation { goToApp = true }
-            }
+            // No necesitamos navegar manualmente - KapitosAppApp observa auth.isAuthenticated
+            // y automáticamente mostrará la vista correcta según el rol
         } else {
             print("❌ Login failed")
         }

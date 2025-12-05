@@ -48,7 +48,8 @@ struct RegisterView: View {
                             .unifiedTextField(
                                 icon: "envelope.fill",      // ← SE MANTIENE
                                 text: "Correo electrónico",
-                                value: $email
+                                value: $email,
+                                isEmail: true
                             )
                             .environmentObject(theme)
 

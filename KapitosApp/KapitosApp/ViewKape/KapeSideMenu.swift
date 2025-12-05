@@ -13,8 +13,6 @@ struct KapeSideMenu: View {
     @Binding var currentPage: KapePage
     @Binding var showMenu: Bool
     @EnvironmentObject var theme: AppThemeManager
-    
-    @State private var goToLogin = false  // <- para mostrar LoginView()
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -37,7 +35,7 @@ struct KapeSideMenu: View {
                 // -------- LOG OUT BUTTON --------
                 Button {
                     withAnimation(.smooth) {
-                        goToLogin = true
+                        AuthenticationService.shared.signOut()
                         showMenu = false
                     }
                 } label: {
@@ -57,11 +55,6 @@ struct KapeSideMenu: View {
             .frame(maxHeight: .infinity)
             .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
             .shadow(color: .black.opacity(0.3), radius: 12, x: 5, y: 0)
-            
-            
-            // -------- FULLSCREEN LOGINVIEW --------
-            NavigationLink("", destination: LoginView(), isActive: $goToLogin)
-                .opacity(0)
         }
     }
 

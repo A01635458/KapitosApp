@@ -14,6 +14,7 @@ struct UnifiedTextFieldStyle: ViewModifier {
     let text: String
     @Binding var value: String
     let isSecure: Bool
+    let isEmail: Bool
 
     func body(content: Content) -> some View {
         ZStack(alignment: .leading) {
@@ -40,24 +41,17 @@ struct UnifiedTextFieldStyle: ViewModifier {
                         .font(.system(size: 18))
                 }
 
-                // ---- Placeholder visible cuando value está vacío ----
-                if value.isEmpty {
-                    Text(text)
-                        .foregroundColor(
-                            theme.isDarkMode
-                            ? AppColors.accentLight.opacity(0.65)  // ⭐ BEIGE CLARO PERFECTO EN DARK MODE
-                            : AppColors.textLight.opacity(0.50)   // ⭐ Café clarito en Light Mode
-                        )
-                }
-
                 // ---- Contenido editable ----
                 if isSecure {
-                    SecureField("", text: $value)
+                    SecureField(text, text: $value)
                         .foregroundColor(
                             theme.isDarkMode ? .white : AppColors.textLight
                         )
                 } else {
-                    TextField("", text: $value)
+                    TextField(text, text: $value)
+                        .textInputAutocapitalization(isEmail ? .never : .sentences)
+                        .keyboardType(isEmail ? .emailAddress : .default)
+                        .autocorrectionDisabled(isEmail)
                         .foregroundColor(
                             theme.isDarkMode ? .white : AppColors.textLight
                         )
@@ -71,13 +65,14 @@ struct UnifiedTextFieldStyle: ViewModifier {
 }
 
 extension View {
-    func unifiedTextField(icon: String, text: String, value: Binding<String>, isSecure: Bool = false) -> some View {
+    func unifiedTextField(icon: String, text: String, value: Binding<String>, isSecure: Bool = false, isEmail: Bool = false) -> some View {
         self.modifier(
             UnifiedTextFieldStyle(
                 icon: icon,
                 text: text,
                 value: value,
-                isSecure: isSecure
+                isSecure: isSecure,
+                isEmail: isEmail
             )
             
         )

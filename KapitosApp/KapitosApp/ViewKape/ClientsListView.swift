@@ -33,7 +33,6 @@ struct ClientsListView: View {
         .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
         .navigationTitle("Usuarios")
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)
         .task {
             await adminService.fetchAllUsers()
         }

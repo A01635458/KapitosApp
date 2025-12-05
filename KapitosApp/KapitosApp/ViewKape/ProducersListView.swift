@@ -29,7 +29,6 @@ struct ProducersListView: View {
         .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
         .navigationTitle("Productores Aprobados")
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)
         .task {
             await adminService.fetchApprovedProducers()
         }

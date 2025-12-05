@@ -103,8 +103,6 @@ struct ProducerSideMenu: View {
     @EnvironmentObject var theme: AppThemeManager
     @EnvironmentObject var store: ProducerStore
 
-    @State private var goToLogin = false
-
     var body: some View {
         VStack(alignment: .leading, spacing: 28) {
 
@@ -128,7 +126,7 @@ struct ProducerSideMenu: View {
             // ----------- CERRAR SESIÓN -----------
             Button {
                 withAnimation(.smooth) {
-                    goToLogin = true
+                    AuthenticationService.shared.signOut()
                     showMenu = false
                 }
             } label: {

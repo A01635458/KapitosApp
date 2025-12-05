@@ -80,18 +80,25 @@ final class AdminDataService: ObservableObject {
             
             let userId = signUpResponse.user.id
             
-            // 2. Update profile with name and role
-            struct ProfileUpdate: Encodable {
+            // 2. INSERT profile with name and role (not UPDATE, since profile doesn't exist yet)
+            struct ProfileInsert: Encodable {
+                let id: UUID
                 let full_name: String
+                let email: String
                 let role: String
             }
             
             try await client
                 .from("profiles")
-                .update(ProfileUpdate(full_name: fullName, role: role))
-                .eq("id", value: userId.uuidString)
+                .insert(ProfileInsert(
+                    id: userId,
+                    full_name: fullName,
+                    email: email,
+                    role: role
+                ))
                 .execute()
             
+            print("✅ Account created successfully: \(email) with role: \(role)")
             return true
         } catch {
             errorMessage = "Error al crear cuenta: \(error.localizedDescription)"

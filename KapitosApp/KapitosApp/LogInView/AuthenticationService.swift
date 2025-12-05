@@ -68,4 +68,15 @@ final class AuthenticationService: ObservableObject {
             return false
         }
     }
+    
+    func signOut() {
+        currentUserId = nil
+        userRole = nil
+        message = nil
+        print("🚪 User logged out")
+    }
+    
+    var isAuthenticated: Bool {
+        currentUserId != nil
+    }
 }

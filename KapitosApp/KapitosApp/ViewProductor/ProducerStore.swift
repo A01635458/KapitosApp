@@ -78,8 +78,8 @@ class ProducerStore: ObservableObject {
                 
                 // Build description from available data
                 var descParts: [String] = []
-                if let type = producer.coffee_type {
-                    descParts.append("Café \(type)")
+                if let varieties = producer.varieties, !varieties.isEmpty {
+                    descParts.append("Variedades: \(varieties.joined(separator: ", "))")
                 }
                 if let altitude = producer.altitude {
                     descParts.append("cultivado a \(altitude)m de altura")
