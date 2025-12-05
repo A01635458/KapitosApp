@@ -131,7 +131,6 @@ CREATE TABLE public.producers (
   last_harvest_date date,
   yield_per_ha numeric,
   price_per_kg numeric CHECK (price_per_kg IS NULL OR price_per_kg >= 0::numeric),
-  current_buyers text,
   min_contract_volume integer,
   open_to_export boolean DEFAULT false,
   sells_online boolean DEFAULT false,
@@ -150,6 +149,7 @@ CREATE TABLE public.producers (
   latitude numeric CHECK (latitude IS NULL OR latitude >= '-90'::integer::numeric AND latitude <= 90::numeric),
   longitude numeric CHECK (longitude IS NULL OR longitude >= '-180'::integer::numeric AND longitude <= 180::numeric),
   shade_coverage_percent integer CHECK (shade_coverage_percent IS NULL OR shade_coverage_percent >= 0 AND shade_coverage_percent <= 100),
+  sales_types ARRAY,
   CONSTRAINT producers_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.profiles (

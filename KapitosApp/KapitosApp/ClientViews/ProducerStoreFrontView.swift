@@ -35,15 +35,6 @@ struct ProducerStoreFrontView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 30)
 
-                HStack {
-                    Image(systemName: "clock.fill")
-                        .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
-
-                    Text(producer.schedule)
-                        .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-                }
-                .padding()
-
                 Divider().padding(.horizontal)
 
                 // Productos Hardcodeados

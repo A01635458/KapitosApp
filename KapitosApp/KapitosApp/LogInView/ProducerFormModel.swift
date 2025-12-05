@@ -24,7 +24,7 @@ struct ProducerFormModel {
     let harvestYear: Int
     let yield: String
     let price: String
-    let sellingTo: String
+    let salesTypes: String
     let minVolume: String
     let exportReady: String
     let onlineSales: String

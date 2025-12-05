@@ -23,7 +23,6 @@ struct ProducerBusinessView: View {
                 editableField("Nombre del negocio", text: $store.businessName)
                 editableField("Teléfono", text: $store.phone)
                 editableField("Ubicación", text: $store.address)
-                editableField("Horario", text: $store.schedule)
                 editableField("Descripción", text: $store.description)
 
                 Spacer().frame(height: 80)

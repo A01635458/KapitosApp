@@ -42,7 +42,7 @@ class ProducerRegistrationData: ObservableObject {
                 last_harvest_date: formatHarvestDate(month: form.harvestMonth, year: form.harvestYear),
                 yield_per_ha: Double(form.yield),
                 price_per_kg: Double(form.price),
-                current_buyers: emptyToNil(form.sellingTo),
+                sales_types: splitList(form.salesTypes),
                 min_contract_volume: Int(form.minVolume),
                 open_to_export: normalizedYes(form.exportReady),
                 sells_online: normalizedYes(form.onlineSales),

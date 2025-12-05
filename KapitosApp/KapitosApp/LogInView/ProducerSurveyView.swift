@@ -42,7 +42,7 @@ struct ProducerSurveyView: View {
 
     // --- COMERCIAL ---
     @State private var price = 100
-    @State private var sellingTo = ""
+    @State private var selectedSalesTypes: Set<String> = []
     @State private var minVolume = 50
     @State private var exportReady = false
     @State private var onlineSales = false
@@ -65,6 +65,7 @@ struct ProducerSurveyView: View {
     // Opciones disponibles
     let varieties = ["Typica", "Bourbon", "Caturra", "Catuaí", "Mundo Novo", "Maragogipe", "Garnica", "Geisha", "Arábica", "Robusta"]
     let processes = ["Lavado", "Honey", "Natural"]
+    let salesTypes = ["Exportación", "Mayoreo Nacional (>1000kg)", "Medio Mayoreo (100-1000kg)", "Menudeo (directo)", "Tours/Turismo"]
     let certifications = ["USDA Organic", "Rainforest Alliance", "Fair Trade", "UTZ Certified", "4C", "Orgánico CERTIMEX", "Bird Friendly", "Smithsonian Migratory Bird Center"]
     
     var isFormEligible: Bool {
@@ -158,7 +159,7 @@ struct ProducerSurveyView: View {
 
                     sectionCard("Comercial", icon: "cart.fill") {
                         pickerField("Precio por kg (MXN)", value: $price, range: 50...500, step: 10, key: "price")
-                        validatedField("¿A quién vendes?", text: $sellingTo, key: "sellingTo")
+                        multipleCheckboxField("Tipos de venta", options: salesTypes, selected: $selectedSalesTypes)
                         pickerField("Volumen mínimo (kg)", value: $minVolume, range: 10...1000, step: 10, key: "minVolume")
                         toggleField("¿Exportas?", isOn: $exportReady)
                         toggleField("¿Vendes en línea?", isOn: $onlineSales)
@@ -262,7 +263,7 @@ struct ProducerSurveyView: View {
                     harvestYear: harvestYear,
                     yield: String(yieldPerHa),
                     price: String(price),
-                    sellingTo: sellingTo,
+                    salesTypes: Array(selectedSalesTypes).joined(separator: ", "),
                     minVolume: String(minVolume),
                     exportReady: exportReady ? "Sí" : "No",
                     onlineSales: onlineSales ? "Sí" : "No",

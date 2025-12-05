@@ -25,7 +25,7 @@ struct ProducerInsertDTO: Codable {
     let last_harvest_date: String? // formatted "YYYY-MM-DD" for Postgres date
     let yield_per_ha: Double?
     let price_per_kg: Double?
-    let current_buyers: String?
+    let sales_types: [String]
     let min_contract_volume: Int?
     let open_to_export: Bool?
     let sells_online: Bool?
