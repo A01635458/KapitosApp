@@ -1,15 +1,14 @@
 //
-//  ChatPreviewCard.swift
+//  ProducerChatPreviewCard.swift
 //  KapitosApp
 //
-//  Created by Luisa Cardona on 03/12/25.
+//  Created by Luisa Cardona on 05/12/25.
 //
-
 
 import SwiftUI
 import Combine
 
-struct ChatPreviewCard: View {
+struct ProducerChatPreviewCard: View {
 
     @EnvironmentObject var theme: AppThemeManager
     @StateObject private var messagingService: MessagingService
@@ -23,7 +22,7 @@ struct ChatPreviewCard: View {
     
     var body: some View {
         NavigationLink {
-            ClientChatListView(currentUserId: currentUserId)
+            ProducerChatListView(currentUserId: currentUserId)
                 .environmentObject(theme)
                 .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
 
@@ -76,6 +75,7 @@ struct ChatPreviewCard: View {
                 placeholderText: String(conversation.otherUser.full_name.prefix(1)).uppercased()
             )
             .frame(width: 44, height: 44)
+            .environmentObject(theme)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(conversation.otherUser.full_name)
@@ -103,69 +103,6 @@ struct ChatPreviewCard: View {
 
             Image(systemName: "chevron.right")
                 .foregroundColor(.gray)
-        }
-    }
-}
-
-// MARK: - AsyncImageView Helper
-struct AsyncImageView: View {
-    let urlString: String?
-    let placeholderText: String
-    
-    @EnvironmentObject var theme: AppThemeManager
-    @State private var loadedImage: UIImage?
-    @State private var isLoading = false
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-            
-            if let image = loadedImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 44, height: 44)
-                    .clipShape(Circle())
-            } else if isLoading {
-                ProgressView()
-                    .scaleEffect(0.8)
-            } else {
-                Text(placeholderText)
-                    .font(.headline)
-                    .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
-            }
-        }
-        .onAppear {
-            loadImage()
-        }
-    }
-    
-    private func loadImage() {
-        guard let urlString = urlString, !urlString.isEmpty else { return }
-        guard let url = URL(string: urlString) else { return }
-        
-        isLoading = true
-        
-        Task {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                if let image = UIImage(data: data) {
-                    await MainActor.run {
-                        self.loadedImage = image
-                        self.isLoading = false
-                    }
-                } else {
-                    await MainActor.run {
-                        self.isLoading = false
-                    }
-                }
-            } catch {
-                print("❌ Error loading image: \(error.localizedDescription)")
-                await MainActor.run {
-                    self.isLoading = false
-                }
-            }
         }
     }
 }

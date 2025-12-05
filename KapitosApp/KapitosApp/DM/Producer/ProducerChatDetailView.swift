@@ -114,6 +114,9 @@ extension ProducerChatDetailView {
                         .scaledToFill()
                         .frame(width: 42, height: 42)
                         .clipShape(Circle())
+                } else if otherUserPhotoUrl != nil && !otherUserPhotoUrl!.isEmpty {
+                    ProgressView()
+                        .frame(width: 42, height: 42)
                 } else {
                     Image(systemName: "person.fill")
                         .font(.system(size: 20))
@@ -121,9 +124,12 @@ extension ProducerChatDetailView {
                 }
             }
             .shadow(radius: 3)
-            .task {
+            .onAppear {
+                print("🖼️ [Producer] Photo URL received: \(otherUserPhotoUrl ?? "nil")")
                 if let urlString = otherUserPhotoUrl, !urlString.isEmpty {
-                    await loadAvatar(from: urlString)
+                    Task {
+                        await loadAvatar(from: urlString)
+                    }
                 }
             }
 
@@ -143,17 +149,30 @@ extension ProducerChatDetailView {
     }
     
     private func loadAvatar(from urlString: String) async {
-        guard let url = URL(string: urlString) else { return }
+        print("🔄 [Producer] Attempting to load avatar from: \(urlString)")
+        
+        guard let url = URL(string: urlString) else {
+            print("❌ [Producer] Invalid URL for avatar: \(urlString)")
+            return
+        }
         
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📡 [Producer] HTTP Response: \(httpResponse.statusCode)")
+            }
+            
             if let image = UIImage(data: data) {
+                print("✅ [Producer] Avatar loaded successfully")
                 await MainActor.run {
                     self.otherUserAvatar = image
                 }
+            } else {
+                print("❌ [Producer] Could not create UIImage from data")
             }
         } catch {
-            print("❌ Error loading avatar: \(error)")
+            print("❌ [Producer] Error loading avatar: \(error.localizedDescription)")
         }
     }
 }

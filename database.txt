@@ -49,7 +49,7 @@ CREATE TABLE public.producer_products (
   created_at timestamp without time zone DEFAULT now(),
   updated_at timestamp without time zone DEFAULT now(),
   CONSTRAINT producer_products_pkey PRIMARY KEY (id),
-  CONSTRAINT producer_products_producer_id_fkey FOREIGN KEY (producer_id) REFERENCES public.producers(id)
+  CONSTRAINT producer_products_producer_id_fkey FOREIGN KEY (producer_id) REFERENCES public.profiles(id)
 );
 CREATE TABLE public.producers (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -93,6 +93,7 @@ CREATE TABLE public.profiles (
   email text NOT NULL UNIQUE,
   role text DEFAULT 'user'::text CHECK (role = ANY (ARRAY['user'::text, 'producer'::text, 'admin'::text])),
   created_at timestamp without time zone DEFAULT now(),
+  photo_url text,
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
   CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
 );

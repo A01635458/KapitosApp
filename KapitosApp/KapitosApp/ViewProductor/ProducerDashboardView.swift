@@ -13,6 +13,12 @@ struct ProducerDashboardView: View {
     
     @EnvironmentObject var store: ProducerStore
     @EnvironmentObject var theme: AppThemeManager
+    @StateObject private var messagingService: MessagingService
+    
+    init(currentUserId: UUID) {
+        self.currentUserId = currentUserId
+        _messagingService = StateObject(wrappedValue: MessagingService(currentUserId: currentUserId))
+    }
 
     var body: some View {
 
@@ -28,9 +34,10 @@ struct ProducerDashboardView: View {
                     .foregroundColor(AppColors.textLight)
 
                 dashboardCard(title: "Productos publicados", value: "\(store.products.count)")
-                dashboardCard(title: "Clientes esta semana", value: "12")
-                dashboardCard(title: "Calificación promedio", value: "4.8 ★")
-
+                
+                ProducerChatPreviewCard(currentUserId: currentUserId)
+                    .environmentObject(theme)
+                
                 Spacer()
                     .frame(height: 80)
             }

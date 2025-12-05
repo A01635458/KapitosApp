@@ -50,6 +50,11 @@ struct Profile: Codable {
     let photo_url: String?
 }
 
+struct ProducerProfile: Codable {
+    let id: UUID
+    let photo_url: String?
+}
+
 struct ConversationWithDetails: Identifiable {
     let id: UUID
     let conversation: Conversation
@@ -114,13 +119,44 @@ class MessagingService: ObservableObject {
                     : conversation.client_id
                 
                 // Fetch other user's profile
-                let profile: Profile = try await supabase
+                var profile: Profile = try await supabase
                     .from("profiles")
                     .select()
                     .eq("id", value: otherUserId.uuidString)
                     .single()
                     .execute()
                     .value
+                
+                print("👤 Profile loaded - Name: \(profile.full_name), Role: \(profile.role), Photo URL from profiles: \(profile.photo_url ?? "nil")")
+                
+                // If user is a producer and photo_url is nil in profiles, try to get it from producers table
+                if profile.role == "producer" && (profile.photo_url == nil || profile.photo_url?.isEmpty == true) {
+                    do {
+                        let producerProfile: ProducerProfile = try await supabase
+                            .from("producers")
+                            .select("id, photo_url")
+                            .eq("id", value: otherUserId.uuidString)
+                            .single()
+                            .execute()
+                            .value
+                        
+                        if let producerPhotoUrl = producerProfile.photo_url, !producerPhotoUrl.isEmpty {
+                            print("📸 Found producer photo_url: \(producerPhotoUrl)")
+                            // Create a new profile with the producer's photo
+                            profile = Profile(
+                                id: profile.id,
+                                full_name: profile.full_name,
+                                email: profile.email,
+                                role: profile.role,
+                                photo_url: producerPhotoUrl
+                            )
+                        }
+                    } catch {
+                        print("⚠️ Could not fetch producer photo: \(error.localizedDescription)")
+                    }
+                }
+                
+                print("✅ Final Photo URL: \(profile.photo_url ?? "nil")")
                 
                 // Fetch last message
                 let lastMessageResponse: [MessageData]? = try? await supabase
