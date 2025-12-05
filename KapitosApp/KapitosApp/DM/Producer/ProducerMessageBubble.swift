@@ -16,25 +16,38 @@ struct ProducerMessageBubble: View {
         HStack {
             if !message.isMe { Spacer() }
 
-            Text(message.text)
-                .padding(12)
-                .foregroundColor(
-                    message.isMe
-                        ? .white
-                        : (theme.isDarkMode ? .white : AppColors.textLight)
-                )
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(
-                            message.isMe
-                                ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
-                                : (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                        )
-                )
-                .frame(maxWidth: UIScreen.main.bounds.width * 0.68, alignment: message.isMe ? .leading : .trailing)
+            VStack(alignment: message.isMe ? .leading : .trailing, spacing: 4) {
+                Text(message.text)
+                    .padding(12)
+                    .foregroundColor(
+                        message.isMe
+                            ? .white
+                            : (theme.isDarkMode ? .white : AppColors.textLight)
+                    )
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(
+                                message.isMe
+                                    ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                                    : (theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                            )
+                    )
+                    .frame(maxWidth: UIScreen.main.bounds.width * 0.68, alignment: message.isMe ? .leading : .trailing)
+                
+                Text(formatTime(message.timestamp))
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+                    .padding(.horizontal, 4)
+            }
 
             if message.isMe { Spacer() }
         }
         .padding(.horizontal)
+    }
+    
+    private func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return formatter.string(from: date)
     }
 }

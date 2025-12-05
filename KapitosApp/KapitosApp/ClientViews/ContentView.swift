@@ -51,7 +51,8 @@ struct ContentView: View {
 
                     // ----------- NUEVO: CHAT CLIENTE -----------
                     case .mensajesCliente:
-                        ClientChatListView()
+                        // TODO: Replace with actual authenticated user ID
+                        ClientChatListView(currentUserId: UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!)
                             .environmentObject(theme)
                     }
                 }

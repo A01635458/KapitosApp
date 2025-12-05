@@ -64,7 +64,51 @@ final class ProducerApprovalService: ObservableObject {
         defer { isLoading = false }
         
         do {
-            // 1. Update producer status
+            print("🔄 Starting producer approval for ID: \(producerId.uuidString)")
+            
+            // 1. Create auth user account first
+            print("📝 Creating auth user with email: \(email)")
+            let signUpResponse = try await client.auth.signUp(
+                email: email,
+                password: password
+            )
+            
+            let userId = signUpResponse.user.id
+            print("✅ User created with ID: \(userId.uuidString)")
+            
+            // 2. Get producer info
+            let producerData: [Producer] = try await client
+                .from("producers")
+                .select()
+                .eq("id", value: producerId.uuidString)
+                .execute()
+                .value
+            
+            let producerName = producerData.first?.displayName ?? "Productor"
+            print("📋 Producer name: \(producerName)")
+            
+            // 3. Create profile manually with producer role
+            struct ProfileInsert: Encodable {
+                let id: String
+                let full_name: String
+                let email: String
+                let role: String
+            }
+            
+            print("📝 Creating profile with role: producer")
+            try await client
+                .from("profiles")
+                .insert(ProfileInsert(
+                    id: userId.uuidString,
+                    full_name: producerName,
+                    email: email,
+                    role: "producer"
+                ))
+                .execute()
+            
+            print("✅ Profile created with producer role")
+            
+            // 4. Update producer status to approved
             struct StatusUpdate: Encodable {
                 let status: String
             }
@@ -74,25 +118,9 @@ final class ProducerApprovalService: ObservableObject {
                 .eq("id", value: producerId.uuidString)
                 .execute()
             
-            // 2. Create auth user account
-            let signUpResponse = try await client.auth.signUp(
-                email: email,
-                password: password
-            )
+            print("✅ Producer status updated to approved")
             
-            let userId = signUpResponse.user.id
-            
-            // 3. Update profile to producer role
-            struct ProfileUpdate: Encodable {
-                let role: String
-            }
-            try await client
-                .from("profiles")
-                .update(ProfileUpdate(role: "producer"))
-                .eq("id", value: userId.uuidString)
-                .execute()
-            
-            // 4. Link producer to auth user
+            // 5. Link producer record to the new auth user ID
             struct IdUpdate: Encodable {
                 let id: String
             }
@@ -102,9 +130,12 @@ final class ProducerApprovalService: ObservableObject {
                 .eq("id", value: producerId.uuidString)
                 .execute()
             
+            print("✅ Producer linked to auth user")
+            
             // Refresh list
             await fetchPendingProducers()
             
+            print("🎉 Producer approval completed successfully!")
             return true
         } catch {
             errorMessage = ApprovalError.updateFailed(error.localizedDescription).localizedDescription

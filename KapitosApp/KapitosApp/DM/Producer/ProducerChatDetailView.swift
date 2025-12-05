@@ -12,14 +12,25 @@ import Combine
 struct ProducerChatDetailView: View {
 
     @EnvironmentObject var theme: AppThemeManager
-
-    @State private var messages: [Message] = [
-        Message(text: "Hola, quería saber si ya enviaste mi pedido.", isMe: false),
-        Message(text: "Sí claro! Sale hoy por la tarde 🙌", isMe: true)
-    ]
+    @StateObject private var messagingService: MessagingService
+    
+    let conversationId: UUID
+    let otherUserName: String
 
     @State private var input = ""
     @State private var scrollID = UUID()
+    
+    init(conversationId: UUID, currentUserId: UUID, otherUserName: String) {
+        self.conversationId = conversationId
+        self.otherUserName = otherUserName
+        _messagingService = StateObject(wrappedValue: MessagingService(currentUserId: currentUserId))
+    }
+    
+    private var messages: [Message] {
+        messagingService.messages.map { messageData in
+            Message(from: messageData, currentUserId: messagingService.currentUserId)
+        }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,12 +42,29 @@ struct ProducerChatDetailView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(spacing: 12) {
-
-                        ForEach(messages) { msg in
-                            ProducerMessageBubble(message: msg)
-                                .environmentObject(theme)
-                                .transition(.move(edge: .bottom).combined(with: .opacity))
-                                .animation(.spring(response: 0.35, dampingFraction: 0.8), value: messages)
+                        if messagingService.isLoading && messages.isEmpty {
+                            ProgressView("Cargando mensajes...")
+                                .padding()
+                        } else if messages.isEmpty {
+                            VStack(spacing: 8) {
+                                Image(systemName: "bubble.left.and.bubble.right.fill")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(.gray.opacity(0.5))
+                                Text("No hay mensajes aún")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                Text("Envía un mensaje para comenzar")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.top, 40)
+                        } else {
+                            ForEach(messages) { msg in
+                                ProducerMessageBubble(message: msg)
+                                    .environmentObject(theme)
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: messages.count)
+                            }
                         }
 
                         Color.clear
@@ -48,7 +76,11 @@ struct ProducerChatDetailView: View {
                 .background(
                     theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight
                 )
-                .onChange(of: messages) { _ in
+                .onChange(of: messages.count) { _ in
+                    scrollToBottom(proxy)
+                }
+                .task {
+                    await messagingService.fetchMessages(conversationId: conversationId)
                     scrollToBottom(proxy)
                 }
             }
@@ -72,13 +104,13 @@ extension ProducerChatDetailView {
                 .shadow(radius: 3)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Cliente Ana López")
+                Text(otherUserName)
                     .font(.headline)
                     .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
 
-                Text("En línea ahora")
+                Text("Cliente")
                     .font(.caption)
-                    .foregroundColor(.green.opacity(0.85))
+                    .foregroundColor(.gray)
             }
 
             Spacer()
@@ -115,9 +147,13 @@ extension ProducerChatDetailView {
     func sendMessage() {
         guard !input.isEmpty else { return }
 
-        messages.append(Message(text: input, isMe: true))
+        let messageContent = input
         input = ""
-        scrollID = UUID()
+        
+        Task {
+            await messagingService.sendMessage(conversationId: conversationId, content: messageContent)
+            scrollID = UUID()
+        }
     }
 }
 extension ProducerChatDetailView {

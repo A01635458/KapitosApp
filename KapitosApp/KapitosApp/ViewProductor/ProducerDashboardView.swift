@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProducerDashboardView: View {
 
+    let currentUserId: UUID
+    
     @EnvironmentObject var store: ProducerStore
     @EnvironmentObject var theme: AppThemeManager
 

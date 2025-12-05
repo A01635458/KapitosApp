@@ -17,11 +17,18 @@ enum ProducerScreen {
 
 struct ProducerRootView: View {
 
-    @StateObject var store = ProducerStore()
+    let currentUserId: UUID
+    
+    @StateObject private var store: ProducerStore
     @StateObject var theme = AppThemeManager()
 
     @State private var showMenu = false
     @State private var screen: ProducerScreen = .dashboard
+    
+    init(currentUserId: UUID) {
+        self.currentUserId = currentUserId
+        _store = StateObject(wrappedValue: ProducerStore(currentUserId: currentUserId))
+    }
 
     var body: some View {
         NavigationStack {
@@ -32,7 +39,7 @@ struct ProducerRootView: View {
                     switch screen {
 
                     case .dashboard:
-                        ProducerDashboardView()
+                        ProducerDashboardView(currentUserId: currentUserId)
                             .environmentObject(theme)
                             .environmentObject(store)
 
@@ -56,12 +63,10 @@ struct ProducerRootView: View {
                             .environmentObject(theme)
                             .environmentObject(store)
                         
-                    case .mensajesProductor:
-                        ProducerChatListView()
-                            .environmentObject(theme)
-                            .environmentObject(store)
-                        
-                    }
+                case .mensajesProductor:
+                    ProducerChatListView(currentUserId: currentUserId)
+                        .environmentObject(theme)
+                        .environmentObject(store)                    }
                 }
                 .environmentObject(theme)
                 .toolbar {
@@ -106,5 +111,5 @@ struct ProducerRootView: View {
 }
 
 #Preview {
-    ProducerRootView()
+    ProducerRootView(currentUserId: UUID())
 }
