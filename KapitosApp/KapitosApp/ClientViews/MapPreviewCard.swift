@@ -13,8 +13,8 @@ struct MapPreviewCard: View {
     @Binding var currentScreen: AppScreen
     
     @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 19.4326, longitude: -99.1332), // Mexico City default
-        span: MKCoordinateSpan(latitudeDelta: 8.0, longitudeDelta: 8.0)
+        center: CLLocationCoordinate2D(latitude: 22.7709, longitude: -102.5832), // Zacatecas center
+        span: MKCoordinateSpan(latitudeDelta: 15.0, longitudeDelta: 15.0)
     )
     
     var body: some View {
@@ -141,7 +141,7 @@ struct MapPreviewCard: View {
                let coordinate = firstProducer.coordinate {
                 region = MKCoordinateRegion(
                     center: coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 8.0, longitudeDelta: 8.0)
+                    span: MKCoordinateSpan(latitudeDelta: 15.0, longitudeDelta: 15.0)
                 )
             }
         }

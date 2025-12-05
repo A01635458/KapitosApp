@@ -20,8 +20,11 @@ struct ClientChatListView: View {
         NavigationStack {
             ZStack {
                 if messagingService.isLoading && messagingService.conversations.isEmpty {
-                    ProgressView("Cargando conversaciones...")
-                        .foregroundColor(.gray)
+                    VStack {
+                        ProgressView("Cargando conversaciones...")
+                            .foregroundColor(.gray)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if messagingService.conversations.isEmpty {
                     VStack(spacing: 12) {
                         Image(systemName: "bubble.left.and.bubble.right")
