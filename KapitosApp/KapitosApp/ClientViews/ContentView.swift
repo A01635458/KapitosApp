@@ -48,7 +48,7 @@ struct ContentView: View {
                         MapView().environmentObject(theme)
 
                     case .profile:
-                        ProfileView().environmentObject(theme)
+                        ProfileView(currentUserId: currentUserId).environmentObject(theme)
 
                     // ----------- NUEVO: CHAT CLIENTE -----------
                     case .mensajesCliente:

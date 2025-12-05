@@ -11,6 +11,7 @@ import SwiftUI
 @main
 struct KapitosAppApp: App {
     @StateObject private var theme = AppThemeManager()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {

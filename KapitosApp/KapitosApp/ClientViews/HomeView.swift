@@ -93,6 +93,11 @@ struct HomeView: View {
     @EnvironmentObject var theme: AppThemeManager
     let currentUserId: UUID
     
+    @StateObject private var recommendationEngine = RecommendationEngine()
+    @State private var selectedProducer: ProducerMapData?
+    @State private var showProducerDetail = false
+    @State private var showRecommendationDetail: RecommendationScore?
+    
     struct CoffeeType: Identifiable {
         let id = UUID()
         let nombre: String
@@ -111,14 +116,66 @@ struct HomeView: View {
 
     var body: some View {
 
-        VStack(alignment: .leading, spacing: 20) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
 
-            // --- PREVIEW DE CHATS ---
-            ChatPreviewCard(currentUserId: currentUserId)
-                .environmentObject(theme)
-                .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+                // --- PREVIEW DE CHATS ---
+                ChatPreviewCard(currentUserId: currentUserId)
+                    .environmentObject(theme)
+                    .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+                    .padding(.top, 10)
 
-                .padding(.top, 10)
+                // --- RECOMENDACIONES PERSONALIZADAS ---
+                if !recommendationEngine.recommendations.isEmpty {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image(systemName: "sparkles")
+                                .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                            
+                            Text("Recomendados para Ti")
+                                .font(.title2.bold())
+                                .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
+                            
+                            Spacer()
+                        }
+                        
+                        Text("Productores compatibles con tus preferencias")
+                            .font(.subheadline)
+                            .foregroundColor(
+                                theme.isDarkMode
+                                ? AppColors.textDark.opacity(0.8)
+                                : AppColors.textLight.opacity(0.8)
+                            )
+                        
+                        // Top 5 recommendations
+                        ForEach(Array(recommendationEngine.recommendations.prefix(5))) { recommendation in
+                            RecommendedProducerCard(recommendation: recommendation) {
+                                selectedProducer = recommendation.producer
+                                showProducerDetail = true
+                            }
+                            .environmentObject(theme)
+                            .contextMenu {
+                                Button {
+                                    showRecommendationDetail = recommendation
+                                } label: {
+                                    Label("Ver detalles de compatibilidad", systemImage: "info.circle")
+                                }
+                            }
+                        }
+                    }
+                    .padding(.top, 10)
+                } else if recommendationEngine.isLoading {
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight))
+                        
+                        Text("Generando recomendaciones personalizadas...")
+                            .font(.subheadline)
+                            .foregroundColor(theme.isDarkMode ? AppColors.textDark.opacity(0.7) : AppColors.textLight.opacity(0.7))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 30)
+                }
 
 
             // --- TIPOS DE CAFÉ ---
@@ -167,6 +224,22 @@ struct HomeView: View {
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 40)
+        }
+        .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
+        .task {
+            // Load recommendations on appear
+            await recommendationEngine.generateRecommendations(for: currentUserId, limit: 5)
+        }
+        .sheet(item: $showRecommendationDetail) { recommendation in
+            RecommendationDetailView(recommendation: recommendation)
+                .environmentObject(theme)
+        }
+        .sheet(isPresented: $showProducerDetail) {
+            if let producer = selectedProducer {
+                ProducerDetailSheetView(producer: producer)
+                    .environmentObject(theme)
+            }
+        }
     }
 }
 

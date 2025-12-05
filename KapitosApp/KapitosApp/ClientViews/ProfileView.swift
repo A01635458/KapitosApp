@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var theme: AppThemeManager
+    let currentUserId: UUID
+    
+    @State private var showNotificationPreferences = false
 
     var body: some View {
         ZStack {
@@ -28,10 +31,34 @@ struct ProfileView: View {
                 Text("Tu Nombre")
                     .font(.title2)
                     .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
+                
+                // Notification Settings Button
+                Button {
+                    showNotificationPreferences = true
+                } label: {
+                    HStack {
+                        Image(systemName: "bell.badge.fill")
+                        Text("Notificaciones Inteligentes")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(theme.isDarkMode ? AppColors.cardDark : Color.white)
+                            .shadow(color: .black.opacity(theme.isDarkMode ? 0.3 : 0.1), radius: 6, y: 3)
+                    )
+                    .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
+                }
+                .padding(.horizontal)
 
                 Spacer()
             }
             .padding()
+        }
+        .sheet(isPresented: $showNotificationPreferences) {
+            NotificationPreferencesView(currentUserId: currentUserId)
+                .environmentObject(theme)
         }
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict/>
+	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Necesitamos tu ubicación para mostrarte productores de café cercanos con tours de cafetales y enviarte notificaciones cuando estés cerca de productores compatibles.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Queremos enviarte notificaciones cuando estés cerca de productores de café que coincidan con tus preferencias, incluso cuando la app esté cerrada.</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Te enviaremos notificaciones inteligentes sobre nuevos productores compatibles, cosechas próximas y tours de cafetales cercanos basadas en tus preferencias.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+</dict>
+</plist>
