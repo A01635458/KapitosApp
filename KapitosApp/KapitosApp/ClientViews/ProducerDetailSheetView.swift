@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Supabase
 
 struct ProducerDetailSheetView: View {
     
@@ -18,6 +19,9 @@ struct ProducerDetailSheetView: View {
     @State private var isCreatingConversation = false
     @State private var showChatView = false
     @State private var conversationId: UUID?
+    @State private var products: [ProducerProduct] = []
+    @State private var isLoadingProducts = false
+    @State private var selectedProduct: ProducerProduct?
     
     var body: some View {
         NavigationStack {
@@ -46,6 +50,9 @@ struct ProducerDetailSheetView: View {
                         detailCard("Certificaciones", items: certifications, icon: "checkmark.seal.fill")
                     }
                     
+                    // Products section
+                    productsSection
+                    
                     // Tourism info
                     if producer.has_tourist_area == true || producer.tourist_accessible == true {
                         tourismSection
@@ -69,6 +76,9 @@ struct ProducerDetailSheetView: View {
                     }
                 }
             }
+            .task {
+                await loadProducerProducts()
+            }
             .sheet(isPresented: $showChatView) {
                 if let conversationId = conversationId {
                     NavigationStack {
@@ -80,6 +90,10 @@ struct ProducerDetailSheetView: View {
                         .environmentObject(theme)
                     }
                 }
+            }
+            .sheet(item: $selectedProduct) { product in
+                ProductDetailView(product: product)
+                    .environmentObject(theme)
             }
         }
     }
@@ -228,6 +242,55 @@ struct ProducerDetailSheetView: View {
         .cornerRadius(16)
     }
     
+    // MARK: - Products Section
+    
+    private var productsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "shippingbox.fill")
+                    .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                Text("Productos")
+                    .font(.headline)
+                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+            }
+            
+            if isLoadingProducts {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                        .padding()
+                    Spacer()
+                }
+            } else if products.isEmpty {
+                Text("Este productor aún no ha publicado productos")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .padding(.vertical, 8)
+            } else {
+                VStack(spacing: 12) {
+                    ForEach(products) { product in
+                        SwipeableProductCardForClient(
+                            product: product,
+                            onTap: {
+                                selectedProduct = product
+                            },
+                            onSwipeToChat: {
+                                Task {
+                                    await createConversationAndSendProductMessage(product: product)
+                                }
+                            }
+                        )
+                        .environmentObject(theme)
+                    }
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(theme.isDarkMode ? AppColors.cardDark : .white)
+        .cornerRadius(16)
+    }
+    
     // MARK: - Tourism Section
     
     private var tourismSection: some View {
@@ -286,6 +349,52 @@ struct ProducerDetailSheetView: View {
     
     // MARK: - Helper Functions
     
+    private func loadProducerProducts() async {
+        isLoadingProducts = true
+        
+        do {
+            let supabase = SupabaseClient(
+                supabaseURL: AppConfig.supabaseURL,
+                supabaseKey: AppConfig.supabaseAnonKey
+            )
+            
+            struct ProductDTO: Codable {
+                let id: UUID
+                let name: String
+                let price: Double
+                let weight: String
+                let image_url: String?
+                let description: String?
+            }
+            
+            let response: [ProductDTO] = try await supabase
+                .from("producer_products")
+                .select()
+                .eq("producer_id", value: producer.id.uuidString)
+                .eq("is_active", value: true)
+                .execute()
+                .value
+            
+            products = response.map { dto in
+                ProducerProduct(
+                    id: dto.id,
+                    name: dto.name,
+                    price: dto.price,
+                    weight: dto.weight,
+                    image: nil,
+                    imageUrl: dto.image_url,
+                    description: dto.description
+                )
+            }
+            
+            print("✅ Loaded \(products.count) products for producer")
+        } catch {
+            print("❌ Error loading products: \(error)")
+        }
+        
+        isLoadingProducts = false
+    }
+    
     private func createConversationAndOpenChat() async {
         isCreatingConversation = true
         
@@ -297,6 +406,20 @@ struct ProducerDetailSheetView: View {
         }
         
         isCreatingConversation = false
+    }
+    
+    private func createConversationAndSendProductMessage(product: ProducerProduct) async {
+        let messagingService = MessagingService(currentUserId: currentUserId)
+        
+        if let newConversationId = await messagingService.getOrCreateConversation(withUserId: producer.id) {
+            // Enviar mensaje automático
+            let messageContent = "Hola, me interesa el producto \(product.name)"
+            await messagingService.sendMessage(conversationId: newConversationId, content: messageContent)
+            
+            // Abrir chat
+            conversationId = newConversationId
+            showChatView = true
+        }
     }
 }
 
