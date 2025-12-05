@@ -101,11 +101,9 @@ struct MapView: View {
             .mapStyle(.standard(elevation: .realistic))
             .preferredColorScheme(theme.isDarkMode ? .dark : .light)
             .ignoresSafeArea()
-            
-            // Search bar overlay at toolbar height
-            VStack(spacing: 0) {
+            .safeAreaInset(edge: .top) {
                 searchBarSection
-                Spacer()
+                    .background(.clear)
             }
             
             // Error message
@@ -133,10 +131,8 @@ struct MapView: View {
         }
     }
     
-    // MARK: - Search Bar Section
-    
     private var searchBarSection: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 8) {
             // Search bar
             HStack(spacing: 12) {
                 HStack(spacing: 8) {
@@ -174,8 +170,6 @@ struct MapView: View {
                         .scaleEffect(0.8)
                 }
             }
-            .padding(.horizontal, 60)
-            .padding(.top, 60) // Align with toolbar/sidebar button
             
             // Autocomplete suggestions
             if showSuggestions && !searchText.isEmpty {
@@ -221,12 +215,8 @@ struct MapView: View {
                 .background(theme.isDarkMode ? AppColors.cardDark : .white)
                 .cornerRadius(12)
                 .shadow(radius: 4)
-                .padding(.horizontal, 60)
-                .padding(.top, 4)
-            }
-            
-            // Info card
-            if !showSuggestions {
+            } else if searchText.isEmpty {
+                // Info card - only show when not searching
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Productores de Café")
@@ -248,10 +238,10 @@ struct MapView: View {
                 )
                 .cornerRadius(12)
                 .shadow(radius: 2)
-                .padding(.horizontal, 60)
-                .padding(.top, 8)
             }
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
     }
     
     // MARK: - Filter Function
