@@ -127,7 +127,6 @@ CREATE TABLE public.producers (
   country text,
   state text,
   municipality text,
-  shade_type text,
   annual_production_kg integer,
   last_harvest_date date,
   yield_per_ha numeric,
@@ -137,7 +136,6 @@ CREATE TABLE public.producers (
   open_to_export boolean DEFAULT false,
   sells_online boolean DEFAULT false,
   online_store_url text,
-  needs text,
   has_tourist_area boolean DEFAULT false,
   tourist_accessible boolean DEFAULT false,
   tourism_details text,
@@ -148,10 +146,10 @@ CREATE TABLE public.producers (
   processes ARRAY,
   certifications ARRAY,
   altitude integer,
-  coffee_type text,
   status text DEFAULT 'pending'::text CHECK (status = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text])),
   latitude numeric CHECK (latitude IS NULL OR latitude >= '-90'::integer::numeric AND latitude <= 90::numeric),
   longitude numeric CHECK (longitude IS NULL OR longitude >= '-180'::integer::numeric AND longitude <= 180::numeric),
+  shade_coverage_percent integer CHECK (shade_coverage_percent IS NULL OR shade_coverage_percent >= 0 AND shade_coverage_percent <= 100),
   CONSTRAINT producers_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.profiles (

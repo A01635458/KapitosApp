@@ -1,30 +1,37 @@
 import Foundation
+import UIKit
 
-struct ProducerFormModel: Codable {
+struct ProducerFormModel {
     let name: String
     let phone: String
     let email: String
+    let profileImage: UIImage?
+    let experienceYears: String
     let brand: String
     let farmSize: String
     let location: String
     let latitude: Double?
     let longitude: Double?
     let locationAddress: String?
+    let state: String?
+    let municipality: String?
     let altitude: String
-    let shadeType: String
+    let shadeCoverage: String
     let production: String
     let varieties: String
     let processes: String
-    let coffeeType: String
-    let harvestDate: String
+    let harvestMonth: Int
+    let harvestYear: Int
     let yield: String
     let price: String
     let sellingTo: String
     let minVolume: String
     let exportReady: String
     let onlineSales: String
-    let needs: String
     let hasTastingArea: String
     let touristAccess: String
     let certifications: String
+    let consentGPS: Bool
+    let consentAI: Bool
+    let consentNotifications: Bool
 }
