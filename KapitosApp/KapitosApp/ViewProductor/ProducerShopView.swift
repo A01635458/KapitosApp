@@ -4,40 +4,97 @@
 //
 //  Created by Luisa Cardona on 25/11/25.
 //
+//
+//  ProducerShopView.swift
+//  KapitosApp
+//
+//
+//  ProducerShopView.swift
+//  KapitosApp
+//
 
 import SwiftUI
 
 struct ProducerShopView: View {
 
     @EnvironmentObject var store: ProducerStore
-    @State private var showAdd = false
+    @State private var showAddOptions = false
 
     var body: some View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
 
+                // -------------------------
+                // ENCABEZADO
+                // -------------------------
+
                 HStack {
                     Text("Mis Productos")
                         .font(.largeTitle.bold())
+                        .foregroundColor(AppColors.textLight)
 
                     Spacer()
-
-                    Button {
-                        showAdd = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(.blue)
-                    }
                 }
 
+                // -------------------------
+                // BOTÓN AGREGAR PRODUCTO
+                // -------------------------
+
+                Button {
+                    showAddOptions = true
+                } label: {
+                    HStack(spacing: 12) {
+
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+
+                        Text("Agregar producto")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .padding(.vertical, 16)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(AppColors.accentLight)
+                    )
+                    .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 3)
+                }
+                .padding(.top, 4)
+
+                // -------------------------
+                // LISTA O ESTADO VACÍO
+                // -------------------------
+
                 if store.products.isEmpty {
-                    Text("Aún no tienes productos")
-                        .padding(.top, 50)
+
+                    VStack(spacing: 16) {
+
+                        Image(systemName: "shippingbox.fill")
+                            .font(.system(size: 52))
+                            .foregroundColor(AppColors.accentLight)
+
+                        Text("No hay productos aún")
+                            .font(.title3.bold())
+                            .foregroundColor(AppColors.textLight)
+
+                        Text("Cuando agregues productos, aparecerán aquí automáticamente.")
+                            .font(.subheadline)
+                            .foregroundColor(AppColors.textLight.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 60)
+
                 } else {
-                    ForEach(store.products) { product in
-                        productCard(product)
+
+                    VStack(spacing: 16) {
+                        ForEach(store.products) { product in
+                            productCard(product)
+                        }
                     }
                 }
 
@@ -45,67 +102,59 @@ struct ProducerShopView: View {
             }
             .padding(22)
         }
-        .sheet(isPresented: $showAdd) {
-            AddProductView()
+        .background(AppColors.backgroundLight)
+        .sheet(isPresented: $showAddOptions) {
+            AddProductModeSheet(showAddOptions: $showAddOptions)
+                .presentationDetents([.height(320)])
                 .environmentObject(store)
         }
     }
 
+    // -------------------------
+    // TARJETA DE PRODUCTO
+    // -------------------------
+
     func productCard(_ product: ProducerProduct) -> some View {
         HStack(spacing: 14) {
-            Circle()
-                .fill(Color.gray.opacity(0.3))
-                .frame(width: 60, height: 60)
 
-            VStack(alignment: .leading) {
+            if let imgData = product.image,
+               let uiImg = UIImage(data: imgData) {
+
+                Image(uiImage: uiImg)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+
+            } else {
+
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(AppColors.cardLight.opacity(0.6))
+                    .frame(width: 60, height: 60)
+                    .overlay(
+                        Image(systemName: "photo")
+                            .foregroundColor(AppColors.textLight.opacity(0.5))
+                    )
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+
                 Text(product.name)
                     .font(.headline)
+                    .foregroundColor(AppColors.textLight)
+
                 Text("\(product.weight) · $\(product.price, specifier: "%.0f")")
-                    .foregroundColor(.gray)
+                    .foregroundColor(AppColors.textLight.opacity(0.6))
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
+                .foregroundColor(AppColors.textLight.opacity(0.5))
         }
         .padding()
-        .background(Color.gray.opacity(0.12))
-        .cornerRadius(14)
-    }
-}
-
-struct AddProductView: View {
-
-    @EnvironmentObject var store: ProducerStore
-    @Environment(\.dismiss) var dismiss
-
-    @State private var name = ""
-    @State private var price = ""
-    @State private var weight = ""
-
-    var body: some View {
-
-        NavigationStack {
-            Form {
-                TextField("Nombre", text: $name)
-                TextField("Precio", text: $price)
-                    .keyboardType(.numberPad)
-                TextField("Peso", text: $weight)
-            }
-            .navigationTitle("Nuevo Producto")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Guardar") {
-                        if let p = Double(price) {
-                            store.products.append(
-                                ProducerProduct(name: name, price: p, weight: weight, image: nil)
-                            )
-                            dismiss()
-                        }
-                    }
-                }
-            }
-        }
+        .background(AppColors.cardLight)
+        .cornerRadius(18)
+        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 3)
     }
 }
