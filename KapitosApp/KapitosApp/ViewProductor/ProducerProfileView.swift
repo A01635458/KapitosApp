@@ -21,7 +21,7 @@ struct ProducerProfileView: View {
 
                 // Foto de perfil del productor
                 ZStack {
-                    if let profileImage = store.profileImage {
+                    if let profileImage = store.logoImage {
                         Image(uiImage: profileImage)
                             .resizable()
                             .scaledToFill()
@@ -70,23 +70,6 @@ struct ProducerProfileView: View {
                         Text(store.phone)
                             .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : .gray)
                     }
-                }
-                
-                if !store.description.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Acerca de")
-                            .font(.headline)
-                            .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
-                        
-                        Text(store.description)
-                            .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : .gray)
-                            .multilineTextAlignment(.leading)
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
-                    .cornerRadius(16)
-                    .padding(.horizontal)
                 }
 
                 Spacer()

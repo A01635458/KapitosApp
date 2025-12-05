@@ -22,13 +22,10 @@ class ProducerStore: ObservableObject {
     @Published var businessName: String = "Cargando..."
     @Published var phone: String = ""
     @Published var address: String = ""
-    @Published var schedule: String = "Lun - Vie · 8am - 6pm"
-    @Published var description: String = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
 
-    @Published var bannerImage: UIImage? = UIImage(named: "banner_mock")
-    @Published var profileImage: UIImage? = UIImage(systemName: "leaf.fill")
+    @Published var logoImage: UIImage? = nil
 
     // --- PRODUCTS ---
     @Published var products: [ProducerProduct] = []
@@ -77,23 +74,10 @@ class ProducerStore: ObservableObject {
                 }
                 address = locationParts.joined(separator: ", ")
                 
-                // Build description from available data
-                var descParts: [String] = []
-                if let varieties = producer.varieties, !varieties.isEmpty {
-                    descParts.append("Variedades: \(varieties.joined(separator: ", "))")
-                }
-                if let altitude = producer.altitude {
-                    descParts.append("cultivado a \(altitude)m de altura")
-                }
-                if let municipality = producer.municipality {
-                    descParts.append("en \(municipality)")
-                }
-                description = descParts.isEmpty ? "Productor de café" : descParts.joined(separator: " ")
-                
-                // Load profile image from URL if available
+                // Load logo image from URL if available
                 if let photoUrl = producer.photo_url, !photoUrl.isEmpty {
                     Task {
-                        await loadImageFromURL(photoUrl)
+                        await loadLogoImageFromURL(photoUrl)
                     }
                 }
                 
@@ -112,19 +96,19 @@ class ProducerStore: ObservableObject {
         }
     }
     
-    /// Carga una imagen desde una URL
-    private func loadImageFromURL(_ urlString: String) async {
+    /// Carga el logo desde una URL
+    private func loadLogoImageFromURL(_ urlString: String) async {
         guard let url = URL(string: urlString) else { return }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             if let image = UIImage(data: data) {
                 await MainActor.run {
-                    self.profileImage = image
+                    self.logoImage = image
                 }
             }
         } catch {
-            print("❌ Error loading image from URL: \(error)")
+            print("❌ Error loading logo image from URL: \(error)")
         }
     }
     
@@ -346,5 +330,78 @@ class ProducerStore: ObservableObject {
             .getPublicURL(path: fileName)
         
         return publicURL.absoluteString
+    }
+    
+    /// Sube el logo del productor a Supabase Storage y actualiza la base de datos
+    func uploadLogo(_ image: UIImage) async -> Bool {
+        do {
+            guard let imageData = image.jpegData(compressionQuality: 0.7) else {
+                print("❌ Could not convert image to JPEG")
+                return false
+            }
+            
+            print("📤 Uploading logo for producer: \(currentUserId.uuidString)")
+            
+            let fileName = "\(currentUserId.uuidString)/logo.jpg"
+            let bucket = "producer-profiles"
+            
+            // Upload to storage
+            try await client.storage
+                .from(bucket)
+                .upload(
+                    path: fileName,
+                    file: imageData,
+                    options: .init(contentType: "image/jpeg", upsert: true)
+                )
+            
+            // Get public URL
+            let publicURL = try client.storage
+                .from(bucket)
+                .getPublicURL(path: fileName)
+            
+            let urlString = publicURL.absoluteString
+            print("✅ Logo uploaded to: \(urlString)")
+            
+            // Update producer record with new photo_url
+            try await client
+                .from("producers")
+                .update(["photo_url": urlString])
+                .eq("id", value: currentUserId.uuidString)
+                .execute()
+            
+            print("✅ Producer photo_url updated in database")
+            
+            // Update local state
+            await MainActor.run {
+                self.logoImage = image
+            }
+            
+            return true
+        } catch {
+            print("❌ Error uploading logo: \(error)")
+            errorMessage = "Error al subir logo: \(error.localizedDescription)"
+            return false
+        }
+    }
+    
+    /// Guarda los cambios de información del negocio en la base de datos
+    func saveBusinessInfo() async {
+        do {
+            print("💾 Saving business info for producer: \(currentUserId.uuidString)")
+            
+            try await client
+                .from("producers")
+                .update([
+                    "farm_name": businessName,
+                    "phone": phone
+                ])
+                .eq("id", value: currentUserId.uuidString)
+                .execute()
+            
+            print("✅ Business info saved successfully")
+        } catch {
+            print("❌ Error saving business info: \(error)")
+            errorMessage = "Error al guardar: \(error.localizedDescription)"
+        }
     }
 }

@@ -158,8 +158,11 @@ struct HomeView: View {
         }
     }
 }
-#Preview { 
-    HomeView(currentUserId: UUID(uuidString: "3ba73474-dc62-4c5a-86a3-d70069097d17")!)
-        .environmentObject(AppThemeManager()) 
+#Preview {
+    // Preview con datos de prueba - solo para desarrollo
+    if let testUserId = UUID(uuidString: "00000000-0000-0000-0000-000000000000") {
+        HomeView(currentUserId: testUserId)
+            .environmentObject(AppThemeManager())
+    }
 }
 

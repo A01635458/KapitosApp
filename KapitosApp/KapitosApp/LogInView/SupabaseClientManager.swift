@@ -14,9 +14,21 @@ final class SupabaseClientManager {
 
     private init() {
         client = SupabaseClient(
-            supabaseURL: URL(string: "https://vhjxtygfviesnyepsujw.supabase.co")!,
-            supabaseKey: "sb_publishable_JawMYouxwX8apRA2F2s_5w_xy1LbFDb"
+            supabaseURL: AppConfig.supabaseURL,
+            supabaseKey: AppConfig.supabaseAnonKey
         )
+    }
+    
+    /// Obtiene el ID del usuario autenticado actualmente
+    /// - Returns: UUID del usuario o nil si no hay sesión activa
+    func getCurrentUserId() async -> UUID? {
+        do {
+            let session = try await client.auth.session
+            return session.user.id
+        } catch {
+            print("Error obteniendo usuario actual: \(error)")
+            return nil
+        }
     }
 }
 

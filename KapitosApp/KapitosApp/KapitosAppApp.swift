@@ -19,23 +19,29 @@ struct KapitosAppApp: App {
             if auth.isAuthenticated {
                 // Esperar a que el rol esté cargado antes de mostrar la vista
                 if let role = auth.userRole {
+                    // DEBUG: Imprimir rol en consola
+                    let _ = print("🎭 User role detected: \(role)")
+                    let _ = print("👤 User ID: \(auth.currentUserId?.uuidString ?? "nil")")
+                    
                     // Usuario autenticado con rol conocido
                     if role == "admin" {
+                        let _ = print("✅ Loading ADMIN view")
                         KapeContentView()
                             .environmentObject(theme)
                     } else if role == "producer" {
+                        let _ = print("✅ Loading PRODUCER view")
                         if let userId = auth.currentUserId {
                             ProducerContentView(currentUserId: userId)
                                 .environmentObject(theme)
                         }
                     } else {
+                        let _ = print("✅ Loading CLIENT view (role: \(role))")
                         // Cliente o rol por defecto
-                        if let userId = auth.currentUserId {
-                            ContentView(currentUserId: userId)
-                                .environmentObject(theme)
-                        }
+                        ContentView()
+                            .environmentObject(theme)
                     }
                 } else {
+                    let _ = print("⏳ Role not loaded yet, showing loading screen")
                     // Autenticado pero rol aún no cargado - mostrar loading
                     ZStack {
                         Color(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)

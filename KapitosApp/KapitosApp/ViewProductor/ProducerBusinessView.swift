@@ -12,7 +12,9 @@ import PhotosUI
 struct ProducerBusinessView: View {
 
     @EnvironmentObject var store: ProducerStore
-    @State private var showBannerPicker = false
+    @State private var showImageSourceSelector = false
+    @State private var tempLogoSelection: PhotosPickerItem?
+    @State private var isUploadingLogo = false
 
     var body: some View {
 
@@ -25,53 +27,64 @@ struct ProducerBusinessView: View {
                     .foregroundColor(AppColors.textLight)
 
                 // -----------------------------------------------------
-                // 🟫 BANNER DEL NEGOCIO
+                // 🟫 LOGO DEL NEGOCIO
                 // -----------------------------------------------------
                 VStack(alignment: .leading, spacing: 12) {
 
-                    Text("Banner del negocio")
+                    Text("Logo del negocio")
                         .font(.headline)
                         .foregroundColor(AppColors.textLight)
 
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(AppColors.cardLight)
-                            .frame(height: 180)
+                            .frame(width: 180, height: 180)
                             .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
 
-                        if let img = store.bannerImage {
+                        if let img = store.logoImage {
                             Image(uiImage: img)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(height: 180)
+                                .frame(width: 180, height: 180)
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                         } else {
                             VStack(spacing: 10) {
-                                Image(systemName: "photo.on.rectangle.angled")
+                                Image(systemName: "photo.circle")
                                     .font(.system(size: 40))
                                     .foregroundColor(AppColors.accentLight)
 
-                                Text("Aún no tienes un banner")
+                                Text("Sin logo")
                                     .foregroundColor(AppColors.textLight.opacity(0.6))
                             }
                         }
+                        
+                        if isUploadingLogo {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .scaleEffect(1.5)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Color.black.opacity(0.3))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                        }
                     }
+                    .frame(maxWidth: .infinity)
 
                     Button {
-                        showBannerPicker = true
+                        showImageSourceSelector = true
                     } label: {
                         HStack {
-                            Image(systemName: "square.and.arrow.up")
-                            Text("Subir banner")
+                            Image(systemName: isUploadingLogo ? "hourglass" : "square.and.arrow.up")
+                            Text(isUploadingLogo ? "Subiendo..." : (store.logoImage == nil ? "Subir logo" : "Actualizar logo"))
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(AppColors.accentLight)
+                        .background(isUploadingLogo ? AppColors.accentLight.opacity(0.6) : AppColors.accentLight)
                         .cornerRadius(16)
                         .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 3)
                     }
+                    .disabled(isUploadingLogo)
                 }
 
                 // -----------------------------------------------------
@@ -80,39 +93,58 @@ struct ProducerBusinessView: View {
 
                 editableField("Nombre del negocio", text: $store.businessName)
                 editableField("Teléfono", text: $store.phone)
-                editableField("Ubicación", text: $store.address)
-                // schedule eliminado
-                editableField("Descripción", text: $store.description)
+                
+                Text("Ubicación")
+                    .font(.headline)
+                    .foregroundColor(AppColors.textLight)
+                Text(store.address.isEmpty ? "Sin ubicación registrada" : store.address)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(AppColors.cardLight.opacity(0.5))
+                    .cornerRadius(14)
+                    .foregroundColor(AppColors.textLight.opacity(0.7))
+                
+                // Guardar cambios
+                Button {
+                    Task {
+                        await store.saveBusinessInfo()
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "checkmark.circle")
+                        Text("Guardar cambios")
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(AppColors.accentLight)
+                    .cornerRadius(16)
+                    .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 3)
+                }
 
                 Spacer().frame(height: 80)
             }
             .padding(22)
         }
         .background(AppColors.backgroundLight)
-        .photosPicker(isPresented: $showBannerPicker, selection: .constant(nil), matching: .images, preferredItemEncoding: .automatic)
-        .onChange(of: showBannerPicker) { _ in
-            // NOTE: handling inside .onChange for PhotosPicker below
-        }
-        .photosPicker(isPresented: $showBannerPicker, selection: Binding.constant(nil), matching: .images)
-        .onChange(of: showBannerPicker) { _ in /* no-op */ }
-        .onAppear { }
-        .background(AppColors.backgroundLight)
-        // Real picker binding:
-        .photosPicker(isPresented: $showBannerPicker, selection: $tempBannerSelection, matching: .images)
-        .onChange(of: tempBannerSelection) { _ in loadBannerImage() }
-    }
-
-    // Temporary selection container
-    @State private var tempBannerSelection: PhotosPickerItem?
-
-    // Load image chosen from picker
-    func loadBannerImage() {
-        Task {
-            if let item = tempBannerSelection,
-               let data = try? await item.loadTransferable(type: Data.self),
-               let image = UIImage(data: data) {
-                store.bannerImage = image
-            }
+        .background {
+            ImageSourceSelector(image: Binding(
+                get: { nil },
+                set: { newImage in
+                    if let img = newImage {
+                        Task {
+                            isUploadingLogo = true
+                            let success = await store.uploadLogo(img)
+                            isUploadingLogo = false
+                            
+                            if !success {
+                                print("❌ Failed to upload logo")
+                            }
+                        }
+                    }
+                }
+            ), showActionSheet: $showImageSourceSelector)
         }
     }
 

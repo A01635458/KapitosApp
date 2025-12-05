@@ -27,7 +27,7 @@ struct ProducerCustomerPreviewView: View {
                     .frame(height: 210)
                     
                     // Logo del productor
-                    if let profileImage = store.profileImage {
+                    if let profileImage = store.logoImage {
                         Image(uiImage: profileImage)
                             .resizable()
                             .scaledToFill()
@@ -58,9 +58,6 @@ struct ProducerCustomerPreviewView: View {
 
                 Text(store.businessName)
                     .font(.largeTitle.bold())
-
-                Text(store.description)
-                    .foregroundColor(.gray)
 
                 Text("Productos")
                     .font(.title2.bold())
