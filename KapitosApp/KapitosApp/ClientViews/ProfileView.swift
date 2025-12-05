@@ -33,6 +33,7 @@ struct ProfileView: View {
             if isLoading {
                 ProgressView("Cargando perfil...")
                     .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let errorMessage = errorMessage {
                 VStack(spacing: 12) {
                     Image(systemName: "exclamationmark.triangle")

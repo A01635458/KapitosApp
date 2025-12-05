@@ -29,6 +29,7 @@ struct ContentView: View {
                 if isLoadingUser {
                     ProgressView("Cargando...")
                         .progressViewStyle(CircularProgressViewStyle(tint: theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if let userId = currentUserId {
                     mainContent(userId: userId)
                 } else {

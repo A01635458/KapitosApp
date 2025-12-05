@@ -15,6 +15,7 @@ struct ProducersListView: View {
             if adminService.isLoading && adminService.approvedProducers.isEmpty {
                 ProgressView("Cargando productores...")
                     .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if adminService.approvedProducers.isEmpty {
                 emptyState
             } else {

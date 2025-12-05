@@ -255,12 +255,9 @@ struct ProducerDetailSheetView: View {
             }
             
             if isLoadingProducts {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                        .padding()
-                    Spacer()
-                }
+                ProgressView()
+                    .padding()
+                    .frame(maxWidth: .infinity)
             } else if products.isEmpty {
                 Text("Este productor aún no ha publicado productos")
                     .font(.caption)

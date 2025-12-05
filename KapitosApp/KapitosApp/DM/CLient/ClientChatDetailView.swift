@@ -47,6 +47,7 @@ struct ClientChatDetailView: View {
                         if messagingService.isLoading && messages.isEmpty {
                             ProgressView("Cargando mensajes...")
                                 .padding()
+                                .frame(maxWidth: .infinity)
                         } else if messages.isEmpty {
                             VStack(spacing: 8) {
                                 Image(systemName: "bubble.left.and.bubble.right.fill")

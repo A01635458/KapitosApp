@@ -43,12 +43,9 @@ struct ChatPreviewCard: View {
                 .foregroundColor(theme.isDarkMode ? AppColors.textDark : AppColors.textLight)
             
             if messagingService.isLoading {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                        .padding()
-                    Spacer()
-                }
+                ProgressView()
+                    .padding()
+                    .frame(maxWidth: .infinity)
             } else if messagingService.conversations.isEmpty {
                 Text("No hay conversaciones")
                     .font(.caption)
