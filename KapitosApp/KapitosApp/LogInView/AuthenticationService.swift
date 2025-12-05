@@ -40,6 +40,8 @@ final class AuthenticationService: ObservableObject {
             let user = response.user
             currentUserId = user.id
             
+            print("🔍 User logged in: \(user.id.uuidString)")
+            
             // Obtener el rol del usuario desde la tabla profiles
             let profileResponse: [UserProfile] = try await client
                 .from("profiles")
@@ -48,13 +50,20 @@ final class AuthenticationService: ObservableObject {
                 .execute()
                 .value
             
+            print("📋 Profiles found: \(profileResponse.count)")
+            
             if let profile = profileResponse.first {
                 userRole = profile.role
+                print("✅ User role: \(profile.role)")
+            } else {
+                print("⚠️ No profile found for user")
+                userRole = "user" // Default role
             }
             
             message = "Inicio de sesión exitoso ✔️"
             return true
         } catch {
+            print("❌ Login error: \(error)")
             message = (error as? AuthError)?.localizedDescription ?? error.localizedDescription
             return false
         }

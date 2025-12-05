@@ -106,11 +106,18 @@ import SwiftUI
 
 struct ProducerContentView: View {
 
+    let currentUserId: UUID
+    
     @State private var showMenu = false
     @State private var currentPage: ProducerScreen = .dashboard
 
     @StateObject var theme = AppThemeManager()
-    @StateObject var store = ProducerStore()
+    @StateObject private var store: ProducerStore
+    
+    init(currentUserId: UUID) {
+        self.currentUserId = currentUserId
+        _store = StateObject(wrappedValue: ProducerStore(currentUserId: currentUserId))
+    }
 
     var body: some View {
         NavigationStack {
@@ -123,7 +130,7 @@ struct ProducerContentView: View {
                     switch currentPage {
 
                     case .dashboard:
-                        ProducerDashboardView()
+                        ProducerDashboardView(currentUserId: currentUserId)
                             .environmentObject(theme)
                             .environmentObject(store)
 
@@ -149,7 +156,7 @@ struct ProducerContentView: View {
 
                     // ---------- NUEVO: MENSAJES PRODUCTOR ----------
                     case .mensajesProductor:
-                        ProducerChatListView()
+                        ProducerChatListView(currentUserId: currentUserId)
                             .environmentObject(theme)
                             .environmentObject(store)
                     }
@@ -198,5 +205,5 @@ struct ProducerContentView: View {
 }
 
 #Preview {
-    ProducerContentView()
+    ProducerContentView(currentUserId: UUID())
 }

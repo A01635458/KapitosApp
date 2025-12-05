@@ -174,8 +174,12 @@ struct LoginView: View {
                 KapeContentView().environmentObject(theme)
             }
             .navigationDestination(isPresented: $goToProducer) {
-                ProducerContentView()
-                    .environmentObject(theme)
+                if let userId = auth.currentUserId {
+                    ProducerContentView(currentUserId: userId)
+                        .environmentObject(theme)
+                } else {
+                    Text("Error: No se pudo obtener el ID del usuario")
+                }
             }
         }
     }
@@ -184,25 +188,28 @@ struct LoginView: View {
 // MARK: - LOGIN LOGIC
 extension LoginView {
     private func handleLogin() async {
-
-        if email.lowercased() == "productor1@kapitos.com"
-            && password == "Productor123!" {
-
-            withAnimation { goToProducer = true }
-            return
-        }
-
         let success = await auth.signIn(
             email: email.trimmingCharacters(in: .whitespacesAndNewlines),
             password: password
         )
 
         if success {
-            if auth.userRole == "admin" {
+            print("🎯 Login successful. User role: \(auth.userRole ?? "nil")")
+            
+            // Route based on user role from database
+            switch auth.userRole {
+            case "admin":
+                print("➡️ Routing to Admin view")
                 withAnimation { goToAdmin = true }
-            } else {
+            case "producer":
+                print("➡️ Routing to Producer view")
+                withAnimation { goToProducer = true }
+            default:
+                print("➡️ Routing to Client view (role: \(auth.userRole ?? "nil"))")
                 withAnimation { goToApp = true }
             }
+        } else {
+            print("❌ Login failed")
         }
     }
 }

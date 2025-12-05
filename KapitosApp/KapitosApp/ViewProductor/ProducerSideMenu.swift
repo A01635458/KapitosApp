@@ -178,5 +178,5 @@ struct ProducerSideMenu: View {
 #Preview {
     ProducerSideMenu(current: .constant(.dashboard), showMenu: .constant(true))
         .environmentObject(AppThemeManager())
-        .environmentObject(ProducerStore())
+        .environmentObject(ProducerStore(currentUserId: UUID()))
 }
