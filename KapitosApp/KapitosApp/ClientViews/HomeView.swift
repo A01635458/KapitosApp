@@ -13,8 +13,10 @@ struct HomeView: View {
     let currentUserId: UUID
     
     @StateObject private var recommendationEngine = RecommendationEngine()
+    @StateObject private var preferencesChecker = UserPreferencesChecker()
     @State private var selectedProducer: ProducerMapData?
     @State private var showRecommendationDetail: RecommendationScore?
+    @State private var showCompletePreferences = false
     
     struct CoffeeType: Identifiable {
         let id = UUID()
@@ -36,6 +38,45 @@ struct HomeView: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                
+                // --- BANNER PARA COMPLETAR PREFERENCIAS ---
+                if !preferencesChecker.isLoading && !preferencesChecker.hasPreferences {
+                    Button {
+                        showCompletePreferences = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "sparkles.rectangle.stack.fill")
+                                .font(.system(size: 28))
+                                .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Completa tu Perfil de Gustos")
+                                    .font(.headline)
+                                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                                
+                                Text("Obtén mejores recomendaciones personalizadas")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(theme.isDarkMode ? AppColors.accentDark.opacity(0.5) : AppColors.accentLight.opacity(0.5), lineWidth: 2)
+                                )
+                        )
+                        .shadow(radius: 2)
+                    }
+                    .padding(.top, 10)
+                }
 
                 // --- PREVIEW DE CHATS ---
                 ChatPreviewCard(currentUserId: currentUserId)
@@ -99,8 +140,13 @@ struct HomeView: View {
         }
         .background(theme.isDarkMode ? AppColors.backgroundDark : AppColors.backgroundLight)
         .task {
-            // Load recommendations on appear
+            // Load recommendations and check preferences on appear
+            await preferencesChecker.checkUserPreferences(userId: currentUserId)
             await recommendationEngine.generateRecommendations(for: currentUserId, limit: 5)
+        }
+        .sheet(isPresented: $showCompletePreferences) {
+            CompletePreferencesSheet(currentUserId: currentUserId)
+                .environmentObject(theme)
         }
         .sheet(item: $showRecommendationDetail) { recommendation in
             RecommendationDetailView(recommendation: recommendation)
