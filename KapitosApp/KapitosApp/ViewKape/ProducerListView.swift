@@ -88,7 +88,7 @@ struct ProducerListView: View {
             
             // Varieties
             if let varieties = producer.varieties, !varieties.isEmpty {
-                Text("Variedades: \\(varieties.joined(separator: \", \"))")
+                Text("Variedades: \(varieties.joined(separator: ", "))")
                     .font(.caption)
                     .foregroundColor(theme.isDarkMode ? .white.opacity(0.6) : AppColors.textLight.opacity(0.6))
                     .lineLimit(1)

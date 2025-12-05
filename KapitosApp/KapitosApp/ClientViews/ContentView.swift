@@ -16,6 +16,7 @@ struct ContentView: View {
     @StateObject var theme = AppThemeManager()
     @State private var currentUserId: UUID?
     @State private var isLoadingUser = true
+    @StateObject private var navigationManager = NavigationManager.shared
 
     var body: some View {
         NavigationStack {
@@ -39,6 +40,12 @@ struct ContentView: View {
         .environmentObject(theme)
         .task {
             await loadCurrentUser()
+        }
+        .onChange(of: navigationManager.navigationScreen) { oldValue, newValue in
+            if let screen = newValue {
+                print("🧭 ContentView: Navigating to screen: \(screen)")
+                currentScreen = screen
+            }
         }
     }
     

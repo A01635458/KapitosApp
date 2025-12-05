@@ -5,7 +5,8 @@
 //
 
 import SwiftUI
-import Combine 
+import Combine
+import Supabase
 
 struct HomeView: View {
 
@@ -14,9 +15,11 @@ struct HomeView: View {
     
     @StateObject private var recommendationEngine = RecommendationEngine()
     @StateObject private var preferencesChecker = UserPreferencesChecker()
+    @StateObject private var navigationManager = NavigationManager.shared
     @State private var selectedProducer: ProducerMapData?
     @State private var showRecommendationDetail: RecommendationScore?
     @State private var showCompletePreferences = false
+    @State private var isLoadingNotificationProducer = false
     
     struct CoffeeType: Identifiable {
         let id = UUID()
@@ -144,6 +147,14 @@ struct HomeView: View {
             await preferencesChecker.checkUserPreferences(userId: currentUserId)
             await recommendationEngine.generateRecommendations(for: currentUserId, limit: 5)
         }
+        .onChange(of: navigationManager.selectedProducerId) { oldValue, newValue in
+            if let producerId = newValue, navigationManager.shouldShowProducerDetail {
+                print("🧭 HomeView: Loading producer from notification: \(producerId)")
+                Task {
+                    await loadProducerFromNotification(producerId: producerId)
+                }
+            }
+        }
         .sheet(isPresented: $showCompletePreferences) {
             CompletePreferencesSheet(currentUserId: currentUserId)
                 .environmentObject(theme)
@@ -152,10 +163,83 @@ struct HomeView: View {
             RecommendationDetailView(recommendation: recommendation)
                 .environmentObject(theme)
         }
-        .sheet(item: $selectedProducer) { producer in
+        .sheet(item: $selectedProducer, onDismiss: {
+            // Reset navigation state when sheet is dismissed
+            if navigationManager.shouldShowProducerDetail {
+                navigationManager.resetNavigation()
+            }
+        }) { producer in
             ProducerDetailSheetView(producer: producer, currentUserId: currentUserId)
                 .environmentObject(theme)
         }
+    }
+    
+    // MARK: - Load Producer from Notification
+    
+    private func loadProducerFromNotification(producerId: UUID) async {
+        isLoadingNotificationProducer = true
+        
+        do {
+            let supabase = SupabaseClient(
+                supabaseURL: URL(string: "https://vhjxtygfviesnyepsujw.supabase.co")!,
+                supabaseKey: "sb_publishable_JawMYouxwX8apRA2F2s_5w_xy1LbFDb"
+            )
+            
+            struct ProducerResponse: Codable {
+                let id: UUID
+                let farm_name: String
+                let state: String?
+                let latitude: Double?
+                let longitude: Double?
+                let municipality: String?
+                let varieties: [String]?
+                let processes: [String]?
+                let certifications: [String]?
+                let has_tourist_area: Bool?
+                let tourist_accessible: Bool?
+                let status: String?
+                let photo_url: String?
+            }
+            
+            let producers: [ProducerResponse] = try await supabase
+                .from("producers")
+                .select()
+                .eq("id", value: producerId.uuidString)
+                .eq("status", value: "approved")
+                .execute()
+                .value
+            
+            if let producer = producers.first {
+                let producerData = ProducerMapData(
+                    id: producer.id,
+                    farm_name: producer.farm_name,
+                    latitude: producer.latitude,
+                    longitude: producer.longitude,
+                    municipality: producer.municipality,
+                    state: producer.state,
+                    photo_url: producer.photo_url,
+                    varieties: producer.varieties,
+                    processes: producer.processes,
+                    certifications: producer.certifications,
+                    has_tourist_area: producer.has_tourist_area,
+                    tourist_accessible: producer.tourist_accessible,
+                    status: producer.status
+                )
+                
+                // Show producer detail on main thread
+                await MainActor.run {
+                    selectedProducer = producerData
+                    print("✅ Loaded producer from notification: \(producer.farm_name)")
+                }
+            } else {
+                print("⚠️ Producer not found: \(producerId)")
+            }
+            
+        } catch {
+            print("❌ Error loading producer from notification: \(error)")
+        }
+        
+        isLoadingNotificationProducer = false
     }
 }
 #Preview {

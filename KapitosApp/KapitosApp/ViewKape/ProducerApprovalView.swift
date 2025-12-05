@@ -233,7 +233,11 @@ struct ProducerApprovalView: View {
                         Text(varieties.joined(separator: ", "))
                             .font(.subheadline)
                             .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 4)
                 }
                 
                 Text("Toca para ver solicitud completa")

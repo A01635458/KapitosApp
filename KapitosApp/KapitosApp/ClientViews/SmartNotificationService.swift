@@ -383,31 +383,55 @@ class SmartNotificationService: NSObject, ObservableObject {
     private func scheduleNotification(trigger: NotificationTrigger, delaySeconds: TimeInterval) async {
         let content = UNMutableNotificationContent()
         
+        // Extract producerId and farmName for all trigger types
+        var producerId: UUID?
+        var farmName: String?
+        
         switch trigger {
-        case .newMatchingProducer(_, let farmName, let state, let process, let score):
+        case .newMatchingProducer(let id, let name, let state, let process, let score):
+            producerId = id
+            farmName = name
             content.title = "Nuevo Productor Compatible 🌟"
-            content.body = "Nuevo productor en \(state) con proceso \(process) que te encanta (\(Int(score))% compatible)"
+            content.body = "\(name) en \(state) con proceso \(process) que te encanta (\(Int(score))% compatible)"
             content.sound = .default
             content.badge = 1
             
-        case .harvestAlert(_, let farmName, let daysUntil, let score):
+        case .harvestAlert(let id, let name, let daysUntil, let score):
+            producerId = id
+            farmName = name
             content.title = "Próxima Cosecha ☕️"
-            content.body = "La cosecha de \(farmName) (\(Int(score))% compatible) estará lista en \(daysUntil) días"
+            content.body = "La cosecha de \(name) (\(Int(score))% compatible) estará lista en \(daysUntil) días"
             content.sound = .default
             
-        case .nearbyTourAvailable(_, let farmName, let distance):
+        case .nearbyTourAvailable(let id, let name, let distance):
+            producerId = id
+            farmName = name
             content.title = "Tour de Cafetal Cercano 🗺️"
-            content.body = "\(farmName) ofrece tours de cafetales a solo \(Int(distance))km de ti"
+            content.body = "\(name) ofrece tours de cafetales a solo \(Int(distance))km de ti"
             content.sound = .default
             
-        case .conversationUpdate(_, let farmName, let messageCount):
+        case .conversationUpdate(let id, let name, let messageCount):
+            producerId = id
+            farmName = name
             content.title = "Nuevos Mensajes 💬"
-            content.body = "\(messageCount) nuevos mensajes de \(farmName)"
+            content.body = "\(messageCount) nuevos mensajes de \(name)"
             content.sound = .default
             content.badge = NSNumber(value: messageCount)
         }
         
         content.categoryIdentifier = trigger.category
+        
+        // Add producer ID and farm name to userInfo for deep linking
+        if let producerId = producerId {
+            var userInfoDict: [String: Any] = [
+                "producerId": producerId.uuidString,
+                "category": trigger.category
+            ]
+            if let farmName = farmName {
+                userInfoDict["farmName"] = farmName
+            }
+            content.userInfo = userInfoDict
+        }
         
         // Time-based trigger with delay
         let timeTrigger = UNTimeIntervalNotificationTrigger(timeInterval: delaySeconds, repeats: false)

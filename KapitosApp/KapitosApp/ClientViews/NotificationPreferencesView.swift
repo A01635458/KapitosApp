@@ -212,6 +212,55 @@ struct NotificationPreferencesView: View {
                         }
                         .disabled(notificationService.isSchedulingNotifications || !notificationService.notificationPermissionGranted)
                         
+                        // INSTRUCCIONES IMPORTANTES
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "info.circle.fill")
+                                    .foregroundColor(.blue)
+                                Text("Cómo ver las notificaciones")
+                                    .font(.headline)
+                                    .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack(alignment: .top, spacing: 8) {
+                                    Text("1️⃣")
+                                    Text("Presiona \"Generar Notificaciones Ahora\"")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                HStack(alignment: .top, spacing: 8) {
+                                    Text("2️⃣")
+                                    Text("Minimiza la app (presiona el botón Home)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                HStack(alignment: .top, spacing: 8) {
+                                    Text("3️⃣")
+                                    Text("Espera 5-10 segundos para ver las notificaciones")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                HStack(alignment: .top, spacing: 8) {
+                                    Image(systemName: "lightbulb.fill")
+                                        .foregroundColor(.yellow)
+                                        .font(.caption)
+                                    Text("Con la app abierta verás banners arriba. Para ver el banner completo del sistema, minimiza la app")
+                                        .font(.caption2)
+                                        .foregroundColor(.gray)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.blue.opacity(0.1))
+                        )
+                        
                         Button {
                             notificationService.removeAllPendingNotifications()
                         } label: {
