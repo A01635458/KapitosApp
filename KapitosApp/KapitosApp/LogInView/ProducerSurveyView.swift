@@ -9,6 +9,8 @@ struct ProducerSurveyView: View {
     @State private var showSuccessMessage = false
     @State private var successText = ""
 
+    @State private var goToSuccess = false   // ⭐ NUEVO
+
     // --- DATOS PERSONALES ---
     @State private var name = ""
     @State private var phone = ""
@@ -51,12 +53,26 @@ struct ProducerSurveyView: View {
     // --- ERRORES ---
     @State private var errors: [String: String] = [:]
 
+    var isFormEligible: Bool {
+        return !name.isEmpty &&
+               !phone.isEmpty &&
+               !email.isEmpty &&
+               !brand.isEmpty &&
+               !farmSize.isEmpty &&
+               !location.isEmpty &&
+               !altitude.isEmpty
+    }
+
     var body: some View {
 
         NavigationStack {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 26) {
+
+                    // ⭐ REDIRECCIÓN A SUCCESS VIEW
+                    NavigationLink("", destination: ProducerSuccessView(), isActive: $goToSuccess)
+                        .hidden()
 
                     Text("Registro de Productor")
                         .font(.system(size: 32, weight: .bold))
@@ -144,8 +160,7 @@ struct ProducerSurveyView: View {
                 errors[key] = "Este campo es obligatorio"
             }
         }
-        
-        // Validate location coordinates
+
         if latitude == nil || longitude == nil {
             errors["location"] = "Debe seleccionar ubicación en el mapa"
         }
@@ -230,15 +245,8 @@ struct ProducerSurveyView: View {
 
                 await registrationData.submitProducer(form: form)
 
-                if let msg = registrationData.submitMessage {
-                    withAnimation {
-                        successText = msg
-                        showSuccessMessage = true
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        withAnimation { showSuccessMessage = false }
-                    }
+                if registrationData.submitMessage != nil {
+                    goToSuccess = true   // ⭐ REDIRECCIÓN
                 }
             }
 
@@ -254,9 +262,9 @@ struct ProducerSurveyView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(validate() ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight) : Color.gray)
+        .background(isFormEligible ? (theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight) : Color.gray)
         .cornerRadius(16)
-        .disabled(!validate() || registrationData.isLoading)
+        .disabled(!isFormEligible || registrationData.isLoading)
         .padding(.vertical, 8)
     }
 
@@ -338,22 +346,22 @@ struct ProducerSurveyView: View {
     func validatedYesNoField(_ title: String, text: Binding<String>, key: String) -> some View {
         validatedField(title, text: text, key: key)
     }
-    
+
     // MARK: - Location Picker Field
-    
+
     var locationPickerField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Ubicación de la finca")
                 .font(.footnote)
                 .foregroundColor(theme.isDarkMode ? .white.opacity(0.7) : AppColors.textLight.opacity(0.7))
-            
+
             Button(action: {
                 showLocationPicker = true
             }) {
                 HStack {
                     Image(systemName: "map.fill")
                         .foregroundColor(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
-                    
+
                     if location.isEmpty {
                         Text("Seleccionar en el mapa")
                             .foregroundColor(.gray)
@@ -362,7 +370,7 @@ struct ProducerSurveyView: View {
                             Text(location)
                                 .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                                 .lineLimit(2)
-                            
+
                             if let lat = latitude, let lon = longitude {
                                 Text("Lat: \(String(format: "%.6f", lat)), Lon: \(String(format: "%.6f", lon))")
                                     .font(.caption)
@@ -370,9 +378,9 @@ struct ProducerSurveyView: View {
                             }
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
                 }
@@ -384,7 +392,7 @@ struct ProducerSurveyView: View {
                         .stroke(errors["location"] != nil ? Color.red : Color.clear, lineWidth: 1)
                 )
             }
-            
+
             if let err = errors["location"] {
                 Text(err)
                     .foregroundColor(.red)
