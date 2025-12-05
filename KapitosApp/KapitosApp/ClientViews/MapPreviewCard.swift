@@ -5,16 +5,16 @@
 
 import SwiftUI
 import MapKit
-import Combine 
 
 struct MapPreviewCard: View {
     
     @EnvironmentObject var theme: AppThemeManager
+    @StateObject private var mapService = ProducerMapService()
     @Binding var currentScreen: AppScreen
     
     @State private var region = MKCoordinateRegion(
-        center: mockCafe.coordinate,
-        span: MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
+        center: CLLocationCoordinate2D(latitude: 19.4326, longitude: -99.1332), // Mexico City default
+        span: MKCoordinateSpan(latitudeDelta: 8.0, longitudeDelta: 8.0)
     )
     
     var body: some View {
@@ -33,43 +33,97 @@ struct MapPreviewCard: View {
                     radius: 6, x: 0, y: 4
                 )
             
-            // ---- MAP ITSELF ----
-            Map(coordinateRegion: $region)
-                .clipShape(RoundedRectangle(cornerRadius: 22))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 22)
-                        .stroke(
-                            theme.isDarkMode
-                                ? AppColors.cardDark.opacity(0.5)
-                                : AppColors.cardLight.opacity(0.7),
-                            lineWidth: 1
+            // ---- MAP WITH REAL PRODUCERS ----
+            Map(coordinateRegion: $region, annotationItems: mapService.producers) { producer in
+                MapAnnotation(coordinate: producer.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)) {
+                    if let photoUrl = producer.photo_url, !photoUrl.isEmpty {
+                        AsyncImage(url: URL(string: photoUrl)) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ZStack {
+                                Circle()
+                                    .fill(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                                Image(systemName: "cup.and.saucer.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14))
+                            }
+                        }
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle().stroke(
+                                theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight,
+                                lineWidth: 2
+                            )
                         )
-                )
-                .allowsHitTesting(false)
+                        .shadow(radius: 4)
+                    } else {
+                        ZStack {
+                            Circle()
+                                .fill(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                                .frame(width: 40, height: 40)
+                            
+                            Image(systemName: "cup.and.saucer.fill")
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+                        }
+                        .overlay(
+                            Circle().stroke(
+                                theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight,
+                                lineWidth: 2
+                            )
+                        )
+                        .shadow(radius: 4)
+                    }
+                }
+            }
+            .preferredColorScheme(theme.isDarkMode ? .dark : .light)
+            .clipShape(RoundedRectangle(cornerRadius: 22))
+            .overlay(
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(
+                        theme.isDarkMode
+                            ? AppColors.cardDark.opacity(0.5)
+                            : AppColors.cardLight.opacity(0.7),
+                        lineWidth: 1
+                    )
+            )
+            .allowsHitTesting(false)
             
-            // ---- PIN DEL PRODUCTOR ----
-            VStack {
-                Spacer()
-                
-                Image(mockCafe.profileImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 78, height: 78)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle().stroke(
-                            theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight,
-                            lineWidth: 4
+            // Loading indicator
+            if mapService.isLoading {
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(1.2)
+                        .padding()
+                        .background(
+                            (theme.isDarkMode ? Color.black : Color.white)
+                                .opacity(0.7)
                         )
-                    )
-                    .shadow(
-                        color: theme.isDarkMode
-                            ? AppColors.accentDark.opacity(0.4)
-                            : AppColors.accentLight.opacity(0.4),
-                        radius: 8
-                    )
-                
-                Spacer().frame(height: 14)
+                        .cornerRadius(12)
+                    Spacer()
+                }
+            }
+            
+            // Producer count badge
+            if !mapService.producers.isEmpty {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Text("\(mapService.producers.count)")
+                            .font(.caption.bold())
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(theme.isDarkMode ? AppColors.accentDark : AppColors.accentLight)
+                            .cornerRadius(12)
+                            .padding(12)
+                    }
+                    Spacer()
+                }
             }
         }
         .frame(height: 240)
@@ -77,6 +131,18 @@ struct MapPreviewCard: View {
         .onTapGesture {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                 currentScreen = .map
+            }
+        }
+        .task {
+            await mapService.fetchProducers()
+            
+            // Center map on producers if available
+            if let firstProducer = mapService.producers.first,
+               let coordinate = firstProducer.coordinate {
+                region = MKCoordinateRegion(
+                    center: coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 8.0, longitudeDelta: 8.0)
+                )
             }
         }
     }
