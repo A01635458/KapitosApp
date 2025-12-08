@@ -128,7 +128,7 @@ class ProductAIGenerator: ObservableObject {
                 try handler.perform([request])
                 
             } catch {
-                print("❌ Error clasificando: \(error)")
+                print("Error: Error clasificando: \(error)")
                 continuation.resume(returning: nil)
             }
         }
@@ -159,7 +159,7 @@ class ProductAIGenerator: ObservableObject {
             do {
                 try handler.perform([request])
             } catch {
-                print("❌ Error en OCR: \(error)")
+                print("Error: Error en OCR: \(error)")
                 continuation.resume(returning: [])
             }
         }
@@ -240,7 +240,7 @@ class ProductAIGenerator: ObservableObject {
         }
     }
     
-    // MARK: - 🎯 GENERACIÓN DE CONTENIDO
+    // MARK: - Generación de Contenido
     
     private func generateTitle(category: String, text: [String], roast: RoastLevel) -> String {
         // Intentar extraer marca del texto OCR

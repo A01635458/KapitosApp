@@ -116,7 +116,7 @@ final class UserRegistrationService: ObservableObject {
             if flow.hasAnyPreferenceSelections {
                 try await insertPreferences(userId: userId, preferences: flow.preferences)
             }
-            await MainActor.run { submitMessage = "Registro completado ✔️" }
+            await MainActor.run { submitMessage = "Registro completado" }
         } catch {
             await MainActor.run { submitMessage = error.localizedDescription }
         }

@@ -150,10 +150,10 @@ extension ProducerChatDetailView {
     }
     
     private func loadAvatar(from urlString: String) async {
-        print("🔄 [Producer] Attempting to load avatar from: \(urlString)")
+        print("[Producer] Attempting to load avatar from: \(urlString)")
         
         guard let url = URL(string: urlString) else {
-            print("❌ [Producer] Invalid URL for avatar: \(urlString)")
+            print("Error: [Producer] Invalid URL for avatar: \(urlString)")
             return
         }
         
@@ -165,15 +165,15 @@ extension ProducerChatDetailView {
             }
             
             if let image = UIImage(data: data) {
-                print("✅ [Producer] Avatar loaded successfully")
+                print("[Producer] Avatar loaded successfully")
                 await MainActor.run {
                     self.otherUserAvatar = image
                 }
             } else {
-                print("❌ [Producer] Could not create UIImage from data")
+                print("Error: [Producer] Could not create UIImage from data")
             }
         } catch {
-            print("❌ [Producer] Error loading avatar: \(error.localizedDescription)")
+            print("Error: [Producer] Error loading avatar: \(error.localizedDescription)")
         }
     }
 }

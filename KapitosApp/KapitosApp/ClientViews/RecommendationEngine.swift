@@ -2,8 +2,6 @@
 //  RecommendationEngine.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 05/12/25.
-//
 
 import Foundation
 import NaturalLanguage
@@ -37,7 +35,7 @@ class RecommendationEngine: ObservableObject {
             // 1. Load user preferences
             await preferencesService.fetchUserPreferences(userId: userId)
             guard let preferences = preferencesService.preferences else {
-                print("⚠️ No preferences found - showing generic recommendations")
+                print("Warning: No preferences found - showing generic recommendations")
                 await loadGenericRecommendations(limit: limit)
                 return
             }
@@ -74,11 +72,11 @@ class RecommendationEngine: ObservableObject {
                 .prefix(limit)
                 .map { $0 }
             
-            print("✅ Generated \(recommendations.count) recommendations (top score: \(recommendations.first?.score ?? 0))")
+            print("Generated \(recommendations.count) recommendations (top score: \(recommendations.first?.score ?? 0))")
             
         } catch {
             errorMessage = "Error generando recomendaciones: \(error.localizedDescription)"
-            print("❌ Error in generateRecommendations: \(error)")
+            print("Error: Error in generateRecommendations: \(error)")
         }
         
         isLoading = false
@@ -331,7 +329,7 @@ class RecommendationEngine: ObservableObject {
             return counts
             
         } catch {
-            print("⚠️ Error loading conversation counts: \(error)")
+            print("Warning: Error loading conversation counts: \(error)")
             return [:]
         }
     }

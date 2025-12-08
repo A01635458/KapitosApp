@@ -9,7 +9,7 @@ struct ProducerSurveyView: View {
     @State private var showSuccessMessage = false
     @State private var successText = ""
 
-    @State private var goToSuccess = false   // ⭐ NUEVO
+    @State private var goToSuccess = false
 
     // --- DATOS PERSONALES ---
     @State private var name = ""
@@ -85,7 +85,7 @@ struct ProducerSurveyView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 26) {
 
-                    // ⭐ REDIRECCIÓN A SUCCESS VIEW
+                    // Redirección a Success View
                     NavigationLink("", destination: ProducerSuccessView(), isActive: $goToSuccess)
                         .hidden()
 
@@ -278,7 +278,7 @@ struct ProducerSurveyView: View {
                 await registrationData.submitProducer(form: form)
 
                 if registrationData.submitMessage != nil {
-                    goToSuccess = true   // ⭐ REDIRECCIÓN FINAL
+                    goToSuccess = true
                 }
             }
 

@@ -2,8 +2,6 @@
 //  ProducerMapService.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 04/12/25.
-//
 
 import SwiftUI
 import Supabase
@@ -75,11 +73,11 @@ class ProducerMapService: ObservableObject {
                 .value
             
             producers = response
-            print("✅ Loaded \(producers.count) producers from database")
+            print("Loaded \(producers.count) producers from database")
             
         } catch {
             errorMessage = "Error al cargar productores: \(error.localizedDescription)"
-            print("❌ Error fetching producers: \(error)")
+            print("Error: Error fetching producers: \(error)")
         }
         
         isLoading = false
@@ -108,11 +106,11 @@ class ProducerMapService: ObservableObject {
                 .value
             
             producers = response
-            print("✅ Loaded \(producers.count) producers in region")
+            print("Loaded \(producers.count) producers in region")
             
         } catch {
             errorMessage = "Error al cargar productores: \(error.localizedDescription)"
-            print("❌ Error fetching producers in region: \(error)")
+            print("Error: Error fetching producers in region: \(error)")
         }
         
         isLoading = false
@@ -135,11 +133,11 @@ class ProducerMapService: ObservableObject {
                 .value
             
             producers = response
-            print("✅ Loaded \(producers.count) producers from \(state)")
+            print("Loaded \(producers.count) producers from \(state)")
             
         } catch {
             errorMessage = "Error al cargar productores: \(error.localizedDescription)"
-            print("❌ Error fetching producers by state: \(error)")
+            print("Error: Error fetching producers by state: \(error)")
         }
         
         isLoading = false

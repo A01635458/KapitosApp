@@ -1,0 +1,235 @@
+prepara un txt desarrollando la entrega fina lde la aplicacion Instructions
+
+Final Delivery – Software Engineering Project
+The final delivery consists of 4 main sections:
+
+Project Management & Agile Methodology
+
+Software Engineering Process Stages
+
+Security
+Final Presentation & Video for Apple
+
+I. Project Management & Agile Methodology
+Show the completed User Stories and who worked on each. (Include a screenshot of the tracking platform you are using.)
+
+Include the link to your user story tracking tool.
+
+Include the metrics you defined for your project:
+
+Percentage of Completed User Stories / Total Planned Stories for the entire project.
+
+Sprint Progress: Completed User Stories in the Sprint / Planned Stories for the Sprint.
+
+Create final charts to display progress.
+
+Integrate your Sprint Retrospective:
+
+General comments about the sprint.
+
+What went well? What can be improved for future projects?
+
+Individually: comment on your main contribution to the project and the learnings you gained.
+
+Explain the roles that each team member had in the project.
+
+II. Software Engineering Process Stages
+🔹 Analysis
+Include the document delivered and updated in Sprint 1: CBL and SRS (Sprint 1 – FrontEnd and Database Connection).
+
+🔹 Design
+Include the updated Design document from Sprint 2 (Testing Plan ML + Security).
+
+Provide:
+
+Database design diagram.
+
+App architecture diagram (as delivered in Sprint 2).
+
+Architecture diagram (see example: DiagramaArquitectura-1.pdf).
+
+Component diagram.
+
+The selected software architecture for each program.
+
+Example: WebAPI → MVC, iOS App → SwiftUI MVVM.
+
+Specify the folder structure you used in both the App and API projects.
+
+🔹 Development
+Include the Final Repository of your project:
+
+App code
+
+API code
+
+Admin web page code (if developed)
+
+If a web page exists, include a test account and password if needed.
+
+🔹 Testing
+Include the document delivered in Sprint 2 – Testing Plan ML + Security.
+
+Provide a document that includes the testing strategy and plan.
+
+You may use this base document: Plan de Pruebas TC2007B.docx.
+
+Include:
+
+The user story, acceptance criteria, and test case.
+
+Test log: which tests were executed, whether they passed or failed, and who performed them.
+
+🔹 Deployment
+In the project repository, update the README file to specify the steps required to release the API (and the admin page if applicable).
+
+Specify the stack you used.
+
+You may use this repo as a reference: https://github.com/wizeline/remix-project-labLinks to an external site.
+
+Provide the link to your deployed API on a cloud service.
+
+III. Security
+(TBD)
+
+IV. Final Presentation & Video in English
+Include the document used for your presentation (PPT, Keynote, PDF, etc.).
+
+For the presentation, all team members must participate.
+
+Each team has 15 minutes: prepare for 8 minutes of presentation and 7 minutes of Q&A.
+
+Include in your presentation the initial investment required for your app and the maintenance costs.
+
+Video (functionality)
+Create a video showing the functionality of the application (App + Admin page, if developed).
+
+Apple Video (max. 5 min, in English)
+Record a short video in English (maximum 5 minutes) explaining the functionality of your application. It must contain:
+
+Hook
+
+Project Title 
+
+Tagline
+
+Solution
+
+Model Development
+
+Demo
+
+Impact
+
+Next Steps
+
+Learnings
+
+👉 You may use the Mountaintop Presentation Template_8.6.key as a reference, or adapt your presentation to cover all of the above points.
+
+ 
+
+ 
+
+Evaluation
+
+La rúbrica anexa contiene todos los aspectos que se van a evaluar.
+
+Rúbrica en equipo Sprint3
+
+ 
+
+(10) I. Administración de Proyectos y Metodología Ágil
+
+(2)Se ve la prueba de que las historias sse actualizaron en la herramienta de seguimiento.
+
+(2)Liga Seguimiento hisotrias de usuario incluidas
+
+(2)Métricas con su gráfica actualizada.
+
+(2)Retrospectiva
+
+(2)Roles
+
+ 
+
+ 
+
+(78) II. Etapas del Proceso de Ingeniería de SW
+
+(10)Análisis
+
+(2)CBL actualizado
+
+(2)Requerimientos Funcionales
+
+(2)Requerimientos No Funcionales
+
+(2)Las funcionalidades realmente solucionanla problemática
+
+(2)Problemática / Solución / Impacto se encuentran bien alineadas.
+
+ 
+
+(12)Diseño
+
+(4)Diseño BD
+
+(4)Arq. Tecnológica
+
+(4)Arq. SW
+
+ 
+
+(21)Desarrollo
+
+(10)Código completo app, el código se puede ejecutar y cuenta con principios de código limpio y comentarios de documentación
+
+(5)Código completo API y funcionando
+
+(5)Código Completo página adminsitradora y funcionando (si fue realizada)
+
+(1)Liga a repositorio donde se muestran los commits realizados por cada miembro del equipo
+
+ 
+
+(25) Pruebas
+
+(4)Historias de Usuario correcta
+
+(6)Criterio de Aceptación Correcta
+
+(5)Se realizó cada una de las pruebas del caso de prueba
+
+(5)Se muestra la bitacora de las pruebas realizadas
+
+(5)La app funciona correctamente en el happy path
+
+ 
+
+(10)Despliegue
+
+(2)Para la API ReadME Actualizado:
+
+Se especifica el stack utilizado
+Se especifica los pasaos para ejecutar la página web
+(4)Liga a api con los end-points funcionando. (Incluir cada uno de los ecdpoints para probarlos.)
+
+(4)API Deplegada de un servicio cloud
+
+ 
+
+(12) III. Presentación Final y Video en Inglés
+
+(2)Se incluye presentación final utilizada en la presentación al socio
+
+(2)Los alumnos prepraron la forma de presentar previamente
+
+(4)Video de la funcionalidad refelja el correcto funcionamiento
+
+(4)Video Ingles funcionalidad refleja el uso de ML y funcionalidad correctamente
+
+ 
+
+Nota: para poder revisar el Sprint el código debe estar completo tanto de la app, api y página web (si lo realizaron) y funcionando correctamente al ejecutarse.
+

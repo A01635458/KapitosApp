@@ -58,7 +58,7 @@ class ProducerStore: ObservableObject {
                 .value
             
             if let producer = response.first {
-                print("✅ Producer found: \(producer.displayName)")
+                print("Producer found: \(producer.displayName)")
                 
                 // Update business info with real fields from database
                 businessName = producer.farm_name ?? "Productor"
@@ -81,16 +81,16 @@ class ProducerStore: ObservableObject {
                     }
                 }
                 
-                print("📋 Producer data loaded successfully")
+                print("Producer data loaded successfully")
             } else {
-                print("⚠️ No producer found for this user")
+                print("Warning: No producer found for this user")
                 errorMessage = "No se encontró información del productor"
                 businessName = "Productor"
             }
             
             isLoading = false
         } catch {
-            print("❌ Error loading producer data: \(error)")
+            print("Error: Error loading producer data: \(error)")
             errorMessage = "Error al cargar datos: \(error.localizedDescription)"
             isLoading = false
         }
@@ -108,7 +108,7 @@ class ProducerStore: ObservableObject {
                 }
             }
         } catch {
-            print("❌ Error loading logo image from URL: \(error)")
+            print("Error: Error loading logo image from URL: \(error)")
         }
     }
     
@@ -146,7 +146,7 @@ class ProducerStore: ObservableObject {
                 .execute()
                 .value
             
-            print("✅ Loaded \(response.count) products from database")
+            print("Loaded \(response.count) products from database")
             
             // Convertir DTOs a ProducerProduct con imageUrl de Supabase
             self.products = response.map { dto in
@@ -168,7 +168,7 @@ class ProducerStore: ObservableObject {
             }
             
         } catch {
-            print("❌ Error loading products: \(error)")
+            print("Error: Error loading products: \(error)")
             errorMessage = "Error al cargar productos: \(error.localizedDescription)"
         }
     }
@@ -221,14 +221,14 @@ class ProducerStore: ObservableObject {
                 .insert(dto)
                 .execute()
             
-            print("✅ Product saved successfully")
+            print("Product saved successfully")
             
             // Recargar productos
             await loadProducts()
             
             return true
         } catch {
-            print("❌ Error saving product: \(error)")
+            print("Error: Error saving product: \(error)")
             errorMessage = "Error al guardar producto: \(error.localizedDescription)"
             return false
         }
@@ -237,7 +237,7 @@ class ProducerStore: ObservableObject {
     /// Actualiza un producto existente
     func updateProduct(_ product: ProducerProduct) async -> Bool {
         do {
-            print("🔄 Updating product: \(product.name)")
+            print("Updating product: \(product.name)")
             
             // Si hay una nueva imagen, subirla
             var imageUrl: String? = product.imageUrl
@@ -279,12 +279,12 @@ class ProducerStore: ObservableObject {
                 .eq("id", value: product.id.uuidString)
                 .execute()
             
-            print("✅ Product updated successfully")
+            print("Product updated successfully")
             await loadProducts()
             
             return true
         } catch {
-            print("❌ Error updating product: \(error)")
+            print("Error: Error updating product: \(error)")
             errorMessage = "Error al actualizar producto: \(error.localizedDescription)"
             return false
         }
@@ -301,12 +301,12 @@ class ProducerStore: ObservableObject {
                 .eq("id", value: product.id.uuidString)
                 .execute()
             
-            print("✅ Product deleted successfully")
+            print("Product deleted successfully")
             await loadProducts()
             
             return true
         } catch {
-            print("❌ Error deleting product: \(error)")
+            print("Error: Error deleting product: \(error)")
             errorMessage = "Error al eliminar producto: \(error.localizedDescription)"
             return false
         }
@@ -336,7 +336,7 @@ class ProducerStore: ObservableObject {
     func uploadLogo(_ image: UIImage) async -> Bool {
         do {
             guard let imageData = image.jpegData(compressionQuality: 0.7) else {
-                print("❌ Could not convert image to JPEG")
+                print("Error: Could not convert image to JPEG")
                 return false
             }
             
@@ -360,7 +360,7 @@ class ProducerStore: ObservableObject {
                 .getPublicURL(path: fileName)
             
             let urlString = publicURL.absoluteString
-            print("✅ Logo uploaded to: \(urlString)")
+            print("Logo uploaded to: \(urlString)")
             
             // Update producer record with new photo_url
             try await client
@@ -369,7 +369,7 @@ class ProducerStore: ObservableObject {
                 .eq("id", value: currentUserId.uuidString)
                 .execute()
             
-            print("✅ Producer photo_url updated in database")
+            print("Producer photo_url updated in database")
             
             // Update local state
             await MainActor.run {
@@ -378,7 +378,7 @@ class ProducerStore: ObservableObject {
             
             return true
         } catch {
-            print("❌ Error uploading logo: \(error)")
+            print("Error: Error uploading logo: \(error)")
             errorMessage = "Error al subir logo: \(error.localizedDescription)"
             return false
         }
@@ -398,9 +398,9 @@ class ProducerStore: ObservableObject {
                 .eq("id", value: currentUserId.uuidString)
                 .execute()
             
-            print("✅ Business info saved successfully")
+            print("Business info saved successfully")
         } catch {
-            print("❌ Error saving business info: \(error)")
+            print("Error: Error saving business info: \(error)")
             errorMessage = "Error al guardar: \(error.localizedDescription)"
         }
     }

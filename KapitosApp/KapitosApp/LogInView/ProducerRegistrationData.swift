@@ -72,7 +72,7 @@ class ProducerRegistrationData: ObservableObject {
                 throw error
             }
 
-            submitMessage = "Registro enviado correctamente ✔️"
+            submitMessage = "Registro enviado correctamente"
 
         } catch {
             submitMessage = "Error al enviar: \(error.localizedDescription)"
@@ -85,7 +85,7 @@ class ProducerRegistrationData: ObservableObject {
     
     private func uploadProducerImage(image: UIImage, producerName: String) async -> String? {
         guard let imageData = image.jpegData(compressionQuality: 0.7) else {
-            print("❌ Failed to convert image to JPEG")
+            print("Error: Failed to convert image to JPEG")
             return nil
         }
         
@@ -103,11 +103,11 @@ class ProducerRegistrationData: ObservableObject {
                 .from("producer-profiles")
                 .getPublicURL(path: filePath)
             
-            print("✅ Image uploaded successfully: \(publicURL)")
+            print("Image uploaded successfully: \(publicURL)")
             return publicURL.absoluteString
             
         } catch {
-            print("❌ Error uploading image: \(error.localizedDescription)")
+            print("Error: Error uploading image: \(error.localizedDescription)")
             return nil
         }
     }

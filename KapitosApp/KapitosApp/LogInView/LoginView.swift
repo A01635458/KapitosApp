@@ -178,11 +178,11 @@ extension LoginView {
         )
 
         if success {
-            print("🎯 Login successful. User role: \(auth.userRole ?? "nil")")
+            print("Login successful. User role: \(auth.userRole ?? "nil")")
             // No necesitamos navegar manualmente - KapitosAppApp observa auth.isAuthenticated
             // y automáticamente mostrará la vista correcta según el rol
         } else {
-            print("❌ Login failed")
+            print("Error: Login failed")
         }
     }
 }

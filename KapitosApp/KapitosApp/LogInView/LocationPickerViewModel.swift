@@ -2,8 +2,6 @@
 //  LocationPickerViewModel.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 04/12/25.
-//
 
 import Foundation
 import MapKit
@@ -74,7 +72,7 @@ class LocationPickerViewModel: NSObject, ObservableObject {
             getUserLocation()
         case .denied, .restricted:
             // Keep default Mexico City location
-            print("⚠️ Location permission denied, using default location")
+            print("Warning: Location permission denied, using default location")
         @unknown default:
             break
         }
@@ -265,7 +263,7 @@ extension LocationPickerViewModel: CLLocationManagerDelegate {
     }
     
     nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("❌ Location error: \(error.localizedDescription)")
+        print("Error: Location error: \(error.localizedDescription)")
     }
     
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

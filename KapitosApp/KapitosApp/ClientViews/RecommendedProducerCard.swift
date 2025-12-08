@@ -2,8 +2,6 @@
 //  RecommendedProducerCard.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 05/12/25.
-//
 
 import SwiftUI
 

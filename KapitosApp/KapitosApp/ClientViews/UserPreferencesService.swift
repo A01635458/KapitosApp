@@ -2,8 +2,6 @@
 //  UserPreferencesService.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 05/12/25.
-//
 
 import Foundation
 import Supabase
@@ -36,15 +34,15 @@ class UserPreferencesService: ObservableObject {
             
             if let prefs = response.first {
                 preferences = prefs
-                print("✅ Loaded preferences for user \(userId)")
+                print("Loaded preferences for user \(userId)")
             } else {
-                print("⚠️ No preferences found for user \(userId)")
+                print("Warning: No preferences found for user \(userId)")
                 preferences = nil
             }
             
         } catch {
             errorMessage = "Error al cargar preferencias: \(error.localizedDescription)"
-            print("❌ Error fetching preferences: \(error)")
+            print("Error: Error fetching preferences: \(error)")
         }
         
         isLoading = false

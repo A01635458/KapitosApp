@@ -2,8 +2,6 @@
 //  AppDelegate.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 05/12/25.
-//
 
 import UIKit
 import UserNotifications
@@ -18,7 +16,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // Set notification delegate
         UNUserNotificationCenter.current().delegate = self
         
-        print("✅ KapitosApp launched successfully")
+        print(" KapitosApp launched successfully")
         
         return true
     }

@@ -1,0 +1,719 @@
+================================================================================
+                    USER STORIES PARA GITHUB PROJECTS
+                         KapitosApp - La Ruta del Café
+================================================================================
+
+Instrucciones:
+1. Ve a https://github.com/A01635458/KapitosApp/projects
+2. Crea un nuevo proyecto tipo "Board"
+3. Crea columnas: "Backlog", "Sprint 1", "Sprint 2", "Sprint 3", "Done"
+4. Copia cada User Story como un Issue o Card
+
+================================================================================
+                              SPRINT 1
+                    Fundamentos y Autenticación
+================================================================================
+
+------------------------------------------------------------------------------
+US-001: Registro de Usuario Cliente
+------------------------------------------------------------------------------
+
+TÍTULO: US-001: Registro de Usuario Cliente
+
+DESCRIPCIÓN:
+Como usuario nuevo
+Quiero crear una cuenta con mi nombre, email y contraseña
+Para acceder a la plataforma y personalizar mi experiencia
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] El usuario puede ingresar nombre completo, email y contraseña
+- [ ] El sistema valida que el email tenga formato válido (@)
+- [ ] La contraseña debe tener mínimo 6 caracteres
+- [ ] Se requiere confirmación de contraseña
+- [ ] El sistema muestra mensajes de error claros
+- [ ] Después del registro, navega a captura de preferencias
+
+DEFINICIÓN DE DONE:
+- [ ] UI implementada en SwiftUI
+- [ ] Validación de formulario funcionando
+- [ ] Integración con Supabase Auth
+- [ ] Navegación entre vistas implementada
+- [ ] Pruebas unitarias escritas y pasando
+
+ARCHIVOS RELACIONADOS:
+- RegisterView.swift
+- UserRegistrationService.swift
+- RegistrationFlowModel.swift
+
+ETIQUETAS: Sprint-1, Authentication, Frontend, Backend
+STORY POINTS: 5
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro, Luisa Cardona
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-002: Captura de Preferencias de Usuario
+------------------------------------------------------------------------------
+
+TÍTULO: US-002: Captura de Preferencias de Usuario
+
+DESCRIPCIÓN:
+Como usuario que acaba de registrarse
+Quiero indicar mis preferencias de café (procesos, tuestes, bebidas, etc.)
+Para recibir recomendaciones personalizadas
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] El usuario ve 7 pantallas de preferencias con navegación paso a paso
+- [ ] Puede seleccionar múltiples opciones en cada categoría
+- [ ] Las categorías incluyen: procesos, tuestes, bebidas, horarios, acidez, notas, consumo semanal
+- [ ] Puede saltar preguntas individuales o todo el proceso
+- [ ] Las selecciones se guardan en la base de datos
+- [ ] Después de completar, navega a LoginView
+
+DEFINICIÓN DE DONE:
+- [ ] UI con navegación de múltiples pasos
+- [ ] Selección múltiple funcional
+- [ ] Integración con Supabase (tabla user_preferences)
+- [ ] Botones "Saltar" funcionando
+- [ ] Animaciones y transiciones suaves
+- [ ] Pruebas de validación
+
+ARCHIVOS RELACIONADOS:
+- RegisterPreferencesView.swift
+- UserPreferences.swift
+- UserRegistrationService.swift
+
+ETIQUETAS: Sprint-1, Preferences, Frontend, UX
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro, Luisa Cardona
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-003: Login de Usuario
+------------------------------------------------------------------------------
+
+TÍTULO: US-003: Login de Usuario
+
+DESCRIPCIÓN:
+Como usuario registrado
+Quiero iniciar sesión con mi email y contraseña
+Para acceder a mi cuenta y usar la aplicación
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] El usuario puede ingresar email y contraseña
+- [ ] El sistema valida las credenciales con Supabase Auth
+- [ ] Muestra mensaje de "Email no confirmado" si aplica
+- [ ] Muestra loading spinner durante autenticación
+- [ ] Después de login exitoso, navega a ContentView según rol
+- [ ] Muestra mensajes de error claros si falla
+
+DEFINICIÓN DE DONE:
+- [ ] UI de login implementada
+- [ ] Integración con Supabase Auth
+- [ ] Manejo de estados (loading, error, success)
+- [ ] Navegación condicional según rol (user/producer/admin)
+- [ ] Banners de mensajes implementados
+- [ ] Pruebas unitarias escritas
+
+ARCHIVOS RELACIONADOS:
+- LoginView.swift
+- AuthenticationService.swift
+- UserProfile.swift
+
+ETIQUETAS: Sprint-1, Authentication, Frontend, Backend
+STORY POINTS: 5
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-004: Formulario de Registro de Productor
+------------------------------------------------------------------------------
+
+TÍTULO: US-004: Formulario de Registro de Productor
+
+DESCRIPCIÓN:
+Como productor de café
+Quiero enviar mi solicitud de registro con información de mi finca
+Para ser aprobado como productor en la plataforma
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] El formulario captura: nombre finca, teléfono, ubicación, variedades, procesos, certificaciones
+- [ ] Valida que campos requeridos no estén vacíos
+- [ ] Permite ingresar arrays separados por comas
+- [ ] Parsea fechas de cosecha en formato válido
+- [ ] Envía datos a Supabase con status "pending"
+- [ ] Muestra mensaje de éxito al completar
+- [ ] Normaliza datos antes de insertar (yes/no, listas, fechas)
+
+DEFINICIÓN DE DONE:
+- [ ] Formulario completo implementado
+- [ ] Validación de datos funcionando
+- [ ] Normalización de inputs (helper functions)
+- [ ] Integración con Supabase
+- [ ] Status "pending" por defecto
+- [ ] Pruebas de parseo y validación
+
+ARCHIVOS RELACIONADOS:
+- ProducerSurveyView.swift
+- ProducerRegistrationData.swift
+- ProducerInsertDTO.swift
+- ProducerFormModel.swift
+
+ETIQUETAS: Sprint-1, Producer, Registration, Backend
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro, Luisa Cardona
+ESTADO: ✅ Completado
+
+
+================================================================================
+                              SPRINT 2
+                    Panel Administrativo y Aprobaciones
+================================================================================
+
+------------------------------------------------------------------------------
+US-005: Dashboard de Admin
+------------------------------------------------------------------------------
+
+TÍTULO: US-005: Dashboard de Admin
+
+DESCRIPCIÓN:
+Como administrador de la plataforma
+Quiero ver un dashboard con métricas en tiempo real
+Para monitorear el estado general de la aplicación
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Muestra número de solicitudes pendientes de productores
+- [ ] Muestra número de productores activos (aprobados)
+- [ ] Muestra número total de usuarios registrados
+- [ ] Los datos se actualizan al cargar la vista
+- [ ] Diseño limpio con cards de métricas
+- [ ] Acceso solo para usuarios con rol "admin"
+
+DEFINICIÓN DE DONE:
+- [ ] UI de dashboard implementada
+- [ ] Servicio AdminDataService creado
+- [ ] Consultas a Supabase funcionando
+- [ ] Métricas correctas y en tiempo real
+- [ ] Navegación a otras vistas de admin
+- [ ] Tema claro/oscuro soportado
+
+ARCHIVOS RELACIONADOS:
+- DashboardView.swift
+- AdminDataService.swift
+- KapeAdminView.swift
+
+ETIQUETAS: Sprint-2, Admin, Dashboard, Frontend
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Luisa Cardona, Leobardo Navarro
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-006: Aprobación de Productores
+------------------------------------------------------------------------------
+
+TÍTULO: US-006: Aprobación de Productores
+
+DESCRIPCIÓN:
+Como administrador
+Quiero revisar solicitudes de productores pendientes
+Para aprobar o rechazar su registro en la plataforma
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Lista de productores con status "pending"
+- [ ] Ver detalles completos del productor
+- [ ] Botón para aprobar → cambia status a "approved"
+- [ ] Botón para rechazar → cambia status a "rejected"
+- [ ] Al aprobar, se crea cuenta de usuario con rol "producer"
+- [ ] Envío de credenciales (email) al productor aprobado
+- [ ] Actualización de lista después de acción
+
+DEFINICIÓN DE DONE:
+- [ ] Vista de lista de solicitudes
+- [ ] Vista de detalle de solicitud
+- [ ] ProducerApprovalService creado
+- [ ] Lógica de creación de cuenta funcionando
+- [ ] Transición de estados correcta
+- [ ] UI con feedback de acciones
+
+ARCHIVOS RELACIONADOS:
+- ProducerApprovalView.swift
+- RequestsListView.swift
+- RequestDetailView.swift
+- ProducerApprovalService.swift
+
+ETIQUETAS: Sprint-2, Admin, Approval, Backend
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-007: Lista de Productores Aprobados
+------------------------------------------------------------------------------
+
+TÍTULO: US-007: Lista de Productores Aprobados
+
+DESCRIPCIÓN:
+Como administrador
+Quiero ver la lista de todos los productores aprobados
+Para gestionar y monitorear a los productores activos
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Lista de productores con status "approved"
+- [ ] Muestra nombre de finca, ubicación, fecha de aprobación
+- [ ] Puede ver detalles del productor
+- [ ] Opción de desactivar productor si es necesario
+- [ ] Búsqueda o filtrado básico
+- [ ] Diseño consistente con resto de admin
+
+DEFINICIÓN DE DONE:
+- [ ] Vista de lista implementada
+- [ ] Consulta filtrada a Supabase
+- [ ] Cards de productor con información relevante
+- [ ] Navegación a detalle
+- [ ] UI responsive
+
+ARCHIVOS RELACIONADOS:
+- ProducersListView.swift
+- ProducerListView.swift
+- AdminDataService.swift
+
+ETIQUETAS: Sprint-2, Admin, Producers, Frontend
+STORY POINTS: 5
+PRIORIDAD: Media
+ASIGNADO A: Luisa Cardona
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-008: Crear Cuentas Manualmente
+------------------------------------------------------------------------------
+
+TÍTULO: US-008: Crear Cuentas Manualmente
+
+DESCRIPCIÓN:
+Como administrador
+Quiero poder crear cuentas de usuario, productor o admin manualmente
+Para gestionar accesos especiales sin pasar por el flujo normal
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Formulario para crear nueva cuenta
+- [ ] Selección de rol (user, producer, admin)
+- [ ] Campos: nombre, email, contraseña
+- [ ] Validación de datos
+- [ ] Creación en Supabase Auth y profiles
+- [ ] Mensaje de éxito/error
+
+DEFINICIÓN DE DONE:
+- [ ] UI de formulario implementada
+- [ ] Integración con Supabase Auth
+- [ ] Creación de perfil en tabla profiles
+- [ ] Validaciones funcionando
+- [ ] Feedback al usuario
+
+ARCHIVOS RELACIONADOS:
+- AccountGeneratorView.swift
+- AdminDataService.swift
+
+ETIQUETAS: Sprint-2, Admin, Accounts, Backend
+STORY POINTS: 5
+PRIORIDAD: Media
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-009: Lista de Usuarios/Clientes
+------------------------------------------------------------------------------
+
+TÍTULO: US-009: Lista de Usuarios/Clientes
+
+DESCRIPCIÓN:
+Como administrador
+Quiero ver la lista de todos los usuarios registrados
+Para monitorear la base de usuarios de la plataforma
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Lista de usuarios con rol "user"
+- [ ] Muestra nombre, email, fecha de registro
+- [ ] Indicador de si tiene preferencias completadas
+- [ ] Contador total de usuarios
+- [ ] Diseño consistente con otras listas de admin
+
+DEFINICIÓN DE DONE:
+- [ ] Vista de lista implementada
+- [ ] Consulta a tabla profiles
+- [ ] Cards de usuario con info básica
+- [ ] Ordenamiento por fecha
+
+ARCHIVOS RELACIONADOS:
+- ClientsListView.swift
+- AdminDataService.swift
+
+ETIQUETAS: Sprint-2, Admin, Users, Frontend
+STORY POINTS: 3
+PRIORIDAD: Baja
+ASIGNADO A: Luisa Cardona
+ESTADO: ✅ Completado
+
+
+================================================================================
+                              SPRINT 3
+                    ML, Mensajería y Marketplace
+================================================================================
+
+------------------------------------------------------------------------------
+US-010: Sistema de Recomendaciones IA
+------------------------------------------------------------------------------
+
+TÍTULO: US-010: Sistema de Recomendaciones IA
+
+DESCRIPCIÓN:
+Como cliente
+Quiero ver productores recomendados basados en mis preferencias
+Para descubrir café que se ajuste a mis gustos
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Algoritmo de scoring multi-criterio (0-100)
+- [ ] Coincidencia de preferencias (procesos, variedades, notas)
+- [ ] Proximidad geográfica considerada
+- [ ] Engagement score basado en conversaciones
+- [ ] Tours disponibles como bonus
+- [ ] Sección "Recomendados para Ti" en HomeView
+- [ ] Explicación de compatibilidad visible
+
+DEFINICIÓN DE DONE:
+- [ ] RecommendationEngine implementado
+- [ ] Integración con NaturalLanguage framework
+- [ ] Embeddings semánticos para matching
+- [ ] UI de cards de recomendación
+- [ ] Score y desglose visible
+- [ ] Pruebas del algoritmo
+
+ARCHIVOS RELACIONADOS:
+- RecommendationEngine.swift
+- RecommendationScore.swift
+- RecommendedProducerCard.swift
+- UserPreferencesService.swift
+- HomeView.swift
+
+ETIQUETAS: Sprint-3, ML, Recommendations, AI, Backend
+STORY POINTS: 13
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+NOTAS TÉCNICAS:
+Algoritmo de Scoring:
+- Preferencias (40 pts): procesos, variedades, certificaciones
+- Proximidad (30 pts): distancia geográfica
+- Engagement (20 pts): historial de conversaciones
+- Tours (10 pts): área turística disponible
+
+Tecnologías:
+- NLEmbedding para similitud semántica
+- CoreLocation para distancias
+- Supabase para datos
+
+------------------------------------------------------------------------------
+US-011: Mensajería Cliente-Productor
+------------------------------------------------------------------------------
+
+TÍTULO: US-011: Mensajería Cliente-Productor
+
+DESCRIPCIÓN:
+Como cliente
+Quiero enviar mensajes directos a productores
+Para hacer preguntas sobre sus productos y coordinar compras
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Iniciar conversación desde perfil de productor
+- [ ] Lista de conversaciones activas
+- [ ] Vista de chat con mensajes ordenados
+- [ ] Envío y recepción de mensajes de texto
+- [ ] Indicador de mensajes no leídos
+- [ ] Marca como leído al abrir conversación
+- [ ] Funciona para ambos: cliente y productor
+
+DEFINICIÓN DE DONE:
+- [ ] MessagingService implementado
+- [ ] Modelo Message creado
+- [ ] Vistas de chat para cliente y productor
+- [ ] Integración con Supabase Realtime
+- [ ] UI de conversaciones
+- [ ] Contador de no leídos
+
+ARCHIVOS RELACIONADOS:
+- Message.swift
+- MessagingService.swift
+- DM/Client/ (vistas de cliente)
+- DM/Producer/ (vistas de productor)
+- ChatPreviewCard.swift
+- ProducerChatPreviewCard.swift
+
+ETIQUETAS: Sprint-3, Messaging, Realtime, Frontend, Backend
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro, Luisa Cardona
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-012: Mapa de Productores
+------------------------------------------------------------------------------
+
+TÍTULO: US-012: Mapa de Productores
+
+DESCRIPCIÓN:
+Como cliente
+Quiero ver productores en un mapa interactivo
+Para descubrir productores cercanos a mi ubicación
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Mapa con pines de productores aprobados
+- [ ] Ubicación del usuario mostrada
+- [ ] Tap en pin muestra preview del productor
+- [ ] Navegación a perfil completo del productor
+- [ ] Filtros por región o características
+- [ ] Zoom y navegación fluida
+
+DEFINICIÓN DE DONE:
+- [ ] Integración con MapKit
+- [ ] ProducerMapService implementado
+- [ ] Pines personalizados
+- [ ] Sheet de preview al seleccionar
+- [ ] Permisos de ubicación manejados
+- [ ] UI responsive
+
+ARCHIVOS RELACIONADOS:
+- MapView.swift
+- ProducerMapService.swift
+- ProducerDetailSheetView.swift
+- MapPreviewCard.swift
+
+ETIQUETAS: Sprint-3, Map, MapKit, Frontend
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Luisa Cardona
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-013: Tienda del Productor
+------------------------------------------------------------------------------
+
+TÍTULO: US-013: Tienda del Productor
+
+DESCRIPCIÓN:
+Como productor
+Quiero gestionar mi tienda virtual con productos
+Para mostrar mi catálogo a potenciales compradores
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Vista de tienda con productos listados
+- [ ] Agregar nuevo producto manualmente
+- [ ] Agregar producto con ayuda de IA (clasificador)
+- [ ] Editar producto existente
+- [ ] Eliminar o desactivar producto
+- [ ] Campos: nombre, precio, peso, descripción, imagen, notas de cata
+
+DEFINICIÓN DE DONE:
+- [ ] ProducerShopView implementada
+- [ ] CRUD de productos funcionando
+- [ ] AddProductManualView creada
+- [ ] AddProductAIView con clasificador
+- [ ] EditProductView creada
+- [ ] Integración con Supabase y Storage
+
+ARCHIVOS RELACIONADOS:
+- ProducerShopView.swift
+- ProducerProduct.swift
+- AddProductManualView.swift
+- AddProductAIView.swift
+- EditProductView.swift
+- ProducerStore.swift
+
+ETIQUETAS: Sprint-3, Producer, Shop, CRUD, Backend
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+------------------------------------------------------------------------------
+US-014: Notificaciones Inteligentes
+------------------------------------------------------------------------------
+
+TÍTULO: US-014: Notificaciones Inteligentes
+
+DESCRIPCIÓN:
+Como cliente
+Quiero recibir notificaciones sobre productores y eventos relevantes
+Para no perderme oportunidades de café que me interesa
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Notificación de nuevos productores compatibles (score >60%)
+- [ ] Alertas de próximas cosechas
+- [ ] Notificación de tours cercanos
+- [ ] Notificación de nuevos mensajes
+- [ ] Panel de configuración de preferencias de notificaciones
+- [ ] Control de qué tipos recibir
+
+DEFINICIÓN DE DONE:
+- [ ] SmartNotificationService implementado
+- [ ] Integración con UNUserNotificationCenter
+- [ ] NotificationPreferencesView creada
+- [ ] Triggers configurados
+- [ ] Permisos manejados correctamente
+- [ ] Integración con AppDelegate
+
+ARCHIVOS RELACIONADOS:
+- SmartNotificationService.swift
+- NotificationPreferencesView.swift
+- AppDelegate.swift
+- KapitosAppApp.swift
+
+ETIQUETAS: Sprint-3, Notifications, UX, Backend
+STORY POINTS: 5
+PRIORIDAD: Media
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+TIPOS DE NOTIFICACIONES:
+1. Nuevos Productores Compatibles
+   - Trigger: Productor aprobado en últimos 7 días con score >60%
+   - Ejemplo: "🌟 Nuevo Productor Compatible - 85% compatible"
+
+2. Alertas de Cosecha
+   - Trigger: last_harvest_date + 365 días en ventana de 60-90 días
+   - Ejemplo: "☕️ Próxima Cosecha en 14 días"
+
+3. Tours Cercanos
+   - Trigger: Usuario dentro de 50km de productor con tours
+   - Ejemplo: "🗺️ Tour de Cafetal a 12km de ti"
+
+4. Mensajes Nuevos
+   - Trigger: Nuevo mensaje en conversación
+   - Ejemplo: "💬 3 nuevos mensajes de Café Don José"
+
+------------------------------------------------------------------------------
+US-015: Clasificador de Café (CoreML)
+------------------------------------------------------------------------------
+
+TÍTULO: US-015: Clasificador de Café (CoreML)
+
+DESCRIPCIÓN:
+Como productor
+Quiero usar la cámara para clasificar automáticamente mi café
+Para agregar productos más fácilmente con información precisa
+
+CRITERIOS DE ACEPTACIÓN:
+- [ ] Tomar foto de café (grano o empaque)
+- [ ] Modelo CoreML clasifica el tipo de café
+- [ ] Muestra resultado con confianza
+- [ ] Pre-llena campos del producto basado en clasificación
+- [ ] Opción de corregir o confirmar
+- [ ] Funciona offline (modelo embebido)
+
+DEFINICIÓN DE DONE:
+- [ ] Modelo CoffeeType.mlmodel integrado
+- [ ] ProductAIGenerator implementado
+- [ ] Vista de cámara/galería
+- [ ] Procesamiento de imagen
+- [ ] UI de resultados con sugerencias
+- [ ] Integración con flujo de agregar producto
+
+ARCHIVOS RELACIONADOS:
+- CoffeeType.mlmodel
+- ProductAIGenerator.swift
+- AddProductAIView.swift
+- ImagePicker.swift
+
+ETIQUETAS: Sprint-3, ML, CoreML, Vision, AI
+STORY POINTS: 8
+PRIORIDAD: Alta
+ASIGNADO A: Leobardo Navarro
+ESTADO: ✅ Completado
+
+NOTAS TÉCNICAS:
+- Modelo entrenado con CreateML
+- Clasificación de tipos de café mexicano
+- Confianza mínima requerida: 70%
+- Fallback a entrada manual si confianza baja
+
+
+================================================================================
+                         COMANDOS GITHUB CLI
+================================================================================
+
+Si prefieres crear los issues desde terminal, usa estos comandos:
+
+# Autenticarse
+gh auth login
+
+# Sprint 1
+gh issue create --title "US-001: Registro de Usuario Cliente" --body "Story Points: 5\nAsignado: Leobardo, Luisa\n\nComo usuario nuevo quiero crear una cuenta con mi nombre, email y contraseña para acceder a la plataforma." --label "Sprint-1,Authentication,completed"
+
+gh issue create --title "US-002: Captura de Preferencias de Usuario" --body "Story Points: 8\nAsignado: Leobardo, Luisa\n\nComo usuario que acaba de registrarse quiero indicar mis preferencias de café para recibir recomendaciones personalizadas." --label "Sprint-1,Preferences,completed"
+
+gh issue create --title "US-003: Login de Usuario" --body "Story Points: 5\nAsignado: Leobardo\n\nComo usuario registrado quiero iniciar sesión con mi email y contraseña para acceder a mi cuenta." --label "Sprint-1,Authentication,completed"
+
+gh issue create --title "US-004: Formulario Registro de Productor" --body "Story Points: 8\nAsignado: Leobardo, Luisa\n\nComo productor de café quiero enviar mi solicitud de registro con información de mi finca para ser aprobado." --label "Sprint-1,Producer,completed"
+
+# Sprint 2
+gh issue create --title "US-005: Dashboard de Admin" --body "Story Points: 8\nAsignado: Luisa, Leobardo\n\nComo administrador quiero ver un dashboard con métricas en tiempo real para monitorear la aplicación." --label "Sprint-2,Admin,completed"
+
+gh issue create --title "US-006: Aprobación de Productores" --body "Story Points: 8\nAsignado: Leobardo\n\nComo administrador quiero revisar y aprobar/rechazar solicitudes de productores." --label "Sprint-2,Admin,completed"
+
+gh issue create --title "US-007: Lista de Productores Aprobados" --body "Story Points: 5\nAsignado: Luisa\n\nComo administrador quiero ver la lista de productores aprobados para gestionar productores activos." --label "Sprint-2,Admin,completed"
+
+gh issue create --title "US-008: Crear Cuentas Manualmente" --body "Story Points: 5\nAsignado: Leobardo\n\nComo administrador quiero crear cuentas manualmente para gestionar accesos especiales." --label "Sprint-2,Admin,completed"
+
+gh issue create --title "US-009: Lista de Usuarios/Clientes" --body "Story Points: 3\nAsignado: Luisa\n\nComo administrador quiero ver la lista de usuarios registrados para monitorear la base de usuarios." --label "Sprint-2,Admin,completed"
+
+# Sprint 3
+gh issue create --title "US-010: Sistema de Recomendaciones IA" --body "Story Points: 13\nAsignado: Leobardo\n\nComo cliente quiero ver productores recomendados basados en mis preferencias usando ML." --label "Sprint-3,ML,AI,completed"
+
+gh issue create --title "US-011: Mensajería Cliente-Productor" --body "Story Points: 8\nAsignado: Leobardo, Luisa\n\nComo cliente quiero enviar mensajes directos a productores para coordinar compras." --label "Sprint-3,Messaging,completed"
+
+gh issue create --title "US-012: Mapa de Productores" --body "Story Points: 8\nAsignado: Luisa\n\nComo cliente quiero ver productores en un mapa interactivo para descubrir productores cercanos." --label "Sprint-3,Map,completed"
+
+gh issue create --title "US-013: Tienda del Productor" --body "Story Points: 8\nAsignado: Leobardo\n\nComo productor quiero gestionar mi tienda virtual con productos para mostrar mi catálogo." --label "Sprint-3,Producer,completed"
+
+gh issue create --title "US-014: Notificaciones Inteligentes" --body "Story Points: 5\nAsignado: Leobardo\n\nComo cliente quiero recibir notificaciones sobre productores y eventos relevantes." --label "Sprint-3,Notifications,completed"
+
+gh issue create --title "US-015: Clasificador de Café (CoreML)" --body "Story Points: 8\nAsignado: Leobardo\n\nComo productor quiero usar la cámara para clasificar café automáticamente con ML." --label "Sprint-3,ML,CoreML,completed"
+
+
+================================================================================
+                              RESUMEN
+================================================================================
+
+SPRINT 1 (26 Story Points)
+--------------------------
+US-001: Registro de Usuario Cliente      - 5 pts  ✅
+US-002: Captura de Preferencias          - 8 pts  ✅
+US-003: Login de Usuario                 - 5 pts  ✅
+US-004: Registro de Productor            - 8 pts  ✅
+
+SPRINT 2 (29 Story Points)
+--------------------------
+US-005: Dashboard de Admin               - 8 pts  ✅
+US-006: Aprobación de Productores        - 8 pts  ✅
+US-007: Lista de Productores             - 5 pts  ✅
+US-008: Crear Cuentas Manualmente        - 5 pts  ✅
+US-009: Lista de Usuarios                - 3 pts  ✅
+
+SPRINT 3 (50 Story Points)
+--------------------------
+US-010: Recomendaciones IA               - 13 pts ✅
+US-011: Mensajería                       - 8 pts  ✅
+US-012: Mapa de Productores              - 8 pts  ✅
+US-013: Tienda del Productor             - 8 pts  ✅
+US-014: Notificaciones Inteligentes      - 5 pts  ✅
+US-015: Clasificador CoreML              - 8 pts  ✅
+
+TOTAL: 15 User Stories - 105 Story Points - 100% Completado
+
+================================================================================
+                              FIN DEL DOCUMENTO
+================================================================================

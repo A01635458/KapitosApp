@@ -96,7 +96,7 @@ struct ChatRow: View {
                 }
             }
         } catch {
-            print("❌ Error loading avatar: \(error)")
+            print("Error: Error loading avatar: \(error)")
         }
     }
 }

@@ -184,7 +184,7 @@ struct ProfileView: View {
             
             isLoading = false
         } catch {
-            print("❌ Error loading user profile: \(error)")
+            print("Error: Error loading user profile: \(error)")
             errorMessage = "No se pudo cargar el perfil"
             isLoading = false
         }
@@ -203,7 +203,7 @@ struct ProfileView: View {
                 }
             }
         } catch {
-            print("❌ Error loading profile image: \(error)")
+            print("Error: Error loading profile image: \(error)")
         }
     }
     
@@ -214,7 +214,7 @@ struct ProfileView: View {
         
         do {
             guard let imageData = image.jpegData(compressionQuality: 0.7) else {
-                print("❌ Could not convert image to JPEG")
+                print("Error: Could not convert image to JPEG")
                 isUploadingPhoto = false
                 return
             }
@@ -239,7 +239,7 @@ struct ProfileView: View {
                 .getPublicURL(path: fileName)
             
             let urlString = publicURL.absoluteString
-            print("✅ Profile photo uploaded to: \(urlString)")
+            print("Profile photo uploaded to: \(urlString)")
             
             // Update user profile with new photo_url
             try await supabase
@@ -248,7 +248,7 @@ struct ProfileView: View {
                 .eq("id", value: currentUserId.uuidString)
                 .execute()
             
-            print("✅ User photo_url updated in database")
+            print("User photo_url updated in database")
             
             // Update local state
             await MainActor.run {
@@ -257,7 +257,7 @@ struct ProfileView: View {
             
             isUploadingPhoto = false
         } catch {
-            print("❌ Error uploading profile photo: \(error)")
+            print("Error: Error uploading profile photo: \(error)")
             isUploadingPhoto = false
         }
     }

@@ -2,8 +2,6 @@
 //  SmartNotificationService.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 05/12/25.
-//
 
 import Foundation
 import UserNotifications
@@ -82,10 +80,10 @@ class SmartNotificationService: NSObject, ObservableObject {
             await MainActor.run {
                 notificationPermissionGranted = granted
             }
-            print(granted ? "✅ Notification permission granted" : "❌ Notification permission denied")
+            print(granted ? "Notification permission granted" : "Notification permission denied")
             return granted
         } catch {
-            print("❌ Error requesting notification permission: \(error)")
+            print("Error: Error requesting notification permission: \(error)")
             return false
         }
     }
@@ -160,7 +158,7 @@ class SmartNotificationService: NSObject, ObservableObject {
     /// Generate and schedule contextual notifications for a user
     func generateContextualNotifications(userId: UUID) async {
         guard notificationPermissionGranted else {
-            print("⚠️ Notification permission not granted")
+            print("Warning: Notification permission not granted")
             return
         }
         
@@ -243,13 +241,13 @@ class SmartNotificationService: NSObject, ObservableObject {
                             delaySeconds: 2 // Small delay to avoid spam
                         )
                         
-                        print("✅ Scheduled notification for new match: \(producer.farm_name) (\(Int(matchScore))%)")
+                        print("Scheduled notification for new match: \(producer.farm_name) (\(Int(matchScore))%)")
                     }
                 }
             }
             
         } catch {
-            print("❌ Error checking new matching producers: \(error)")
+            print("Error: Error checking new matching producers: \(error)")
         }
     }
     
@@ -315,12 +313,12 @@ class SmartNotificationService: NSObject, ObservableObject {
                         delaySeconds: 5
                     )
                     
-                    print("✅ Scheduled harvest alert for \(producer.farm_name) in \(daysUntil) days")
+                    print("Scheduled harvest alert for \(producer.farm_name) in \(daysUntil) days")
                 }
             }
             
         } catch {
-            print("❌ Error checking upcoming harvests: \(error)")
+            print("Error: Error checking upcoming harvests: \(error)")
         }
     }
     
@@ -368,12 +366,12 @@ class SmartNotificationService: NSObject, ObservableObject {
                         delaySeconds: 8
                     )
                     
-                    print("✅ Scheduled tour notification for \(producer.farm_name) at \(Int(distanceKm))km")
+                    print("Scheduled tour notification for \(producer.farm_name) at \(Int(distanceKm))km")
                 }
             }
             
         } catch {
-            print("❌ Error checking nearby tours: \(error)")
+            print("Error: Error checking nearby tours: \(error)")
         }
     }
     
@@ -391,7 +389,7 @@ class SmartNotificationService: NSObject, ObservableObject {
         case .newMatchingProducer(let id, let name, let state, let process, let score):
             producerId = id
             farmName = name
-            content.title = "Nuevo Productor Compatible 🌟"
+            content.title = "Nuevo Productor Compatible"
             content.body = "\(name) en \(state) con proceso \(process) que te encanta (\(Int(score))% compatible)"
             content.sound = .default
             content.badge = 1
@@ -399,21 +397,21 @@ class SmartNotificationService: NSObject, ObservableObject {
         case .harvestAlert(let id, let name, let daysUntil, let score):
             producerId = id
             farmName = name
-            content.title = "Próxima Cosecha ☕️"
+            content.title = "Próxima Cosecha"
             content.body = "La cosecha de \(name) (\(Int(score))% compatible) estará lista en \(daysUntil) días"
             content.sound = .default
             
         case .nearbyTourAvailable(let id, let name, let distance):
             producerId = id
             farmName = name
-            content.title = "Tour de Cafetal Cercano 🗺️"
+            content.title = "Tour de Cafetal Cercano"
             content.body = "\(name) ofrece tours de cafetales a solo \(Int(distance))km de ti"
             content.sound = .default
             
         case .conversationUpdate(let id, let name, let messageCount):
             producerId = id
             farmName = name
-            content.title = "Nuevos Mensajes 💬"
+            content.title = "Nuevos Mensajes"
             content.body = "\(messageCount) nuevos mensajes de \(name)"
             content.sound = .default
             content.badge = NSNumber(value: messageCount)
@@ -444,9 +442,9 @@ class SmartNotificationService: NSObject, ObservableObject {
         
         do {
             try await notificationCenter.add(request)
-            print("✅ Scheduled notification: \(trigger.identifier)")
+            print("Scheduled notification: \(trigger.identifier)")
         } catch {
-            print("❌ Error scheduling notification: \(error)")
+            print("Error: Error scheduling notification: \(error)")
         }
     }
     

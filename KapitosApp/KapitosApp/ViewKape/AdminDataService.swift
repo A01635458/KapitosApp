@@ -40,7 +40,7 @@ final class AdminDataService: ObservableObject {
             approvedProducers = response
         } catch {
             errorMessage = "Error al obtener productores: \(error.localizedDescription)"
-            print("❌ Error fetching approved producers: \(error)")
+            print("Error: Error fetching approved producers: \(error)")
         }
     }
     
@@ -61,7 +61,7 @@ final class AdminDataService: ObservableObject {
             allUsers = response
         } catch {
             errorMessage = "Error al obtener usuarios: \(error.localizedDescription)"
-            print("❌ Error fetching users: \(error)")
+            print("Error: Error fetching users: \(error)")
         }
     }
     
@@ -98,11 +98,11 @@ final class AdminDataService: ObservableObject {
                 ))
                 .execute()
             
-            print("✅ Account created successfully: \(email) with role: \(role)")
+            print("Account created successfully: \(email) with role: \(role)")
             return true
         } catch {
             errorMessage = "Error al crear cuenta: \(error.localizedDescription)"
-            print("❌ Error creating account: \(error)")
+            print("Error: Error creating account: \(error)")
             return false
         }
     }
@@ -122,7 +122,7 @@ final class AdminDataService: ObservableObject {
             
             return (users, producers, admins)
         } catch {
-            print("❌ Error getting user counts: \(error)")
+            print("Error: Error getting user counts: \(error)")
             return (0, 0, 0)
         }
     }

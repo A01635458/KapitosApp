@@ -50,20 +50,20 @@ final class AuthenticationService: ObservableObject {
                 .execute()
                 .value
             
-            print("📋 Profiles found: \(profileResponse.count)")
+            print("Profiles found: \(profileResponse.count)")
             
             if let profile = profileResponse.first {
                 userRole = profile.role
-                print("✅ User role: \(profile.role)")
+                print("User role: \(profile.role)")
             } else {
-                print("⚠️ No profile found for user")
+                print("Warning: No profile found for user")
                 userRole = "user" // Default role
             }
             
-            message = "Inicio de sesión exitoso ✔️"
+            message = "Inicio de sesión exitoso"
             return true
         } catch {
-            print("❌ Login error: \(error)")
+            print("Error: Login error: \(error)")
             message = (error as? AuthError)?.localizedDescription ?? error.localizedDescription
             return false
         }
@@ -73,18 +73,18 @@ final class AuthenticationService: ObservableObject {
         currentUserId = nil
         userRole = nil
         message = nil
-        print("🚪 User logged out")
+        print("User logged out")
     }
     
     /// Refresca el rol del usuario actual desde la base de datos
     func refreshUserRole() async {
         guard let userId = currentUserId else {
-            print("⚠️ No user ID to refresh role")
+            print("Warning: No user ID to refresh role")
             return
         }
         
         do {
-            print("🔄 Refreshing user role for: \(userId.uuidString)")
+            print("Refreshing user role for: \(userId.uuidString)")
             let profileResponse: [UserProfile] = try await client
                 .from("profiles")
                 .select()
@@ -94,12 +94,12 @@ final class AuthenticationService: ObservableObject {
             
             if let profile = profileResponse.first {
                 userRole = profile.role
-                print("✅ Role refreshed: \(profile.role)")
+                print("Role refreshed: \(profile.role)")
             } else {
-                print("⚠️ No profile found during refresh")
+                print("Warning: No profile found during refresh")
             }
         } catch {
-            print("❌ Error refreshing role: \(error)")
+            print("Error: Error refreshing role: \(error)")
         }
     }
     

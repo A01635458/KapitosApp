@@ -229,14 +229,14 @@ struct HomeView: View {
                 // Show producer detail on main thread
                 await MainActor.run {
                     selectedProducer = producerData
-                    print("✅ Loaded producer from notification: \(producer.farm_name)")
+                    print("Loaded producer from notification: \(producer.farm_name)")
                 }
             } else {
-                print("⚠️ Producer not found: \(producerId)")
+                print("Warning: Producer not found: \(producerId)")
             }
             
         } catch {
-            print("❌ Error loading producer from notification: \(error)")
+            print("Error: Error loading producer from notification: \(error)")
         }
         
         isLoadingNotificationProducer = false

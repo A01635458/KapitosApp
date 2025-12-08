@@ -139,7 +139,7 @@ struct ProducerBusinessView: View {
                             isUploadingLogo = false
                             
                             if !success {
-                                print("❌ Failed to upload logo")
+                                print("Error: Failed to upload logo")
                             }
                         }
                     }

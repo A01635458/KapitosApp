@@ -25,17 +25,17 @@ struct KapitosAppApp: App {
                     
                     // Usuario autenticado con rol conocido
                     if role == "admin" {
-                        let _ = print("✅ Loading ADMIN view")
+                        let _ = print("Loading ADMIN view")
                         KapeContentView()
                             .environmentObject(theme)
                     } else if role == "producer" {
-                        let _ = print("✅ Loading PRODUCER view")
+                        let _ = print("Loading PRODUCER view")
                         if let userId = auth.currentUserId {
                             ProducerContentView(currentUserId: userId)
                                 .environmentObject(theme)
                         }
                     } else {
-                        let _ = print("✅ Loading CLIENT view (role: \(role))")
+                        let _ = print("Loading CLIENT view (role: \(role))")
                         // Cliente o rol por defecto
                         ContentView()
                             .environmentObject(theme)

@@ -47,7 +47,7 @@ struct ProducerApprovalView: View {
                         .background(theme.isDarkMode ? AppColors.cardDark : AppColors.cardLight)
                         .cornerRadius(10)
                     
-                    // ⭐ CONTRASEÑA CON OJITO
+                    // Campo de contraseña con visibilidad
                     ZStack(alignment: .trailing) {
                         if showPassword {
                             TextField("Contraseña", text: $password)
@@ -72,7 +72,7 @@ struct ProducerApprovalView: View {
                         }
                     }
                     
-                    // ⭐ CONFIRMAR CONTRASEÑA CON OJITO
+                    // Campo de confirmar contraseña con visibilidad
                     ZStack(alignment: .trailing) {
                         if showConfirmPassword {
                             TextField("Confirmar contraseña", text: $confirmPassword)

@@ -243,7 +243,7 @@ struct AddProductAIView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("✅ Análisis completado")
+                    Text("Análisis completado")
                         .font(.headline)
                         .foregroundColor(theme.isDarkMode ? .white : AppColors.textLight)
                     

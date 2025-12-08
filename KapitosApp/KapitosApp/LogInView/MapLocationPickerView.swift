@@ -2,8 +2,6 @@
 //  MapLocationPickerView.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 04/12/25.
-//
 
 import SwiftUI
 import MapKit

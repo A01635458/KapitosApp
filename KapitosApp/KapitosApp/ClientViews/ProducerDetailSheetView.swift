@@ -2,8 +2,6 @@
 //  ProducerDetailSheetView.swift
 //  KapitosApp
 //
-//  Created by GitHub Copilot on 04/12/25.
-//
 
 import SwiftUI
 import MapKit
@@ -384,9 +382,9 @@ struct ProducerDetailSheetView: View {
                 )
             }
             
-            print("✅ Loaded \(products.count) products for producer")
+            print("Loaded \(products.count) products for producer")
         } catch {
-            print("❌ Error loading products: \(error)")
+            print("Error: Error loading products: \(error)")
         }
         
         isLoadingProducts = false

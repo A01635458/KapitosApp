@@ -150,10 +150,10 @@ extension ClientChatDetailView {
     }
     
     private func loadAvatar(from urlString: String) async {
-        print("🔄 Attempting to load avatar from: \(urlString)")
+        print("Attempting to load avatar from: \(urlString)")
         
         guard let url = URL(string: urlString) else {
-            print("❌ Invalid URL for avatar: \(urlString)")
+            print("Error: Invalid URL for avatar: \(urlString)")
             return
         }
         
@@ -165,15 +165,15 @@ extension ClientChatDetailView {
             }
             
             if let image = UIImage(data: data) {
-                print("✅ Avatar loaded successfully")
+                print("Avatar loaded successfully")
                 await MainActor.run {
                     self.otherUserAvatar = image
                 }
             } else {
-                print("❌ Could not create UIImage from data")
+                print("Error: Could not create UIImage from data")
             }
         } catch {
-            print("❌ Error loading avatar: \(error.localizedDescription)")
+            print("Error: Error loading avatar: \(error.localizedDescription)")
         }
     }
 }

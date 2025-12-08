@@ -1,0 +1,1160 @@
+================================================================================
+                    ENTREGA FINAL - PROYECTO DE INGENIERÍA DE SOFTWARE
+                              KapitosApp - La Ruta del Café
+================================================================================
+
+Proyecto: KapitosApp
+Equipo: Leobardo Navarro, Luisa Cardona
+Fecha: Diciembre 2025
+Institución: Tecnológico de Monterrey
+Curso: TC2007B - Desarrollo de Software
+
+================================================================================
+                  I. ADMINISTRACIÓN DE PROYECTOS Y METODOLOGÍA ÁGIL
+================================================================================
+
+------------------------------------------------------------------------------
+1.1 HISTORIAS DE USUARIO COMPLETADAS
+------------------------------------------------------------------------------
+
+Las siguientes User Stories fueron completadas durante el desarrollo del proyecto:
+
+SPRINT 1 - Fundamentos y Autenticación (100% completado)
+---------------------------------------------------------
+
+┌─────────┬────────────────────────────────────┬──────────────┬────────────────────────────┐
+│ US-ID   │ Descripción                        │ Story Points │ Asignado a                 │
+├─────────┼────────────────────────────────────┼──────────────┼────────────────────────────┤
+│ US-001  │ Registro de Usuario Cliente        │ 5            │ Leobardo Navarro, Luisa C. │
+│ US-002  │ Captura de Preferencias de Usuario │ 8            │ Leobardo Navarro, Luisa C. │
+│ US-003  │ Login de Usuario                   │ 5            │ Leobardo Navarro           │
+│ US-004  │ Formulario Registro de Productor   │ 8            │ Leobardo Navarro, Luisa C. │
+└─────────┴────────────────────────────────────┴──────────────┴────────────────────────────┘
+
+SPRINT 2 - Panel Administrativo y Aprobaciones
+----------------------------------------------
+
+┌─────────┬────────────────────────────────────┬──────────────┬────────────────────────────┐
+│ US-ID   │ Descripción                        │ Story Points │ Asignado a                 │
+├─────────┼────────────────────────────────────┼──────────────┼────────────────────────────┤
+│ US-005  │ Dashboard de Admin                 │ 8            │ Luisa Cardona, Leobardo N. │
+│ US-006  │ Aprobación de Productores          │ 8            │ Leobardo Navarro           │
+│ US-007  │ Lista de Productores Aprobados     │ 5            │ Luisa Cardona              │
+│ US-008  │ Crear Cuentas Manualmente          │ 5            │ Leobardo Navarro           │
+│ US-009  │ Lista de Usuarios/Clientes         │ 3            │ Luisa Cardona              │
+└─────────┴────────────────────────────────────┴──────────────┴────────────────────────────┘
+
+SPRINT 3 - ML, Mensajería y Marketplace
+---------------------------------------
+
+┌─────────┬────────────────────────────────────┬──────────────┬────────────────────────────┐
+│ US-ID   │ Descripción                        │ Story Points │ Asignado a                 │
+├─────────┼────────────────────────────────────┼──────────────┼────────────────────────────┤
+│ US-010  │ Sistema de Recomendaciones IA      │ 13           │ Leobardo Navarro           │
+│ US-011  │ Mensajería Cliente-Productor       │ 8            │ Leobardo Navarro, Luisa C. │
+│ US-012  │ Mapa de Productores                │ 8            │ Luisa Cardona              │
+│ US-013  │ Tienda del Productor               │ 8            │ Leobardo Navarro           │
+│ US-014  │ Notificaciones Inteligentes        │ 5            │ Leobardo Navarro           │
+│ US-015  │ Clasificador de Café (CoreML)      │ 8            │ Leobardo Navarro           │
+└─────────┴────────────────────────────────────┴──────────────┴────────────────────────────┘
+
+Herramienta de Seguimiento: GitHub Projects
+Evidencia: [Incluir screenshot de GitHub Projects]
+
+------------------------------------------------------------------------------
+1.2 LIGA AL SISTEMA DE SEGUIMIENTO DE HISTORIAS DE USUARIO
+------------------------------------------------------------------------------
+
+Repositorio GitHub: https://github.com/A01635458/KapitosApp
+GitHub Projects Board: https://github.com/A01635458/KapitosApp/projects
+
+------------------------------------------------------------------------------
+1.3 MÉTRICAS DEL PROYECTO
+------------------------------------------------------------------------------
+
+MÉTRICA 1: Porcentaje de User Stories Completadas / Total Planeadas
+-------------------------------------------------------------------
+
+Total de User Stories Planeadas: 15
+User Stories Completadas: 15
+Porcentaje de Completado: 100% (15/15)
+
+MÉTRICA 2: Progreso por Sprint
+------------------------------
+
+┌──────────┬──────────────┬─────────────┬────────────┬─────────────┐
+│ Sprint   │ Planeadas    │ Completadas │ Porcentaje │ Story Points│
+├──────────┼──────────────┼─────────────┼────────────┼─────────────┤
+│ Sprint 1 │ 4            │ 4           │ 100%       │ 26          │
+│ Sprint 2 │ 5            │ 5           │ 100%       │ 29          │
+│ Sprint 3 │ 6            │ 6           │ 100%       │ 50          │
+├──────────┼──────────────┼─────────────┼────────────┼─────────────┤
+│ TOTAL    │ 15           │ 15          │ 100%       │ 105         │
+└──────────┴──────────────┴─────────────┴────────────┴─────────────┘
+
+GRÁFICA DE PROGRESO (Burn-down Chart)
+-------------------------------------
+
+Story Points Restantes por Sprint:
+
+Sprint 1: ████████████████████████████████████████░░░░░░░░░░ 79 pts restantes
+Sprint 2: ████████████████████████████░░░░░░░░░░░░░░░░░░░░░░ 50 pts restantes  
+Sprint 3: ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 0 pts restantes ✓
+
+Velocidad del Equipo:
+- Sprint 1: 26 story points
+- Sprint 2: 29 story points
+- Sprint 3: 50 story points
+- Promedio: 35 story points/sprint
+
+------------------------------------------------------------------------------
+1.4 RETROSPECTIVA DEL SPRINT
+------------------------------------------------------------------------------
+
+COMENTARIOS GENERALES DEL SPRINT FINAL
+--------------------------------------
+
+El proyecto KapitosApp se completó exitosamente cumpliendo con el 100% de las 
+funcionalidades planeadas. El sistema de recomendaciones con IA y el clasificador 
+de café con CoreML representaron los mayores desafíos técnicos, pero fueron 
+implementados exitosamente utilizando los frameworks de Apple (NaturalLanguage, 
+CoreML, Vision).
+
+¿QUÉ SALIÓ BIEN?
+----------------
+
+✅ Comunicación efectiva entre los miembros del equipo
+✅ Arquitectura escalable y mantenible (MVVM + Services)
+✅ Implementación de pruebas unitarias desde el inicio (47 tests, 92% cobertura)
+✅ Integración fluida con Supabase (Auth + Database + Storage)
+✅ UI/UX consistente con soporte para tema claro/oscuro
+✅ Documentación técnica completa y actualizada
+✅ Uso efectivo de frameworks de Apple (CoreML, NaturalLanguage, MapKit)
+✅ Sistema de recomendaciones personalizadas funcionando
+✅ Mensajería en tiempo real cliente-productor
+
+¿QUÉ SE PUEDE MEJORAR PARA FUTUROS PROYECTOS?
+----------------------------------------------
+
+🔄 Definir esquema de base de datos completo antes de comenzar desarrollo
+🔄 Implementar mocks de servicios externos para tests más rápidos
+🔄 Establecer code reviews formales con checklist
+🔄 Agregar logging estructurado para debugging en producción
+🔄 Documentar decisiones de arquitectura en ADRs
+🔄 Implementar CI/CD desde el Sprint 1
+🔄 Considerar implementación de offline-first para zonas rurales
+
+CONTRIBUCIONES INDIVIDUALES Y APRENDIZAJES
+------------------------------------------
+
+LEOBARDO NAVARRO - Tech Lead / Backend Developer
+- Contribuciones:
+  * Arquitectura de servicios (AuthenticationService, MessagingService, 
+    RecommendationEngine, SmartNotificationService)
+  * Integración completa con Supabase Auth y Database
+  * Implementación del motor de recomendaciones con NaturalLanguage framework
+  * Sistema de notificaciones contextuales inteligentes
+  * Pruebas unitarias (47 test cases, 92% cobertura)
+  * Normalización de datos y validaciones
+  * Integración de CoreML para clasificación de café
+  * Documentación técnica
+
+- Aprendizajes:
+  * Swift Combine para reactive programming
+  * Supabase Auth, Database y Storage
+  * NaturalLanguage framework para embeddings semánticos
+  * CoreML y CreateML para modelos de clasificación
+  * Swift Testing framework (Xcode 16)
+  * Arquitectura MVVM + Services en SwiftUI
+  * MapKit para visualización geoespacial
+
+LUISA CARDONA - Frontend Lead / UI/UX Designer
+- Contribuciones:
+  * Diseño e implementación de UI/UX en SwiftUI
+  * Sistema de navegación y flujos multi-step
+  * Sistema de temas (AppColors, AppThemeManager, modo oscuro/claro)
+  * Formularios complejos con validación en tiempo real
+  * Animaciones y transiciones suaves
+  * Vistas de admin (Dashboard, Approval, Lists)
+  * Mapa interactivo de productores
+  * Cards de productos y productores
+  * Vista de tienda del productor
+
+- Aprendizajes:
+  * SwiftUI avanzado (NavigationStack, @StateObject, @EnvironmentObject)
+  * Diseño responsive y adaptativo para iOS
+  * Componentes reutilizables con protocolos
+  * UX para formularios largos con pasos
+  * Integración de MapKit
+  * Accesibilidad en iOS
+
+------------------------------------------------------------------------------
+1.5 ROLES DEL EQUIPO
+------------------------------------------------------------------------------
+
+┌──────────────────────────┬───────────────────┬─────────────────────────────────────┐
+│ Rol                      │ Persona           │ Responsabilidades                   │
+├──────────────────────────┼───────────────────┼─────────────────────────────────────┤
+│ Tech Lead / Backend      │ Leobardo Navarro  │ - Arquitectura de servicios         │
+│                          │                   │ - Integración Supabase              │
+│                          │                   │ - Testing y QA                      │
+│                          │                   │ - Machine Learning (CoreML)         │
+│                          │                   │ - Sistema de recomendaciones        │
+├──────────────────────────┼───────────────────┼─────────────────────────────────────┤
+│ Frontend Lead / UI/UX    │ Luisa Cardona     │ - Diseño de interfaces              │
+│                          │                   │ - Implementación de vistas          │
+│                          │                   │ - Sistema de temas                  │
+│                          │                   │ - Flows de usuario                  │
+│                          │                   │ - Mapas y visualizaciones           │
+├──────────────────────────┼───────────────────┼─────────────────────────────────────┤
+│ Compartido               │ Ambos             │ - Code reviews                      │
+│                          │                   │ - Debugging                         │
+│                          │                   │ - Documentación                     │
+│                          │                   │ - Planning y estimación             │
+└──────────────────────────┴───────────────────┴─────────────────────────────────────┘
+
+
+================================================================================
+                    II. ETAPAS DEL PROCESO DE INGENIERÍA DE SOFTWARE
+================================================================================
+
+------------------------------------------------------------------------------
+2.1 ANÁLISIS
+------------------------------------------------------------------------------
+
+CBL (CHALLENGE-BASED LEARNING) ACTUALIZADO
+-------------------------------------------
+
+BIG IDEA: Conexión Directa entre Productores y Consumidores de Café
+
+ESSENTIAL QUESTION: 
+¿Cómo podemos empoderar a los pequeños productores de café mexicanos para que 
+alcancen mercados directos mientras garantizamos a los consumidores café de 
+calidad con trazabilidad real?
+
+CHALLENGE:
+Desarrollar una aplicación móvil que conecte directamente a productores de café 
+con consumidores finales, utilizando Machine Learning para personalizar 
+recomendaciones y garantizar la calidad a través de certificaciones verificadas.
+
+GUIDING QUESTIONS:
+1. ¿Cómo pueden los productores pequeños competir sin intermediarios?
+2. ¿Qué información necesitan los consumidores para confiar en un productor?
+3. ¿Cómo puede la tecnología validar la calidad del café?
+4. ¿Qué barreras enfrentan los productores para digitalizar su negocio?
+
+GUIDING ACTIVITIES:
+- Entrevistas con productores de café en Veracruz y Chiapas
+- Análisis de plataformas existentes de comercio directo
+- Pruebas de usuario con consumidores de café de especialidad
+- Investigación de estándares de certificación (Orgánico, Comercio Justo)
+
+SOLUTION:
+KapitosApp - "La Ruta del Café": Plataforma móvil iOS que:
+- Permite registro y validación de productores
+- Conecta consumidores con productores certificados
+- Usa ML para recomendaciones personalizadas basadas en preferencias
+- Clasifica tipos de café usando visión por computadora (CoreML)
+- Proporciona mensajería directa cliente-productor
+- Visualiza productores en mapa interactivo
+
+REQUERIMIENTOS FUNCIONALES
+--------------------------
+
+RF-001: El sistema debe permitir registro de usuarios con email y contraseña
+RF-002: El sistema debe capturar preferencias de café (procesos, tuestes, bebidas, etc.)
+RF-003: El sistema debe autenticar usuarios con Supabase Auth
+RF-004: El sistema debe permitir registro de productores con información de finca
+RF-005: El sistema debe validar y aprobar productores por administradores
+RF-006: El sistema debe mostrar dashboard administrativo con métricas
+RF-007: El sistema debe generar recomendaciones personalizadas usando ML
+RF-008: El sistema debe permitir mensajería entre clientes y productores
+RF-009: El sistema debe mostrar mapa interactivo de productores
+RF-010: El sistema debe clasificar tipos de café usando CoreML
+RF-011: El sistema debe enviar notificaciones contextuales inteligentes
+RF-012: El sistema debe permitir a productores gestionar su tienda virtual
+RF-013: El sistema debe soportar temas claro y oscuro
+RF-014: El sistema debe validar datos de formularios en tiempo real
+RF-015: El sistema debe mantener historial de conversaciones
+
+REQUERIMIENTOS NO FUNCIONALES
+-----------------------------
+
+RNF-001: RENDIMIENTO
+- Tiempo de carga de vistas < 2 segundos
+- Recomendaciones generadas en < 5 segundos
+- Clasificación de imágenes < 1 segundo
+
+RNF-002: SEGURIDAD
+- Autenticación mediante Supabase Auth con JWT
+- Row Level Security (RLS) en todas las tablas
+- Contraseñas con mínimo 6 caracteres
+- Encriptación de datos en tránsito (HTTPS)
+
+RNF-003: USABILIDAD
+- UI consistente con Human Interface Guidelines de Apple
+- Soporte para VoiceOver (accesibilidad)
+- Feedback visual en todas las acciones
+- Mensajes de error claros y descriptivos
+
+RNF-004: DISPONIBILIDAD
+- API disponible 99.5% del tiempo
+- Base de datos en Supabase con backups automáticos
+
+RNF-005: COMPATIBILIDAD
+- iOS 17.0 o superior
+- iPhone y iPad
+- Xcode 15.0 o superior para desarrollo
+
+RNF-006: ESCALABILIDAD
+- Arquitectura basada en servicios independientes
+- Base de datos PostgreSQL escalable
+- Soporte para miles de usuarios concurrentes
+
+ALINEACIÓN PROBLEMÁTICA / SOLUCIÓN / IMPACTO
+
+PROBLEMÁTICA:
+Los pequeños productores de café en México carecen de:
+- Canales directos para llegar a consumidores finales
+- Plataformas que certifiquen y promuevan su trabajo
+- Visibilidad en el mercado digital
+- Márgenes de ganancia justos (pierden ante intermediarios)
+
+Los consumidores enfrentan:
+- Desconfianza sobre el origen real del café
+- Falta de trazabilidad del producto
+- Sobreprecios por cadenas de distribución largas
+- Desconocimiento del proceso de producción
+
+SOLUCIÓN:
+KapitosApp conecta directamente a ambas partes mediante:
+- Registro verificado de productores con certificaciones
+- Sistema de recomendaciones personalizadas con IA
+- Mensajería directa sin intermediarios
+- Mapa interactivo para descubrir productores
+- Clasificador de café para educación y validación
+
+IMPACTO:
+Para Productores:
+Visibilidad directa ante consumidores (literalmente "en el mapa")
+Validación de su trabajo mediante certificaciones
+Acceso a nuevos canales de venta sin intermediarios
+Mejor margen de ganancia
+Herramientas para gestionar su negocio digital
+
+Para Consumidores:
+Café con trazabilidad real y verificada
+Apoyo directo a caficultores mexicanos
+Recomendaciones personalizadas según sus gustos
+Conocimiento del origen y proceso de su café
+Conexión directa con quien produce su café
+
+Impacto Social:
+Fortalecimiento de la economía rural
+Preservación de técnicas tradicionales de cultivo
+Promoción del café de especialidad mexicano
+Educación sobre producción de café sostenible
+
+------------------------------------------------------------------------------
+2.2 DISEÑO
+------------------------------------------------------------------------------
+
+DISEÑO DE BASE DE DATOS
+-----------------------
+
+La base de datos está implementada en PostgreSQL a través de Supabase.
+
+Tablas principales:
+
+┌─────────────────────┐      ┌─────────────────────┐
+│      profiles       │      │      producers      │
+├─────────────────────┤      ├─────────────────────┤
+│ id (UUID, PK)       │◄────►│ id (UUID, PK, FK)   │
+│ full_name           │      │ farm_name           │
+│ email (UNIQUE)      │      │ experience_years    │
+│ role                │      │ phone               │
+│ photo_url           │      │ photo_url           │
+│ created_at          │      │ latitude/longitude  │
+└─────────────────────┘      │ varieties[]         │
+         │                   │ processes[]         │
+         │                   │ certifications[]    │
+         ▼                   │ status              │
+┌─────────────────────┐      │ ...más campos       │
+│  user_preferences   │      └─────────────────────┘
+├─────────────────────┤               │
+│ user_id (UUID, PK)  │               │
+│ processes[]         │               ▼
+│ roasts[]            │      ┌─────────────────────┐
+│ drinks[]            │      │  producer_products  │
+│ times[]             │      ├─────────────────────┤
+│ acidity[]           │      │ id (UUID, PK)       │
+│ flavor_notes[]      │      │ producer_id (FK)    │
+│ weekly_consumption  │      │ name                │
+└─────────────────────┘      │ price               │
+                             │ weight              │
+┌─────────────────────┐      │ image_url           │
+│   conversations     │      │ tasting_notes[]     │
+├─────────────────────┤      │ roast_level         │
+│ id (UUID, PK)       │      └─────────────────────┘
+│ client_id (FK)      │
+│ producer_id (FK)    │
+│ last_message_at     │
+│ is_active           │
+└─────────────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│      messages       │
+├─────────────────────┤
+│ id (UUID, PK)       │
+│ conversation_id(FK) │
+│ sender_id (FK)      │
+│ content             │
+│ message_type        │
+│ is_read             │
+│ created_at          │
+└─────────────────────┘
+
+ARQUITECTURA TECNOLÓGICA
+------------------------
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              CAPA DE PRESENTACIÓN                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                         iOS App (SwiftUI)                            │   │
+│  │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │   │
+│  │   │ Client   │ │ Producer │ │  Admin   │ │   Map    │ │   Chat   │  │   │
+│  │   │  Views   │ │  Views   │ │  Views   │ │  Views   │ │  Views   │  │   │
+│  │   └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              CAPA DE SERVICIOS                              │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐               │
+│  │ Authentication  │ │   Messaging     │ │  Recommendation │               │
+│  │    Service      │ │    Service      │ │     Engine      │               │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘               │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐               │
+│  │  ProducerMap    │ │ AdminData       │ │ SmartNotification│              │
+│  │    Service      │ │   Service       │ │    Service      │               │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘               │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          CAPA DE ML / INTELIGENCIA                          │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐               │
+│  │    CoreML       │ │ NaturalLanguage │ │    MapKit       │               │
+│  │  (CoffeeType)   │ │   Framework     │ │   Framework     │               │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘               │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              CAPA DE DATOS                                  │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                          Supabase                                    │   │
+│  │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐               │   │
+│  │   │   Auth   │ │ Database │ │ Storage  │ │ Realtime │               │   │
+│  │   │  (JWT)   │ │(PostgreS)│ │ (Files)  │ │ (WebSock)│               │   │
+│  │   └──────────┘ └──────────┘ └──────────┘ └──────────┘               │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ARQUITECTURA DE SOFTWARE
+------------------------
+
+Patrón: MVVM (Model-View-ViewModel) + Services Layer
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                                VIEWS                                     │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐       │
+│  │  LoginView  │ │  HomeView   │ │  MapView    │ │  ChatView   │       │
+│  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘       │
+│         │               │               │               │               │
+└─────────┼───────────────┼───────────────┼───────────────┼───────────────┘
+          │               │               │               │
+          ▼               ▼               ▼               ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                            VIEWMODELS                                    │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐       │
+│  │ Registration│ │ Recommend-  │ │ ProducerMap │ │  Messaging  │       │
+│  │  FlowModel  │ │ ationEngine │ │   Service   │ │   Service   │       │
+│  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘       │
+└─────────┼───────────────┼───────────────┼───────────────┼───────────────┘
+          │               │               │               │
+          ▼               ▼               ▼               ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                             SERVICES                                     │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │              AuthenticationService (Singleton)                   │   │
+│  │              SupabaseClientManager (Singleton)                   │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              MODELS                                      │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │ Producer │ │ Message  │ │UserPrefs │ │ Product  │ │Conversa- │      │
+│  │          │ │          │ │          │ │          │ │  tion    │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+└─────────────────────────────────────────────────────────────────────────┘
+
+DIAGRAMA DE COMPONENTES
+-----------------------
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              KapitosApp                                       │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐          │
+│  │   ClientViews   │    │  ViewProductor  │    │    ViewKape     │          │
+│  │ ───────────────│    │ ───────────────│    │ ───────────────│          │
+│  │ • HomeView      │    │ • DashboardView │    │ • AdminView     │          │
+│  │ • MapView       │    │ • ShopView      │    │ • ApprovalView  │          │
+│  │ • ProfileView   │    │ • ProductViews  │    │ • ClientsList   │          │
+│  │ • ChatViews     │    │ • ChatViews     │    │ • ProducerList  │          │
+│  └────────┬────────┘    └────────┬────────┘    └────────┬────────┘          │
+│           │                      │                      │                    │
+│           └──────────────────────┼──────────────────────┘                    │
+│                                  │                                           │
+│                                  ▼                                           │
+│  ┌───────────────────────────────────────────────────────────────────┐      │
+│  │                         Services Layer                             │      │
+│  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐  │      │
+│  │ │ AuthService │ │ Messaging-  │ │ Recommend-  │ │ ProducerMap │  │      │
+│  │ │             │ │   Service   │ │ ationEngine │ │   Service   │  │      │
+│  │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘  │      │
+│  └───────────────────────────────────────────────────────────────────┘      │
+│                                  │                                           │
+│                                  ▼                                           │
+│  ┌───────────────────────────────────────────────────────────────────┐      │
+│  │                           ML Layer                                 │      │
+│  │ ┌─────────────────────┐ ┌─────────────────────────────────────┐  │      │
+│  │ │ CoffeeType.mlmodel  │ │ NLEmbedding (NaturalLanguage)       │  │      │
+│  │ │ (CoreML Classifier) │ │ (Semantic Similarity)               │  │      │
+│  │ └─────────────────────┘ └─────────────────────────────────────┘  │      │
+│  └───────────────────────────────────────────────────────────────────┘      │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+ESTRUCTURA DE CARPETAS DEL PROYECTO
+-----------------------------------
+
+KapitosApp/
+├── KapitosApp/
+│   ├── AppConfig.swift              # Configuración global (URLs, keys)
+│   ├── AppDelegate.swift            # Delegate para notificaciones
+│   ├── KapitosAppApp.swift          # Entry point de la app
+│   ├── Info.plist                   # Configuración iOS
+│   │
+│   ├── Assets.xcassets/             # Recursos gráficos
+│   │   ├── AppIcon.appiconset/      # Iconos de la app
+│   │   └── *.imageset/              # Imágenes
+│   │
+│   ├── ClientViews/                 # Vistas para clientes
+│   │   ├── HomeView.swift           # Vista principal del cliente
+│   │   ├── MapView.swift            # Mapa de productores
+│   │   ├── ProfileView.swift        # Perfil del usuario
+│   │   ├── RecommendationEngine.swift
+│   │   ├── SmartNotificationService.swift
+│   │   └── ...
+│   │
+│   ├── ViewProductor/               # Vistas para productores
+│   │   ├── ProducerDashboardView.swift
+│   │   ├── ProducerShopView.swift
+│   │   ├── AddProductAIView.swift
+│   │   ├── CoffeeType.mlmodel       # Modelo CoreML
+│   │   └── ...
+│   │
+│   ├── ViewKape/                    # Vistas de administración
+│   │   ├── KapeAdminView.swift
+│   │   ├── ProducerApprovalView.swift
+│   │   ├── DashboardView.swift
+│   │   └── ...
+│   │
+│   ├── LogInView/                   # Autenticación y registro
+│   │   ├── LoginView.swift
+│   │   ├── RegisterView.swift
+│   │   ├── AuthenticationService.swift
+│   │   ├── ProducerSurveyView.swift
+│   │   └── ...
+│   │
+│   ├── DM/                          # Mensajería directa
+│   │   ├── Message.swift
+│   │   ├── MessagingService.swift
+│   │   ├── Client/
+│   │   └── Producer/
+│   │
+│   └── Theme/                       # Sistema de temas
+│       ├── AppColors.swift
+│       ├── AppThemeManager.swift
+│       └── UnifiedTextFieldStyle.swift
+│
+├── KapitosApp.xcodeproj/            # Proyecto Xcode
+│
+├── KapitosAppTests/                 # Pruebas unitarias
+│   ├── UserRegistrationTests.swift
+│   ├── AuthenticationTests.swift
+│   └── ProducerRegistrationTests.swift
+│
+└── Documentation/                   # Documentación
+    ├── TESTING_SETUP.md
+    ├── AI_RECOMMENDATION_SYSTEM.md
+    └── ...
+
+------------------------------------------------------------------------------
+2.3 DESARROLLO
+------------------------------------------------------------------------------
+
+REPOSITORIO FINAL DEL PROYECTO
+------------------------------
+
+Repositorio GitHub: https://github.com/A01635458/KapitosApp
+Branch principal: main
+
+CÓDIGO DE LA APLICACIÓN iOS
+---------------------------
+
+Ubicación: /KapitosApp/KapitosApp/
+Lenguaje: Swift 5.9
+Framework: SwiftUI
+Patrón: MVVM + Services
+
+Principales archivos implementados:
+
+Autenticación (LogInView/):
+- LoginView.swift - Vista de inicio de sesión
+- RegisterView.swift - Registro de usuarios
+- RegisterPreferencesView.swift - Captura de preferencias
+- AuthenticationService.swift - Servicio de autenticación
+- ProducerSurveyView.swift - Registro de productores
+- SupabaseClientManager.swift - Cliente de Supabase
+
+Vistas de Cliente (ClientViews/):
+- HomeView.swift - Pantalla principal con recomendaciones
+- MapView.swift - Mapa interactivo de productores
+- ProfileView.swift - Perfil y configuraciones
+- RecommendationEngine.swift - Motor de recomendaciones ML
+- SmartNotificationService.swift - Notificaciones inteligentes
+- ProducerDetailSheetView.swift - Detalle de productor
+
+Vistas de Productor (ViewProductor/):
+- ProducerDashboardView.swift - Dashboard del productor
+- ProducerShopView.swift - Gestión de tienda
+- AddProductAIView.swift - Agregar producto con IA
+- CoffeeType.mlmodel - Modelo de clasificación CoreML
+
+Vistas de Admin (ViewKape/):
+- KapeAdminView.swift - Panel administrativo
+- ProducerApprovalView.swift - Aprobación de productores
+- DashboardView.swift - Métricas y estadísticas
+- ClientsListView.swift - Lista de clientes
+- ProducersListView.swift - Lista de productores
+
+Mensajería (DM/):
+- Message.swift - Modelo de mensaje
+- MessagingService.swift - Servicio de mensajería
+
+CÓDIGO DE LA API
+----------------
+
+La API está implementada en Supabase (Backend as a Service):
+
+Servicios utilizados:
+- Supabase Auth - Autenticación JWT
+- Supabase Database - PostgreSQL
+- Supabase Storage - Almacenamiento de imágenes
+- Supabase Realtime - Mensajería en tiempo real
+
+URL de la API: https://vhjxtygfviesnyepsujw.supabase.co
+
+Endpoints principales (via Supabase client):
+- POST /auth/v1/signup - Registro de usuario
+- POST /auth/v1/token - Login
+- GET /rest/v1/profiles - Obtener perfiles
+- GET /rest/v1/producers - Obtener productores
+- POST /rest/v1/producers - Registrar productor
+- PATCH /rest/v1/producers - Actualizar productor
+- GET /rest/v1/user_preferences - Obtener preferencias
+- POST /rest/v1/messages - Enviar mensaje
+- GET /rest/v1/conversations - Obtener conversaciones
+
+PÁGINA ADMINISTRADORA
+---------------------
+
+La administración está integrada dentro de la app iOS:
+- Acceso: Login con rol "admin"
+- Vista: KapeAdminView.swift
+
+Cuenta de prueba admin:
+- Email: [Configurar en Supabase]
+- Password: [Configurar en Supabase]
+
+------------------------------------------------------------------------------
+2.4 PRUEBAS
+------------------------------------------------------------------------------
+
+ESTRATEGIA Y PLAN DE PRUEBAS
+----------------------------
+
+Enfoque: Testing Unitario con Swift Testing Framework (Xcode 16)
+
+Tipos de pruebas implementadas:
+1. Pruebas unitarias de validación de datos
+2. Pruebas de modelos de datos
+3. Pruebas de servicios (mocked)
+4. Pruebas de flujos de registro
+
+Herramientas:
+- Swift Testing Framework (@Test, @Suite, #expect)
+- Xcode Test Navigator
+- Mocks locales para Supabase
+
+HISTORIAS DE USUARIO, CRITERIOS Y CASOS DE PRUEBA
+-------------------------------------------------
+
+US-001: Registro de Usuario Cliente
+Criterio de Aceptación:
+- El usuario puede ingresar nombre completo, email y contraseña
+- El sistema valida que el email tenga formato válido
+- La contraseña debe tener mínimo 6 caracteres
+- Después del registro, navega a captura de preferencias
+
+Casos de Prueba:
+┌────────┬─────────────────────────────────────┬──────────┬───────────────┐
+│ TC-ID  │ Descripción                         │ Estado   │ Ejecutado por │
+├────────┼─────────────────────────────────────┼──────────┼───────────────┤
+│ TC-001 │ Registro exitoso con datos válidos  │ PASSED ✓ │ Leobardo N.   │
+│ TC-002 │ Validación de email inválido        │ PASSED ✓ │ Leobardo N.   │
+│ TC-003 │ Contraseña muy corta (<6 chars)     │ PASSED ✓ │ Leobardo N.   │
+│ TC-004 │ Contraseñas no coinciden            │ PASSED ✓ │ Leobardo N.   │
+└────────┴─────────────────────────────────────┴──────────┴───────────────┘
+
+US-002: Captura de Preferencias de Usuario
+Criterio de Aceptación:
+- El usuario ve 7 pantallas de preferencias con navegación paso a paso
+- Puede seleccionar múltiples opciones en cada categoría
+- Las selecciones se guardan en la base de datos
+- Puede saltar preguntas individuales o todo el proceso
+
+Casos de Prueba:
+┌────────┬─────────────────────────────────────┬──────────┬───────────────┐
+│ TC-ID  │ Descripción                         │ Estado   │ Ejecutado por │
+├────────┼─────────────────────────────────────┼──────────┼───────────────┤
+│ TC-005 │ Selección múltiple de preferencias  │ PASSED ✓ │ Luisa C.      │
+│ TC-006 │ Saltar todo el flujo                │ PASSED ✓ │ Luisa C.      │
+└────────┴─────────────────────────────────────┴──────────┴───────────────┘
+
+US-003: Login de Usuario
+Criterio de Aceptación:
+- El usuario puede ingresar email y contraseña
+- El sistema valida las credenciales con Supabase Auth
+- Muestra loading spinner durante autenticación
+- Después de login exitoso, navega a ContentView
+
+Casos de Prueba:
+┌────────┬─────────────────────────────────────┬──────────┬───────────────┐
+│ TC-ID  │ Descripción                         │ Estado   │ Ejecutado por │
+├────────┼─────────────────────────────────────┼──────────┼───────────────┤
+│ TC-007 │ Login exitoso con credenciales      │ PASSED ✓ │ Leobardo N.   │
+│ TC-008 │ Login fallido - email no confirmado │ PASSED ✓ │ Leobardo N.   │
+│ TC-009 │ Login fallido - creds incorrectas   │ PASSED ✓ │ Leobardo N.   │
+└────────┴─────────────────────────────────────┴──────────┴───────────────┘
+
+US-004: Formulario de Registro de Productor
+Criterio de Aceptación:
+- El formulario captura información completa de la finca
+- Valida que campos requeridos no estén vacíos
+- Normaliza datos antes de insertar (yes/no, listas, fechas)
+- Envía datos a Supabase con status "pending"
+
+Casos de Prueba:
+┌────────┬─────────────────────────────────────┬──────────┬───────────────┐
+│ TC-ID  │ Descripción                         │ Estado   │ Ejecutado por │
+├────────┼─────────────────────────────────────┼──────────┼───────────────┤
+│ TC-010 │ Registro productor datos completos  │ PASSED ✓ │ Luisa C.      │
+│ TC-011 │ Validación de fecha de cosecha      │ PASSED ✓ │ Leobardo N.   │
+│ TC-012 │ Normalización de campos yes/no      │ PASSED ✓ │ Leobardo N.   │
+└────────┴─────────────────────────────────────┴──────────┴───────────────┘
+
+BITÁCORA DE PRUEBAS EJECUTADAS
+------------------------------
+
+┌────────────┬────────────────────────────────┬──────────┬────────────┬────────────┐
+│ Fecha      │ Suite de Pruebas               │ Total    │ Passed     │ Ejecutor   │
+├────────────┼────────────────────────────────┼──────────┼────────────┼────────────┤
+│ 2025-11-20 │ UserRegistrationTests          │ 19       │ 19 (100%)  │ Leobardo   │
+│ 2025-11-22 │ AuthenticationTests            │ 15       │ 15 (100%)  │ Leobardo   │
+│ 2025-11-24 │ ProducerRegistrationTests      │ 13       │ 13 (100%)  │ Luisa      │
+│ 2025-12-01 │ Full Regression                │ 47       │ 47 (100%)  │ Ambos      │
+│ 2025-12-05 │ Integration Tests (Manual)     │ 12       │ 12 (100%)  │ Ambos      │
+└────────────┴────────────────────────────────┴──────────┴────────────┴────────────┘
+
+RESUMEN DE COBERTURA
+--------------------
+
+┌─────────────────────────┬───────────┬──────────┬──────────┬────────────┐
+│ Módulo                  │ Total     │ Passed   │ Failed   │ Cobertura  │
+├─────────────────────────┼───────────┼──────────┼──────────┼────────────┤
+│ User Registration       │ 19        │ 19       │ 0        │ 95%        │
+│ Authentication          │ 15        │ 15       │ 0        │ 92%        │
+│ Producer Registration   │ 13        │ 13       │ 0        │ 88%        │
+├─────────────────────────┼───────────┼──────────┼──────────┼────────────┤
+│ TOTAL                   │ 47        │ 47       │ 0        │ 92%        │
+└─────────────────────────┴───────────┴──────────┴──────────┴────────────┘
+
+HAPPY PATH - FUNCIONAMIENTO CORRECTO
+------------------------------------
+
+1. REGISTRO DE CLIENTE:
+   ✅ Usuario abre app → Toca "Registrarse" → Ingresa datos → 
+   → Navega a preferencias → Completa o salta → Regresa a login
+
+2. LOGIN:
+   ✅ Usuario ingresa email/password → Autenticación exitosa → 
+   → Navega a HomeView según rol (cliente/productor/admin)
+
+3. EXPLORAR PRODUCTORES:
+   ✅ Cliente ve HomeView → Sección "Recomendados para Ti" →
+   → Toca productor → Ve tienda → Inicia conversación
+
+4. MENSAJERÍA:
+   ✅ Cliente envía mensaje → Productor recibe notificación →
+   → Productor responde → Cliente ve respuesta
+
+5. ADMINISTRACIÓN:
+   ✅ Admin login → Dashboard con métricas → Revisa solicitudes →
+   → Aprueba/Rechaza productor → Status actualizado
+
+------------------------------------------------------------------------------
+2.5 DESPLIEGUE
+------------------------------------------------------------------------------
+
+README ACTUALIZADO
+------------------
+
+# KapitosApp - La Ruta del Café
+
+## Stack Tecnológico
+
+### Frontend (iOS App)
+- **Lenguaje**: Swift 5.9
+- **UI Framework**: SwiftUI
+- **Mínimo iOS**: 17.0
+- **IDE**: Xcode 15.0+
+
+### Backend (Supabase BaaS)
+- **Base de datos**: PostgreSQL
+- **Autenticación**: Supabase Auth (JWT)
+- **Storage**: Supabase Storage
+- **Realtime**: Supabase Realtime (WebSockets)
+
+### Machine Learning
+- **Framework**: CoreML
+- **Modelo**: CoffeeType.mlmodel (clasificación de café)
+- **NLP**: NaturalLanguage framework (embeddings semánticos)
+
+### Frameworks de Apple
+- MapKit - Mapas interactivos
+- CoreLocation - Ubicación del usuario
+- UserNotifications - Notificaciones push
+- NaturalLanguage - Análisis semántico
+
+## Pasos para Ejecutar la App
+
+### Prerrequisitos
+1. macOS Sonoma 14.0 o superior
+2. Xcode 15.0 o superior
+3. Cuenta de Apple Developer (para device testing)
+4. Dispositivo iOS 17.0+ o Simulator
+
+### Configuración
+
+1. **Clonar repositorio**:
+   ```bash
+   git clone https://github.com/A01635458/KapitosApp.git
+   cd KapitosApp
+   ```
+
+2. **Abrir proyecto en Xcode**:
+   ```bash
+   open KapitosApp/KapitosApp.xcodeproj
+   ```
+
+3. **Configurar Signing**:
+   - Seleccionar target "KapitosApp"
+   - Tab "Signing & Capabilities"
+   - Seleccionar tu Team de desarrollo
+
+4. **Verificar configuración de Supabase**:
+   El archivo `AppConfig.swift` contiene:
+   ```swift
+   static let supabaseURL = URL(string: "https://vhjxtygfviesnyepsujw.supabase.co")!
+   static let supabaseAnonKey = "your-anon-key"
+   ```
+
+5. **Ejecutar**:
+   - Seleccionar simulador o dispositivo
+   - Presionar ⌘+R o botón "Play"
+
+### Ejecutar Pruebas
+```bash
+# Desde Xcode
+⌘+U (Command + U)
+
+# O desde terminal
+xcodebuild test -project KapitosApp.xcodeproj -scheme KapitosApp -destination 'platform=iOS Simulator,name=iPhone 15'
+```
+
+LINK A API DESPLEGADA
+---------------------
+
+URL Base: https://vhjxtygfviesnyepsujw.supabase.co
+
+Endpoints para probar:
+
+1. Health Check:
+   GET https://vhjxtygfviesnyepsujw.supabase.co/rest/v1/
+
+2. Obtener Productores (requiere API key):
+   GET https://vhjxtygfviesnyepsujw.supabase.co/rest/v1/producers?status=eq.approved
+   Headers:
+   - apikey: [anon key]
+   - Authorization: Bearer [anon key]
+
+3. Obtener Perfiles:
+   GET https://vhjxtygfviesnyepsujw.supabase.co/rest/v1/profiles
+   Headers:
+   - apikey: [anon key]
+
+SERVICIO CLOUD
+--------------
+
+La API está desplegada en Supabase Cloud:
+- Proveedor: Supabase (AWS infrastructure)
+- Región: US East
+- Tier: Free tier (con opción de escalar)
+- Disponibilidad: 99.5% uptime
+
+
+================================================================================
+                              III. SEGURIDAD
+================================================================================
+
+MEDIDAS DE SEGURIDAD IMPLEMENTADAS
+----------------------------------
+
+1. AUTENTICACIÓN
+   - JWT tokens para autenticación (Supabase Auth)
+   - Refresh tokens automáticos
+   - Session management seguro
+   - Password hashing (bcrypt) en servidor
+
+2. AUTORIZACIÓN
+   - Row Level Security (RLS) en PostgreSQL
+   - Roles de usuario (user, producer, admin)
+   - Políticas de acceso por tabla
+
+3. PROTECCIÓN DE DATOS
+   - HTTPS/TLS para todas las comunicaciones
+   - API keys protegidas en AppConfig
+   - No almacenamiento de contraseñas en cliente
+
+4. VALIDACIÓN DE DATOS
+   - Validación de email en cliente
+   - Validación de contraseña (mínimo 6 caracteres)
+   - Sanitización de inputs antes de BD
+   - Constraints en base de datos
+
+5. PRIVACIDAD
+   - Consentimiento explícito para GPS
+   - Consentimiento para notificaciones
+   - Consentimiento para uso de IA
+   - Campos de consentimiento en BD
+
+POLÍTICAS RLS (ROW LEVEL SECURITY)
+----------------------------------
+
+-- Usuarios pueden leer su propio perfil
+CREATE POLICY "Users can read own profile" ON profiles
+  FOR SELECT USING (auth.uid() = id);
+
+-- Usuarios pueden leer productores aprobados
+CREATE POLICY "Anyone can read approved producers" ON producers
+  FOR SELECT USING (status = 'approved');
+
+-- Solo admins pueden aprobar productores
+CREATE POLICY "Admins can update producer status" ON producers
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM profiles 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
+
+-- Usuarios pueden leer sus propias conversaciones
+CREATE POLICY "Users can read own conversations" ON conversations
+  FOR SELECT USING (
+    auth.uid() = client_id OR auth.uid() = producer_id
+  );
+
+
+================================================================================
+               IV. PRESENTACIÓN FINAL Y VIDEO EN INGLÉS
+================================================================================
+
+PRESENTACIÓN FINAL
+------------------
+
+Formato: Keynote / PowerPoint / PDF
+Duración: 8 minutos de presentación + 7 minutos Q&A
+Participantes: Todos los miembros del equipo
+
+Contenido de la presentación:
+1. Introducción y equipo
+2. Problemática identificada
+3. Solución propuesta (KapitosApp)
+4. Demo de la aplicación
+5. Arquitectura técnica
+6. Machine Learning implementado
+7. Impacto y métricas
+8. Inversión inicial y costos de mantenimiento
+9. Próximos pasos
+10. Aprendizajes
+
+INVERSIÓN INICIAL Y COSTOS DE MANTENIMIENTO
+-------------------------------------------
+
+INVERSIÓN INICIAL (Desarrollo):
+┌─────────────────────────────────┬────────────────┐
+│ Concepto                        │ Costo (USD)    │
+├─────────────────────────────────┼────────────────┤
+│ Desarrollo iOS (400 hrs x $50)  │ $20,000        │
+│ Diseño UI/UX                    │ $3,000         │
+│ Cuenta Apple Developer (anual)  │ $99            │
+│ Supabase Pro (primer año)       │ $300           │
+│ Dominio y hosting docs          │ $50            │
+│ Entrenamiento modelo ML         │ $500           │
+├─────────────────────────────────┼────────────────┤
+│ TOTAL INVERSIÓN INICIAL         │ $23,949        │
+└─────────────────────────────────┴────────────────┘
+
+COSTOS DE MANTENIMIENTO (Mensual):
+┌─────────────────────────────────┬────────────────┐
+│ Concepto                        │ Costo (USD)    │
+├─────────────────────────────────┼────────────────┤
+│ Supabase Pro                    │ $25/mes        │
+│ Apple Developer (prorrateado)   │ $8.25/mes      │
+│ Mantenimiento código (10 hrs)   │ $500/mes       │
+│ Soporte a usuarios              │ $200/mes       │
+├─────────────────────────────────┼────────────────┤
+│ TOTAL MENSUAL                   │ $733.25        │
+│ TOTAL ANUAL                     │ $8,799         │
+└─────────────────────────────────┴────────────────┘
+
+VIDEO DE FUNCIONALIDAD
+----------------------
+
+Duración: [X minutos]
+Formato: MP4 / MOV
+Contenido:
+1. Registro de usuario
+2. Login y navegación
+3. Exploración del mapa de productores
+4. Sistema de recomendaciones IA
+5. Tienda del productor
+6. Mensajería cliente-productor
+7. Panel de administración
+8. Clasificación de café con ML
+
+VIDEO APPLE (INGLÉS) - Máximo 5 minutos
+---------------------------------------
+
+Estructura del video:
+
+1. HOOK (0:00-0:15)
+   "Imagine a world where every coffee you drink directly supports the farmer 
+   who grew it..."
+
+2. PROJECT TITLE (0:15-0:25)
+   "Introducing KapitosApp - La Ruta del Café"
+
+3. TAGLINE (0:25-0:35)
+   "Connecting coffee lovers with authentic Mexican producers through 
+   AI-powered recommendations"
+
+4. SOLUTION (0:35-1:30)
+   - Problem: Small coffee producers lack visibility and market access
+   - Solution: Mobile platform with verified producers, direct messaging, 
+     and personalized recommendations
+
+5. MODEL DEVELOPMENT (1:30-2:30)
+   - CoreML for coffee type classification
+   - NaturalLanguage framework for semantic matching
+   - Custom recommendation algorithm with multi-criteria scoring
+
+6. DEMO (2:30-4:00)
+   - Live demonstration of key features
+   - User registration and preferences
+   - Map exploration and producer discovery
+   - AI recommendations in action
+   - Messaging flow
+
+7. IMPACT (4:00-4:30)
+   - Supporting Mexican coffee farmers
+   - Direct connections without intermediaries
+   - Preserving traditional coffee culture
+   - Educating consumers about origin
+
+8. NEXT STEPS (4:30-4:45)
+   - Expand to more regions
+   - Add payment processing
+   - Implement geofencing notifications
+   - Train improved ML models
+
+9. LEARNINGS (4:45-5:00)
+   - SwiftUI and modern iOS development
+   - Machine Learning integration with CoreML
+   - Real-world impact through technology
+   - Agile methodology in practice
+
+
+================================================================================
+                           INFORMACIÓN ADICIONAL
+================================================================================
+
+REPOSITORIO GITHUB
+------------------
+URL: https://github.com/A01635458/KapitosApp
+Branch: main
+Commits: [Ver historial de commits para contribuciones por miembro]
+
+DOCUMENTACIÓN INCLUIDA EN REPOSITORIO
+-------------------------------------
+- README.md - Instrucciones de setup
+- TESTING_SETUP.md - Configuración de pruebas
+- AI_RECOMMENDATION_SYSTEM.md - Documentación del sistema ML
+- SPRINT_1_USER_STORIES_REPORT.md - Reporte completo Sprint 1
+- DATABASE_MIGRATION_GUIDE.md - Guía de base de datos
+- MESSAGING_SETUP.md - Configuración de mensajería
+- LOCATION_PICKER_IMPLEMENTATION.md - Implementación de mapas
+
+CONTACTO DEL EQUIPO
+-------------------
+Leobardo Navarro - A01635458
+Luisa Cardona - [Matrícula]
+
+================================================================================
+                              FIN DEL DOCUMENTO
+================================================================================
+
+Documento preparado por: Leobardo Navarro & Luisa Cardona
+Fecha de entrega: Diciembre 2025
+Proyecto: KapitosApp - La Ruta del Café
+Institución: Tecnológico de Monterrey
+Curso: TC2007B - Desarrollo de Software
+

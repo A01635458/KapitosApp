@@ -107,7 +107,7 @@ class MessagingService: ObservableObject {
                 .execute()
                 .value
             
-            print("✅ Found \(response.count) conversations")
+            print("Found \(response.count) conversations")
             
             // Fetch details for each conversation
             var conversationsWithDetails: [ConversationWithDetails] = []
@@ -152,11 +152,11 @@ class MessagingService: ObservableObject {
                             )
                         }
                     } catch {
-                        print("⚠️ Could not fetch producer photo: \(error.localizedDescription)")
+                        print("Warning: Could not fetch producer photo: \(error.localizedDescription)")
                     }
                 }
                 
-                print("✅ Final Photo URL: \(profile.photo_url ?? "nil")")
+                print("Final Photo URL: \(profile.photo_url ?? "nil")")
                 
                 // Fetch last message
                 let lastMessageResponse: [MessageData]? = try? await supabase
@@ -194,11 +194,11 @@ class MessagingService: ObservableObject {
                 ))
             }
             
-            print("✅ Loaded \(conversationsWithDetails.count) conversations with details")
+            print("Loaded \(conversationsWithDetails.count) conversations with details")
             self.conversations = conversationsWithDetails
             isLoading = false
         } catch {
-            print("❌ Error loading conversations: \(error)")
+            print("Error: Error loading conversations: \(error)")
             errorMessage = "Error al cargar conversaciones: \(error.localizedDescription)"
             isLoading = false
         }
@@ -263,7 +263,7 @@ class MessagingService: ObservableObject {
                 is_deleted: false
             )
             
-            print("🔄 Inserting message into database...")
+            print("Inserting message into database...")
             
             // Insert without expecting a full response
             try await supabase
@@ -271,7 +271,7 @@ class MessagingService: ObservableObject {
                 .insert(newMessage)
                 .execute()
             
-            print("✅ Message inserted successfully!")
+            print("Message inserted successfully!")
             
             // Update conversation's last_message_at
             struct ConversationUpdate: Encodable {
@@ -287,15 +287,15 @@ class MessagingService: ObservableObject {
                 .eq("id", value: conversationId.uuidString)
                 .execute()
             
-            print("✅ Conversation updated!")
+            print("Conversation updated!")
             
             // Refresh messages to get the new one
             await fetchMessages(conversationId: conversationId)
             
-            print("✅ Messages refreshed. Total messages: \(messages.count)")
+            print("Messages refreshed. Total messages: \(messages.count)")
             
         } catch {
-            print("❌ Error sending message: \(error)")
+            print("Error: Error sending message: \(error)")
             errorMessage = "Error al enviar mensaje: \(error.localizedDescription)"
         }
     }
@@ -442,7 +442,7 @@ class MessagingService: ObservableObject {
             }
         } catch {
             // Silently fail for background polling
-            print("⚠️ Background polling error: \(error)")
+            print("Warning: Background polling error: \(error)")
         }
     }
 }

@@ -210,6 +210,5 @@ Para probar:
 
 ---
 
-**Implementado por:** GitHub Copilot  
 **Fecha:** 4 de diciembre, 2025  
 **Proyecto:** La Ruta del Café - KapitosApp
